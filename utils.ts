@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 
 export async function execute(fullCommand, cwd) {
-    const { command, args } = fullCommand.split(" ");
+    const [ command, ...args ] = fullCommand.split(" ");
     await spawnChildProcess(cwd, command, ...args);
 }
 
