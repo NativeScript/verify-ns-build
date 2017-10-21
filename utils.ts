@@ -2,12 +2,16 @@ import { spawn } from "child_process";
 
 export async function execute(fullCommand, cwd) {
     const [ command, ...args ] = fullCommand.split(" ");
-    await spawnChildProcess(cwd, command, ...args);
+    try {
+        await spawnChildProcess(cwd, command, ...args);
+    } catch(error) {
+        console.error(error);
+    }
 }
 
 function spawnChildProcess(cwd, command, ...args) {
     return new Promise((resolve, reject) => {
-        const escapedArgs = args.map(a => `"${a}"`);
+        const escapedArgs = args.filter(a => !!a);
 
         const childProcess = spawn(command, escapedArgs, {
             stdio: "inherit",

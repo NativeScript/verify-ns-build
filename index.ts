@@ -47,3 +47,35 @@ export async function update(options) {
     await execute(command, PROJECT_DIR);
 }
 
+export async function build(options, releaseConfig) {
+    const { platform } = options;
+    if (!platform) {
+        return;
+    }
+
+    const { bundleOptions = [], tnsOptions = [], release, bundle } = options;
+    const bundleFlags = joinOptions(bundleOptions);
+    let tnsFlags = joinOptions(tnsOptions);
+
+    if (release) {
+        tnsFlags = tnsFlags.concat(" ", releaseConfig[platform])
+    }
+
+    const command = bundle ?
+        bundleBuild(platform, bundleFlags, tnsFlags) :
+        noBundleBuild(platform, tnsFlags);
+
+    await execute(command, PROJECT_DIR);
+}
+
+function bundleBuild(platform, bundleOptions, tnsOptions) {
+    return `npm run build-${platform}-bundle ${bundleOptions} -- ${tnsOptions}`;
+}
+
+function noBundleBuild(platform, tnsOptions) {
+    return `tns build ${platform} ${tnsOptions}`;
+}
+
+function joinOptions(options) {
+    return options.join(" ");
+}
