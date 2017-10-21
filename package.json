@@ -9,7 +9,8 @@
     "typescript": "^2.5.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm i && tsc",
+    "compile-w": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "NativeScript Team",
