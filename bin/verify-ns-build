@@ -25,15 +25,7 @@
 
     const { build: buildConfigurations } = config;
     for (configuration of buildConfigurations) {
-        console.log(configuration)
-        await verify.build(configuration, releaseConfig);
-        const { outputSizes } = configuration;
-        if (outputSizes) {
-            const verification = await verify.verifyAssets(outputSizes);
-            if (!verification) {
-                console.log("VERIFICATION FAILED!");
-            }
-        }
+        const report = await verify.verifyBuild(configuration, releaseConfig);
     }
 
     function loadConfig() {

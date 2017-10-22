@@ -56,34 +56,62 @@ export async function update(options) {
     await execute(command, PROJECT_DIR);
 }
 
-export async function build(options, releaseConfig) {
+export async function verifyBuild(options, releaseConfig) {
     const { platform } = options;
     if (!platform) {
         return;
     }
 
+    let report = {...options};
+
+    const error = await build(platform, options, releaseConfig[platform]);
+    if (error) {
+        report.error = error;
+        return;
+    }
+
+    const { outputSizes } = options;
+    if (outputSizes) {
+        const result = await verifyAssets(outputSizes);
+        report = { ...report, ...result };
+    }
+
+    return report;
+}
+
+async function build(platform, options, releaseConfig)
+    : Promise<void | Error> {
+
     const { tnsOptions = [], release, bundle } = options;
     let tnsFlags = tnsOptions.join(" ");
 
     if (release) {
-        tnsFlags = tnsFlags.concat(" ", releaseConfig[platform])
+        tnsFlags = tnsFlags.concat(" ", releaseConfig)
     }
 
     const command = bundle ?
         bundleBuild(platform, tnsFlags) :
         noBundleBuild(platform, tnsFlags);
 
-    await execute(command, PROJECT_DIR);
+    const error = await execute(command, PROJECT_DIR);
+    return error;
 }
 
-export async function verifyAssets(outputSizes) {
+async function verifyAssets(outputSizes) {
     const assets = await loadAssets();
     if (!assets) {
         return;
     }
 
-    return Object.keys(outputSizes)
-        .every(name => assets[name] && assets[name] <= outputSizes[name]);
+    const assetsToCheck = Object.keys(outputSizes);
+    const missing = assetsToCheck.filter(name => !assets[name]);
+    assetsToCheck.forEach(name => {
+        if (assets[name] > outputSizes[name]) {
+            assets[name].isOverSizeLimit = true;
+        }
+    });
+
+    return { assets, missing };
 }
 
 async function loadAssets() {

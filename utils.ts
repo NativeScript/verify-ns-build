@@ -1,11 +1,11 @@
 import { spawn } from "child_process";
 
-export async function execute(fullCommand, cwd) {
+export async function execute(fullCommand, cwd): Promise<void | Error> {
     const [ command, ...args ] = fullCommand.split(" ");
     try {
         await spawnChildProcess(cwd, command, ...args);
     } catch(error) {
-        console.error(error);
+        return error;
     }
 }
 
