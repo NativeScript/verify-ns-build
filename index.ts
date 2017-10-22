@@ -95,6 +95,8 @@ export async function verifyBuild(options, releaseConfig, name) {
 
 async function saveReport(result, name) {
     const reportDir = await getReportDirPath(name);
+    const reportPath = resolve(reportDir, "build-report.json");
+    await writeFile(reportPath, JSON.stringify(result, null, 2));
 
     if (result.bundle) {
         await saveBundleReport(reportDir, name);
