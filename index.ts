@@ -4,12 +4,22 @@ import * as fs from "fs";
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
+const mkdir = promisify(fs.mkdir);
+const rename = promisify(fs.rename);
 
 import { execute } from "./utils";
 
 const PROJECT_DIR = process.env.INIT_CWD || __dirname;
+const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 const BUNDLE_REPORT_DIR = resolve(PROJECT_DIR, "report");
-const BUNDLE_STATS_PATH = resolve(BUNDLE_REPORT_DIR, "stats.json");
+const BUNDLE_ANALYZER = {
+    dir: resolve(PROJECT_DIR, "report"),
+    files: {
+        stats: "stats.json",
+        heatmap: "report.html"
+    }
+};
+
 const TIMELINE_REPORT_DIR = PROJECT_DIR;
 
 const VERIFY_WEBPACK_SCRIPT = "ns-verify-bundle";
@@ -56,27 +66,70 @@ export async function update(options) {
     await execute(command, PROJECT_DIR);
 }
 
-export async function verifyBuild(options, releaseConfig) {
+export async function verifyBuild(options, releaseConfig, name) {
     const { platform } = options;
     if (!platform) {
         return;
     }
 
-    let report = {...options};
+    let result = {...options};
 
     const error = await build(platform, options, releaseConfig[platform]);
     if (error) {
-        report.error = error;
+        result.error = error;
         return;
     }
 
     const { outputSizes } = options;
     if (outputSizes) {
-        const result = await verifyAssets(outputSizes);
-        report = { ...report, ...result };
+        const verification = await verifyAssets(outputSizes);
+        result = { ...result, ...verification };
     }
 
-    return report;
+    if (name) {
+        await saveReport(result, name);
+    }
+
+    return result;
+}
+
+async function saveReport(result, name) {
+    const reportDir = await getReportDirPath(name);
+
+    if (result.bundle) {
+        await saveBundleReport(reportDir, name);
+    }
+}
+
+async function saveBundleReport(reportDir, name) {
+    const { dir: bundleReportDir, files } = BUNDLE_ANALYZER;
+
+    const filesToMove = Object.values(BUNDLE_ANALYZER.files).map(fileName => ({
+        oldLocation: resolve(BUNDLE_ANALYZER.dir, fileName),
+        newLocation: resolve(reportDir, fileName),
+    }));
+
+    for (const {oldLocation, newLocation} of filesToMove) {
+        await rename(oldLocation, newLocation);
+    }
+}
+
+async function getReportDirPath(buildName) {
+    const buildReportDir = resolve(REPORT_DIR, buildName);
+    await ensure(REPORT_DIR);
+    await ensure(buildReportDir);
+
+    return buildReportDir;
+}
+
+async function ensure(dir) {
+    try {
+        await mkdir(dir);
+    } catch(e) {
+        if (e.code !== "EEXIST") {
+            throw e;
+        }
+    }
 }
 
 async function build(platform, options, releaseConfig)
@@ -132,7 +185,9 @@ async function loadAssets() {
 
 async function loadBundleStats() {
     try {
-        const statsStream = await readFile(BUNDLE_STATS_PATH, "utf8");
+        const { dir: bundleReportDir, files } = BUNDLE_ANALYZER;
+        const bundleStatsPath = resolve(bundleReportDir, files.stats);
+        const statsStream = await readFile(bundleStatsPath, "utf8");
         const stats = JSON.parse(statsStream);
         return stats;
     } catch(e) {

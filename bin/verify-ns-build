@@ -24,8 +24,19 @@
     }
 
     const { build: buildConfigurations } = config;
-    for (configuration of buildConfigurations) {
-        const report = await verify.verifyBuild(configuration, releaseConfig);
+    const buildResults = {};
+    for (const [index, build] of buildConfigurations.entries()) {
+        const keepReport = shouldKeepReport(build, config);
+        const name = build.name || index.toString();
+        const result = await verify.verifyBuild(build, releaseConfig, keepReport && name);
+
+        buildResults[name] = result;
+    }
+
+    function shouldKeepReport(build, config) {
+        return build.hasOwnProperty("keepReport") ?
+            build.keepReport :
+            config.keepReport;
     }
 
     function loadConfig() {
