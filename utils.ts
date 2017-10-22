@@ -11,9 +11,9 @@ export async function execute(fullCommand, cwd) {
 
 function spawnChildProcess(cwd, command, ...args) {
     return new Promise((resolve, reject) => {
-        const escapedArgs = args.filter(a => !!a);
+        const truthyArgs = args.filter(a => !!a);
 
-        const childProcess = spawn(command, escapedArgs, {
+        const childProcess = spawn(command, truthyArgs, {
             stdio: "inherit",
             cwd,
             shell: true,
