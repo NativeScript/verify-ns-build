@@ -7,7 +7,7 @@ const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
 const rename = promisify(fs.rename);
 
-import { execute } from "./utils";
+import { ExecutionResult, execute, executeAndKillWhenIdle } from "./utils";
 
 const PROJECT_DIR = process.env.INIT_CWD || __dirname;
 const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
@@ -37,6 +37,12 @@ const bundleBuild = (platform, tnsOptions) =>
 const noBundleBuild = (platform, tnsOptions) =>
     `tns build ${platform} ${tnsOptions}`;
 
+const bundleRun = (platform, tnsOptions) =>
+    `npm run start-${platform}-bundle -- ${tnsOptions}`;
+
+const noBundleRun = (platform, tnsOptions) =>
+    `tns run ${platform} ${tnsOptions}`;
+
 export async function installNsWebpack({ version, path }) {
     if ((!version && !path) || (version && path)) {
         throw new Error("You must specify either path " +
@@ -62,19 +68,36 @@ export async function addHelperScripts() {
 export async function update(options) {
     const args = options.map(o => `--${o}`).join(" ");
     const command = `npm run ${UPDATE_WEBPACK_SCRIPT} ${args}`;
-    
+
     await execute(command, PROJECT_DIR);
 }
 
+export async function verifyRun(options, releaseConfig, name) {
+    const result = await verifyApp(options, releaseConfig, name, run);
+    return result;
+}
+
 export async function verifyBuild(options, releaseConfig, name) {
+    const result = await verifyApp(options, releaseConfig, name, build);
+    return result;
+}
+
+async function verifyApp(options, releaseConfig, name, action) {
     const { platform } = options;
     if (!platform) {
         return;
     }
 
+    const { tnsOptions = [], release, bundle } = options;
+    let flags = tnsOptions.join(" ");
+
+    if (release) {
+        flags = flags.concat(" ", releaseConfig[platform])
+    }
+
     let result = {...options};
 
-    const error = await build(platform, options, releaseConfig[platform]);
+    const { log, error } = await action(platform, flags, bundle);
     if (error) {
         result.error = error;
         return;
@@ -134,22 +157,24 @@ async function ensure(dir) {
     }
 }
 
-async function build(platform, options, releaseConfig)
-    : Promise<void | Error> {
-
-    const { tnsOptions = [], release, bundle } = options;
-    let tnsFlags = tnsOptions.join(" ");
-
-    if (release) {
-        tnsFlags = tnsFlags.concat(" ", releaseConfig)
-    }
+async function run(platform, flags, bundle)
+    : Promise<ExecutionResult> {
 
     const command = bundle ?
-        bundleBuild(platform, tnsFlags) :
-        noBundleBuild(platform, tnsFlags);
+        bundleRun(platform, flags) :
+        noBundleRun(platform, flags);
 
-    const error = await execute(command, PROJECT_DIR);
-    return error;
+    return await executeAndKillWhenIdle(command, PROJECT_DIR);
+}
+
+async function build(platform, flags, bundle)
+    : Promise<ExecutionResult> {
+
+   const command = bundle ?
+        bundleBuild(platform, flags) :
+        noBundleBuild(platform, flags);
+
+    return await executeAndKillWhenIdle(command, PROJECT_DIR);
 }
 
 async function verifyAssets(outputSizes) {

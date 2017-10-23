@@ -23,14 +23,23 @@
         await verify.update(options);
     }
 
-    const { build: buildConfigurations } = config;
-    const buildResults = {};
-    for (const [index, build] of buildConfigurations.entries()) {
-        const keepReport = shouldKeepReport(build, config);
-        const name = build.name || index.toString();
-        const result = await verify.verifyBuild(build, releaseConfig, keepReport && name);
+    const { build = [], run = [] } = config;
+    await verifyApp(build, verify.verifyBuild);
+    await verifyApp(run, verify.verifyRun);
 
-        buildResults[name] = result;
+    process.exit(0);
+
+    async function verifyApp(configurations, verification) {
+        const buildResults = {};
+        for (const [index, build] of configurations.entries()) {
+            const keepReport = shouldKeepReport(build, config);
+            const name = build.name || index.toString();
+
+            buildResults[name] = await
+                verification(build, releaseConfig, keepReport && name);
+        }
+
+        return buildResults;
     }
 
     function shouldKeepReport(build, config) {
