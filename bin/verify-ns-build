@@ -24,16 +24,17 @@
     }
 
     const { build = [], run = [] } = config;
-    await verifyApp(build, verify.verifyBuild);
-    await verifyApp(run, verify.verifyRun);
+    await verifyApp(build, verify.verifyBuild, "build");
+    await verifyApp(run, verify.verifyRun, "run");
 
     process.exit(0);
 
-    async function verifyApp(configurations, verification) {
+    async function verifyApp(configurations, verification, action) {
         const buildResults = {};
         for (const [index, build] of configurations.entries()) {
             const keepReport = shouldKeepReport(build, config);
-            const name = build.name || index.toString();
+            const configurationName = build.name || (index + 1).toString();
+            const name = action ? `${action}-${configurationName}` : configurationName;
 
             buildResults[name] = await
                 verification(build, releaseConfig, keepReport && name);
