@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "timeline-view": "github:sis0k0/timeline-view"
+  },
   "devDependencies": {
     "@types/node": "^8.0.46",
     "typescript": "^2.5.3"
@@ -17,5 +19,5 @@
   "license": "MIT",
   "bin": {
     "verify-ns-build": "./bin/verify-ns-build"
- }
+  }
 }

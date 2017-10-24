@@ -7,6 +7,7 @@ const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
 const rename = promisify(fs.rename);
 
+import { toTrace, saveTimeline } from "timeline-view";
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./utils";
 
 let profilingOriginalValue;
@@ -75,11 +76,6 @@ export async function update(options) {
 }
 
 export async function verifyRun(options, releaseConfig, name) {
-    const result = await verifyApp(options, releaseConfig, name, run);
-    return result;
-}
-
-export async function verifyBuild(options, releaseConfig, name) {
     saveProfilingValue();
     const { timeline } = options;
     if (timeline) {
@@ -88,6 +84,17 @@ export async function verifyBuild(options, releaseConfig, name) {
         await disableTraces();
     }
 
+    const result = await verifyApp(options, releaseConfig, name, run);
+    const logLines = (result.log || "").split(/\r?\n/);
+    const traces = logLines.map(toTrace).filter(t => !!t);
+    const reportDir = await getReportDirPath(name);
+    const reportDestination = resolve(reportDir, "report.html");
+    saveTimeline(traces, reportDestination);
+
+    return result;
+}
+
+export async function verifyBuild(options, releaseConfig, name) {
     const result = await verifyApp(options, releaseConfig, name, build);
     return result;
 }
@@ -108,6 +115,7 @@ async function verifyApp(options, releaseConfig, name, action) {
     let result = {...options};
 
     const { log, error } = await action(platform, flags, bundle);
+    result.log = log;
     if (error) {
         result.error = error;
         return;
