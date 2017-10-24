@@ -1,6 +1,29 @@
 import { spawn } from "child_process";
 
 const NEW_DATA_WAIT_TIME = 10 * 1000;
+const nsSpawnedProcesses = [];
+const nsTimeoutIntervals = [];
+
+const stopDetachedProcess = childProcess => {
+    try {
+        process.kill(-childProcess.pid);
+    } catch (e) {}
+};
+
+const clearOnExit = () => {
+    nsSpawnedProcesses.forEach(stopDetachedProcess)
+    nsTimeoutIntervals.forEach(interval => clearInterval(interval));
+};
+
+process.on("exit", clearOnExit);
+process.on("SIGINT", () => {
+    nsSpawnedProcesses.forEach(childProcess => {
+        childProcess.stdout.destroy();
+        childProcess.stderr.destroy();
+    });
+
+    clearOnExit();
+});
 
 export interface ExecutionResult {
     error?: Error,
@@ -17,41 +40,44 @@ export async function execute(fullCommand, cwd, kill = false)
     : Promise<ExecutionResult> {
 
     const [ command, ...args ] = fullCommand.split(" ");
-    const options = { cwd, command, args, kill };
+    const filteredArgs = args.filter(a => !!a);
+    const options = { cwd, command, args: filteredArgs };
+
+    const action = kill ? spawnAndTrack : spawnAndWait;
 
     try {
-        const log = await spawnChildProcess(options);
+        const log = await action(options);
         return { log };
     } catch (error) {
         return { error };
     }
 }
 
-const spawnChildProcess = ({ cwd, command, args, kill }) =>
+const spawnAndTrack = ({ cwd, command, args }) =>
     new Promise((resolve, reject) => {
         let log = "";
         let newDataArrived = false;
 
         const options = {
             cwd,
-            stdio: kill ? "pipe" : "inherit",
+            stdio: "pipe",
             shell: true,
             detached: true,
         };
 
-        const truthyArgs = args.filter(a => !!a);
-        const childProcess = spawn(command, truthyArgs, options);
+        const childProcess = spawn(command, args, options);
+        nsSpawnedProcesses.push(childProcess);
 
-        let trackId;
-        if (kill) {
-            trackId = setInterval(() => {
-                if (newDataArrived) {
-                    newDataArrived = !newDataArrived;
-                } else {
-                    stopChildProcess();
-                }
-            }, NEW_DATA_WAIT_TIME);
-         }
+        const trackId = setInterval(() => {
+            if (newDataArrived) {
+                newDataArrived = !newDataArrived;
+            } else {
+                clearInterval(trackId);
+                stopDetachedProcess(childProcess);
+                resolve(log);
+            }
+        }, NEW_DATA_WAIT_TIME);
+        nsTimeoutIntervals.push(trackId);
 
         childProcess.stdout.on("data", processData);
         childProcess.stderr.on("data", processData);
@@ -63,32 +89,32 @@ const spawnChildProcess = ({ cwd, command, args, kill }) =>
         }
 
         childProcess.on("close", code => {
-            if (code === 0) {
-                if (trackId) {
-                    clearInterval(trackId);
-                }
-
-                resolve(log);
-            } else {
-                reject({
-                    code,
-                    message: `child process exited with code ${code}`,
-                });
-            }
+            clearInterval(trackId);
+            handleClose(resolve, reject, code, log);
         });
-
-        process.on("exit", () => {
-            stopChildProcess();
-        });
-
-        function stopChildProcess() {
-            if (trackId) {
-                clearInterval(trackId);
-            }
-
-            try {
-                process.kill(-childProcess.pid);
-            } catch(e) {}
-        }
     });
 
+function spawnAndWait({ cwd, command, args }) {
+    return new Promise((resolve, reject) => {
+        const childProcess = spawn(command, args, {
+            stdio: "inherit",
+            cwd,
+            shell: true,
+        });
+
+        childProcess.on("close", code => {
+            handleClose(resolve, reject, code);
+        });
+    });
+}
+
+function handleClose(resolve, reject, code, log?) {
+    if (code === 0) {
+        log ? resolve(log) : resolve();
+    } else {
+        reject({
+            code,
+            message: `child process exited with code ${code}`,
+        });
+    }
+}
