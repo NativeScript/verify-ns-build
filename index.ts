@@ -9,6 +9,11 @@ const rename = promisify(fs.rename);
 
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./utils";
 
+let profilingOriginalValue;
+
+process.on("exit", restoreProfilingValue);
+process.on("SIGINT", restoreProfilingValue);
+
 const PROJECT_DIR = process.env.INIT_CWD || __dirname;
 const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 const BUNDLE_REPORT_DIR = resolve(PROJECT_DIR, "report");
@@ -56,13 +61,10 @@ export async function installNsWebpack({ version, path }) {
 }
 
 export async function addHelperScripts() {
-    const packageJsonPath = resolve(PROJECT_DIR, "package.json");
-    const packageJsonStream = await readFile(packageJsonPath, "utf8");
-    const packageJson = JSON.parse(packageJsonStream);
-
+    const { file: packageJson, path: packageJsonPath } = await getPackageJson();
     packageJson.scripts = Object.assign((packageJson.scripts || {}), WEBPACK_HELPER_SCRIPTS);
 
-    await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    await writeFile(packageJsonPath, stringify(packageJson));
 }
 
 export async function update(options) {
@@ -78,6 +80,14 @@ export async function verifyRun(options, releaseConfig, name) {
 }
 
 export async function verifyBuild(options, releaseConfig, name) {
+    saveProfilingValue();
+    const { timeline } = options;
+    if (timeline) {
+        await enableTraces();
+    } else {
+        await disableTraces();
+    }
+
     const result = await verifyApp(options, releaseConfig, name, build);
     return result;
 }
@@ -119,7 +129,7 @@ async function verifyApp(options, releaseConfig, name, action) {
 async function saveReport(result, name) {
     const reportDir = await getReportDirPath(name);
     const reportPath = resolve(reportDir, "build-report.json");
-    await writeFile(reportPath, JSON.stringify(result, null, 2));
+    await writeFile(reportPath, stringify(result));
 
     if (result.bundle) {
         await saveBundleReport(reportDir, name);
@@ -223,3 +233,45 @@ async function loadBundleStats() {
     }
 }
 
+async function saveProfilingValue() {
+    const { file } = await getInnerPackageJson();
+    profilingOriginalValue = file["profiling"];
+}
+
+async function restoreProfilingValue() {
+    const { file, path } = await getInnerPackageJson();
+    file["profiling"] = profilingOriginalValue;
+
+    await writeFile(path, stringify(file));
+}
+
+async function enableTraces() {
+    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
+    packageJson["profiling"] = "timeline";
+
+    await writeFile(packageJsonPath, stringify(packageJson));
+}
+
+async function disableTraces() {
+    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
+    delete packageJson["profiling"];
+
+    await writeFile(packageJsonPath, stringify(packageJson));
+}
+
+function stringify(obj) {
+    return JSON.stringify(obj, null, 2);
+}
+
+async function getInnerPackageJson() {
+    const appPath = resolve(PROJECT_DIR, "app");
+    return await getPackageJson(appPath);
+}
+
+async function getPackageJson(projectDir = PROJECT_DIR) {
+    const path = resolve(projectDir, "package.json");
+    const buffer = await readFile(path, "utf8");
+    const file = JSON.parse(buffer);
+
+    return { path, file };
+}
