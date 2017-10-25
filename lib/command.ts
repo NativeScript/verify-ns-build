@@ -49,7 +49,7 @@ export async function execute(fullCommand, cwd, kill = false)
         const log = await action(options);
         return { log };
     } catch (error) {
-        return { error };
+        return error;
     }
 }
 
@@ -112,9 +112,14 @@ function handleClose(resolve, reject, code, log?) {
     if (code === 0) {
         log ? resolve(log) : resolve();
     } else {
-        reject({
-            code,
-            message: `child process exited with code ${code}`,
-        });
+        const result = {
+            error: {
+                code,
+                message: `child process exited with code ${code}`,
+            },
+            log,
+        };
+
+        reject(result);
     }
 }

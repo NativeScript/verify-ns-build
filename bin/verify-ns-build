@@ -20,7 +20,7 @@
         const options = Object.keys(updateWebpack)
             .filter(o => updateWebpack[o]);
 
-        await verify.update(options);
+        await verify.updateNsWebpack(options);
     }
 
     const { build = [], run = [] } = config;
