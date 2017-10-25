@@ -1,14 +1,18 @@
-import { promisify } from "util";
 import { resolve } from "path";
-import * as fs from "fs";
-
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
-const rename = promisify(fs.rename);
 
 import { toTrace, saveTimeline } from "timeline-view";
-import { ExecutionResult, execute, executeAndKillWhenIdle } from "./utils";
+
+import {
+    readFile,
+    writeFile,
+    mkdir,
+    rename,
+} from "./fs";
+import {
+    ExecutionResult,
+    execute,
+    executeAndKillWhenIdle,
+} from "./command";
 
 let profilingOriginalValue;
 
