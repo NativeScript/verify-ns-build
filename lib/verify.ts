@@ -1,7 +1,3 @@
-import {
-    modifyProfilingValue,
-    generateReport,
-} from "./timeline";
 import { getReportDirPath, saveReport } from "./report";
 import { ExecutionResult, executeAndKillWhenIdle } from "./command";
 import {
@@ -11,7 +7,12 @@ import {
     noBundleBuild,
     noBundleRun,
 } from "./constants";
-import { verifyAssets } from "./webpack-bundle";
+
+import {
+    modifyProfilingValue,
+    generateReport,
+} from "./checks/timeline";
+import { verifyAssets } from "./checks/webpack-bundle";
 
 export async function verifyRun(options, releaseConfig, name) {
     const { timeline } = options;

@@ -1,10 +1,10 @@
 import { resolve } from "path";
 import { toTrace, saveTimeline } from "timeline-view";
 
-import { BUILD_REPORT_FILENAME } from "./constants";
-import { getInnerPackageJson } from "./project-helpers";
-import { stringify } from "./utils";
-import { writeFile } from "./fs";
+import { BUILD_REPORT_FILENAME } from "../constants";
+import { getInnerPackageJson } from "../project-helpers";
+import { stringify } from "../utils";
+import { writeFile } from "../fs";
 
 let profilingOriginalValue;
 let updatedValue = false;

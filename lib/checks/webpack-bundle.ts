@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
-import { BUNDLE_ANALYZER } from "./constants";
-import { readFile } from "./fs";
+import { BUNDLE_ANALYZER } from "../constants";
+import { readFile } from "../fs";
 
 export async function verifyAssets(outputSizes) {
     const assets = await loadAssets();
@@ -48,4 +48,3 @@ async function loadBundleStats() {
         return;
     }
 }
-
