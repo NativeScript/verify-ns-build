@@ -36,5 +36,4 @@ export const bundleRun = (platform, tnsOptions) =>
     `npm run start-${platform}-bundle -- ${tnsOptions}`;
 
 export const noBundleRun = (platform, tnsOptions) =>
-    `tns run ${platform} ${tnsOptions}`;
-
+    `tns run ${platform} ${tnsOptions} --no-watch`;
