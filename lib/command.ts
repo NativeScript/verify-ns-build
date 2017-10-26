@@ -1,8 +1,13 @@
 import { spawn } from "child_process";
 
-const NEW_DATA_WAIT_TIME = 10 * 1000;
+import { track, info } from "./utils";
+
+const NEW_DATA_WAIT_TIME = 10 * 1500;
 const nsSpawnedProcesses = [];
 const nsTimeoutIntervals = [];
+
+const clearIntervals = () =>
+    nsTimeoutIntervals.forEach(interval => clearInterval(interval));
 
 const stopDetachedProcess = childProcess => {
     try {
@@ -12,7 +17,7 @@ const stopDetachedProcess = childProcess => {
 
 const clearOnExit = () => {
     nsSpawnedProcesses.forEach(stopDetachedProcess)
-    nsTimeoutIntervals.forEach(interval => clearInterval(interval));
+    clearIntervals();
 };
 
 process.on("exit", clearOnExit);
@@ -55,6 +60,7 @@ export async function execute(fullCommand, cwd, kill = false)
 
 const spawnAndTrack = ({ cwd, command, args }) =>
     new Promise((resolve, reject) => {
+        console.log(info(`Spawning ${command} ${args}`));
         let log = "";
         let newDataArrived = false;
 
@@ -68,17 +74,6 @@ const spawnAndTrack = ({ cwd, command, args }) =>
         const childProcess = spawn(command, args, options);
         nsSpawnedProcesses.push(childProcess);
 
-        const trackId = setInterval(() => {
-            if (newDataArrived) {
-                newDataArrived = !newDataArrived;
-            } else {
-                clearInterval(trackId);
-                stopDetachedProcess(childProcess);
-                resolve(log);
-            }
-        }, NEW_DATA_WAIT_TIME);
-        nsTimeoutIntervals.push(trackId);
-
         childProcess.stdout.on("data", processData);
         childProcess.stderr.on("data", processData);
 
@@ -89,9 +84,34 @@ const spawnAndTrack = ({ cwd, command, args }) =>
         }
 
         childProcess.on("close", code => {
-            clearInterval(trackId);
+            clearIntervals();
             handleClose(resolve, reject, code, log);
         });
+
+        let waitTime = NEW_DATA_WAIT_TIME;
+        const trackId = setInterval(() => {
+            if (newDataArrived) {
+                newDataArrived = false;
+                waitTime = NEW_DATA_WAIT_TIME;
+            } else {
+                console.log(info(`Waiting time expired.\nKilling ${command} ${args}`));
+                clearIntervals();
+                stopDetachedProcess(childProcess);
+                resolve(log);
+            }
+        }, NEW_DATA_WAIT_TIME);
+
+        const PROGRESS_BAR_INTERVAL = 1000;
+        const newDataWaitId = setInterval(() => {
+            if (!newDataArrived) {
+                console.log(track(`Waiting for ${waitTime / 1000}s for output...`));
+                waitTime -= PROGRESS_BAR_INTERVAL;
+            }
+
+        }, PROGRESS_BAR_INTERVAL);
+
+        nsTimeoutIntervals.push(trackId);
+        nsTimeoutIntervals.push(newDataWaitId);
     });
 
 function spawnAndWait({ cwd, command, args }) {
