@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { toTrace, saveTimeline } from "timeline-view";
 
-import { BUILD_REPORT_FILENAME } from "../constants";
+import { TIMELINE_FILENAME } from "../constants";
 import { getInnerPackageJson } from "../project-helpers";
 import { stringify } from "../utils";
 import { writeFile } from "../fs";
@@ -23,7 +23,7 @@ export async function enableTraces() {
 export async function generateReport(log, reportDir) {
     const logLines = (log || "").split(/\r?\n/);
     const traces = logLines.map(toTrace).filter(t => !!t);
-    const reportDestination = resolve(reportDir, BUILD_REPORT_FILENAME);
+    const reportDestination = resolve(reportDir, TIMELINE_FILENAME);
 
     saveTimeline(traces, reportDestination);
     await restoreProfilingValue();
