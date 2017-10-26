@@ -9,22 +9,18 @@ import {
 } from "./constants";
 
 import {
-    modifyProfilingValue,
+    enableTraces,
     generateReport,
 } from "./checks/timeline";
 import { verifyAssets } from "./checks/webpack-bundle";
 
 export async function verifyRun(options, releaseConfig, name) {
     const { timeline } = options;
-    await modifyProfilingValue(timeline);
+    if (timeline) {
+        await enableTraces();
+    }
 
     const result = await verifyApp(options, releaseConfig, name, run);
-
-    const { log } = result;
-    if (timeline && log) {
-        const reportDir = await getReportDirPath(name);
-        await generateReport(log, reportDir);
-    }
 
     return result;
 }
@@ -50,6 +46,18 @@ async function verifyApp(options, releaseConfig, name, action) {
     const executeResult = await action(platform, flags, bundle);
     let result = {...options, ...executeResult};
 
+    await runChecks(options, name, result);
+
+    return result;
+}
+
+async function runChecks(options, name, result) {
+    const { log } = result;
+    if (options.timeline && log) {
+        const reportDir = await getReportDirPath(name);
+        await generateReport(log, reportDir);
+    }
+
     const { outputSizes } = options;
     if (!result.error && outputSizes) {
         const verification = await verifyAssets(outputSizes);
@@ -59,8 +67,6 @@ async function verifyApp(options, releaseConfig, name, action) {
     if (name) {
         await saveReport(result, name);
     }
-
-    return result;
 }
 
 async function run(platform, flags, bundle)

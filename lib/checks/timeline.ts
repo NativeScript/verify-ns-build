@@ -12,14 +12,12 @@ let updatedValue = false;
 process.on("exit", restoreProfilingValue);
 process.on("SIGINT", restoreProfilingValue);
 
-export async function modifyProfilingValue(isEnabled) {
-    saveProfilingValue();
+export async function enableTraces() {
+    await saveProfilingValue();
+    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
+    packageJson["profiling"] = "timeline";
 
-    if (isEnabled) {
-        await enableTraces();
-    } else {
-        await disableTraces();
-    }
+    await writeFile(packageJsonPath, stringify(packageJson));
 }
 
 export async function generateReport(log, reportDir) {
@@ -28,6 +26,7 @@ export async function generateReport(log, reportDir) {
     const reportDestination = resolve(reportDir, BUILD_REPORT_FILENAME);
 
     saveTimeline(traces, reportDestination);
+    await restoreProfilingValue();
 }
 
 async function saveProfilingValue() {
@@ -52,18 +51,4 @@ async function restoreProfilingValue() {
     profilingOriginalValue = null;
 
     await writeFile(path, stringify(file));
-}
-
-async function enableTraces() {
-    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
-    packageJson["profiling"] = "timeline";
-
-    await writeFile(packageJsonPath, stringify(packageJson));
-}
-
-async function disableTraces() {
-    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
-    delete packageJson["profiling"];
-
-    await writeFile(packageJsonPath, stringify(packageJson));
 }
