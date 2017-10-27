@@ -3,6 +3,7 @@ import { resolve } from "path";
 export const PROJECT_DIR = process.env.INIT_CWD || __dirname;
 export const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 export const TIMELINE_FILENAME = "timeline.html";
+export const REPORT_FILENAME = "report.json";
 export const BUILD_REPORT_FILENAME = "build-report.json";
 
 export const BUNDLE_REPORT_DIR = resolve(PROJECT_DIR, "report");

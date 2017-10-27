@@ -1,4 +1,4 @@
-import { getReportDirPath, saveReport } from "./report";
+import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, executeAndKillWhenIdle } from "./command";
 import {
     PROJECT_DIR,
@@ -20,14 +20,11 @@ export async function verifyRun(options, releaseConfig, name) {
         await enableTraces();
     }
 
-    const result = await verifyApp(options, releaseConfig, name, run);
-
-    return result;
+    return await verifyApp(options, releaseConfig, name, run);
 }
 
 export async function verifyBuild(options, releaseConfig, name) {
-    const result = await verifyApp(options, releaseConfig, name, build);
-    return result;
+    return await verifyApp(options, releaseConfig, name, build);
 }
 
 async function verifyApp(options, releaseConfig, name, action) {
@@ -48,6 +45,7 @@ async function verifyApp(options, releaseConfig, name, action) {
 
     await runChecks(options, name, result);
 
+    delete result.log;
     return result;
 }
 
@@ -65,7 +63,7 @@ async function runChecks(options, name, result) {
     }
 
     if (name) {
-        await saveReport(result, name);
+        await saveBuildReport(result, name);
     }
 }
 
