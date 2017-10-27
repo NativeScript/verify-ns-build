@@ -1,0 +1,70 @@
+{
+    "!releaseConfig": "./.release-args.json",
+    "installPackages": [
+        "~/nativescript-dev-webpack",
+        "nativescript-angular@next"
+    ],
+    "updateWebpack": {
+        "scripts": true,
+        "configs": true,
+        "deps": true
+    },
+    "keepReport": true,
+    "!build": [
+        {
+            "name": "debug",
+            "platform": "android",
+            "bundle": false,
+            "release": true,
+            "tnsOptions": ["--release"]
+        }
+    ],
+    "!build": [
+        {
+            "name": "debug",
+            "platform": "android",
+            "bundle": false,
+            "release": true,
+            "tnsOptions": ["--release"]
+        },
+        {
+            "keepReport": true,
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "outputSizes": {
+                "bundle.js": "15000",
+                "vendor.js": "1700000"
+            }
+        },
+        {
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.uglify", "--env.snapshot"],
+            "outputSizes": {
+                "bundle.js": "5000",
+                "vendor.js": "700000"
+            }
+        }
+    ],
+    "run": [
+        {
+            "platform": "android",
+            "release": true,
+            "bundle": false,
+            "timeline": true,
+            "startup": "2000"
+        }
+
+    ],
+    "!run": [
+        {
+            "platform": "android",
+            "release": true,
+            "bundle": true,
+            "tnsOptions": ["--release"],
+            "timeline": true
+        }
+    ]
+}

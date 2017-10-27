@@ -16,12 +16,19 @@ export async function ensure(dir) {
 
 const colors = {
     reset: "\u001b[0m",
+    red: "\u001b[0;31m",
     yellow: "\u001b[0;33m",
     purple: "\u001b[0;35m",
 };
 
 export const info = (text: string) =>
-    `${colors.yellow}${text}${colors.reset}`;
+    paint(colors.yellow, text);
     
 export const track = (text: string) =>
-    `${colors.purple}${text}${colors.reset}`;
+    paint(colors.purple, text);
+
+export const warn = (text: string) =>
+    paint(colors.red, text);
+
+const paint = (color: string, text: string) =>
+    `${color}${text}${colors.reset}`;

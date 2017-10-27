@@ -24,8 +24,8 @@
     }
 
     const { build = [], run = [] } = config;
-    const buildsReport = await verifyApp(build, verify.verifyBuild, "build") || [];
-    const runsReport = await verifyApp(run, verify.verifyRun, "run") || [];
+    const buildsReport = await verifyApp(build, verify.verifyBuild, "build");
+    const runsReport = await verifyApp(run, verify.verifyRun, "run");
     const report = Object.assign({}, buildsReport, runsReport);
 
     console.log(`REPORT: ${JSON.stringify(report, null, 2)}`);

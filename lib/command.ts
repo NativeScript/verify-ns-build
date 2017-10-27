@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 
 import { track, info } from "./utils";
 
-const NEW_DATA_WAIT_TIME = 10 * 1500;
+const NEW_DATA_WAIT_TIME = 15 * 1000;
 const nsSpawnedProcesses = [];
 const nsTimeoutIntervals = [];
 
@@ -35,18 +35,18 @@ export interface ExecutionResult {
     log?: any,
 }
 
-export async function executeAndKillWhenIdle(command, cwd)
+export async function executeAndKillWhenIdle(command, cwd, printLog = true)
     : Promise<ExecutionResult> {
 
-    return await execute(command, cwd, true);
+    return await execute(command, cwd, printLog, true);
 }
 
-export async function execute(fullCommand, cwd, kill = false)
+export async function execute(fullCommand, cwd, printLog = true, kill = false)
     : Promise<ExecutionResult> {
 
     const [ command, ...args ] = fullCommand.split(" ");
     const filteredArgs = args.filter(a => !!a);
-    const options = { cwd, command, args: filteredArgs };
+    const options = { cwd, command, args: filteredArgs, printLog };
 
     const action = kill ? spawnAndTrack : spawnAndWait;
 
@@ -58,7 +58,7 @@ export async function execute(fullCommand, cwd, kill = false)
     }
 }
 
-const spawnAndTrack = ({ cwd, command, args }) =>
+const spawnAndTrack = ({ cwd, command, args, printLog }) =>
     new Promise((resolve, reject) => {
         console.log(info(`Spawning ${command} ${args}`));
         let log = "";
@@ -78,7 +78,10 @@ const spawnAndTrack = ({ cwd, command, args }) =>
         childProcess.stderr.on("data", processData);
 
         function processData(message) {
-            console.log(message.toString());
+            if (printLog) {
+                console.log(message.toString());
+            }
+
             log += message;
             newDataArrived = true;
         }
@@ -114,10 +117,10 @@ const spawnAndTrack = ({ cwd, command, args }) =>
         nsTimeoutIntervals.push(newDataWaitId);
     });
 
-function spawnAndWait({ cwd, command, args }) {
+function spawnAndWait({ cwd, command, args, printLog }) {
     return new Promise((resolve, reject) => {
         const childProcess = spawn(command, args, {
-            stdio: "inherit",
+            stdio: printLog ? "inherit" : "ignore",
             cwd,
             shell: true,
         });
