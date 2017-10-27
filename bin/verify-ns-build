@@ -9,11 +9,12 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    const { webpackVersion: version, webpackPath: path } = config;
-    if (version || path) {
-        await verify.installNsWebpack({ version, path });
-        await verify.addHelperScripts();
+    const { installPackages } = config;
+    for (nodePackage of installPackages) {
+        await verify.install(nodePackage);
     }
+
+    await verify.addHelperScripts();
 
     const { updateWebpack } = config;
     if (updateWebpack) {

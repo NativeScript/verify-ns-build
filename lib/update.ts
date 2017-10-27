@@ -8,13 +8,7 @@ import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
-export async function installNsWebpack({ version, path }) {
-    if ((!version && !path) || (version && path)) {
-        throw new Error("You must specify either path " +
-                        "or version of the package to be installed!");
-    }
-
-    const nodePackage = path || `nativescript-dev-webpack@${version}`;
+export async function install(nodePackage: string) {
     const command = `npm i -D ${nodePackage}`;
 
     await execute(command, PROJECT_DIR);
