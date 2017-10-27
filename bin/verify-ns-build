@@ -15,8 +15,6 @@
         await verify.install(nodePackage);
     }
 
-    await verify.addHelperScripts();
-
     const { updateWebpack } = config;
     if (updateWebpack) {
         const options = Object.keys(updateWebpack)
