@@ -13,7 +13,7 @@ export async function install(nodePackage: string) {
     const command = `npm i -D ${nodePackage}`;
     await execute(command, PROJECT_DIR);
 
-    if (nodePackage === WEBPACK_PLUGIN) {
+    if (nodePackage.match(WEBPACK_PLUGIN)) {
         await execute("npm i", PROJECT_DIR);
         await addWebpackHelperScripts();
     }
