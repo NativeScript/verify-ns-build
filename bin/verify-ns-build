@@ -10,7 +10,7 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    const { installPackages } = config;
+    const { installPackages = [] } = config;
     for (nodePackage of installPackages) {
         await verify.install(nodePackage);
     }
@@ -28,8 +28,8 @@
     const runsReport = await verifyApp(run, verify.verifyRun, "run");
     const report = Object.assign({}, buildsReport, runsReport);
 
-    console.log(`REPORT: ${JSON.stringify(report, null, 2)}`);
     await verify.saveReport(report);
+    console.log(`REPORT: ${JSON.stringify(report, null, 2)}`);
 
     process.exit(0);
 

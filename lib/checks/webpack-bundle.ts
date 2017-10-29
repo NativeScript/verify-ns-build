@@ -10,14 +10,29 @@ export async function verifyAssets(outputSizes) {
     }
 
     const assetsToCheck = Object.keys(outputSizes);
-    const missing = assetsToCheck.filter(name => !assets[name]);
-    assetsToCheck.forEach(name => {
-        if (assets[name] > outputSizes[name]) {
-            assets[name].isOverSizeLimit = true;
+    const checked = assetsToCheck.map(name => {
+        const produced = assets[name];
+        const asset = { name };
+        if (!produced) {
+            return Object.assign(asset, {
+                missing: true,
+                error: "Asset is missing!",
+            });
+        } else if (produced.size > outputSizes[name]) {
+            return Object.assign(asset, {
+                isOverSizeLimit: true,
+                error: `Asset is over size limit! ` +
+                    `Expected: ${outputSizes[name]}. Actual: ${produced.size}.`,
+            });
+        } else {
+            return Object.assign(asset, {
+                size: produced.size,
+                success: true,
+            });
         }
     });
 
-    return { assets, missing };
+    return checked;
 }
 
 async function loadAssets() {
@@ -29,7 +44,7 @@ async function loadAssets() {
     const { assets } = stats;
     const nameSizeMap = assets
         .reduce((acc, { name, size }) => {
-            acc[name] = size;
+            acc[name] = { size };
             return acc;
         }, {});
 

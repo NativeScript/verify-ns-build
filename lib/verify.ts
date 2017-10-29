@@ -34,46 +34,61 @@ async function verifyApp(options, releaseConfig, name, action) {
         return;
     }
 
+    const result: any = { configuration: options };
     const { tnsOptions = [], release, bundle } = options;
-    let flags = tnsOptions.join(" ");
-
-    if (release) {
-        flags = flags.concat(" ", releaseConfig[platform])
+    let flags;
+    try {
+        flags = prepareFlags(tnsOptions, release, releaseConfig, platform);
+    } catch(error) {
+        result.error = error;
+        return result;
     }
 
-    const executeResult = await action(platform, flags, bundle);
-    let result = {...options, ...executeResult};
-
-    result = await runChecks(options, name, result);
-
-    delete result.log;
-    return result;
-}
-
-async function runChecks(options, name, result) {
-    const { log } = result;
-    if (options.timeline && log) {
-        const reportDir = await getReportDirPath(name);
-        await generateReport(log, reportDir);
-    }
-
-    const { outputSizes } = options;
-    if (!result.error && outputSizes) {
-        const verification = await verifyAssets(outputSizes);
-        result = { ...result, assets: { ...verification } };
-    }
-
-    const { startup, platform } = options;
-    if (startup) {
-        const startupVerification = await verifyStartupTime(startup, platform);
-        result = { ...result, startup: { ...startupVerification } };
-    }
+    result.execution = await action(platform, flags, bundle);
+    result.verifications = await runChecks(options, name, result.execution);
 
     if (name) {
         await saveBuildReport(result, name);
     }
 
+    delete result.execution.log;
     return result;
+}
+
+function prepareFlags(tnsOptions, release, releaseConfig, platform) {
+    const flags = tnsOptions.join(" ");
+    const isReleaseBuild = release || tnsOptions.indexOf("--release") > -1;
+    if (!isReleaseBuild) {
+        return flags;
+    }
+
+    if (!releaseConfig || !releaseConfig[platform]) {
+        throw new Error("You need to provide release configuration!");
+    }
+
+    return flags.concat(" ", releaseConfig[platform]);
+}
+
+async function runChecks(options, name, result) {
+    const verifications: any = {};
+
+    const { log } = result;
+    if (options.timeline && log) {
+        const reportDir = await getReportDirPath(name);
+        verifications.timeline = await generateReport(log, reportDir);
+    }
+
+    const { outputSizes } = options;
+    if (!result.error && outputSizes) {
+        verifications.assets = await verifyAssets(outputSizes);
+    }
+
+    const { startup, platform } = options;
+    if (startup) {
+        verifications.startup = await verifyStartupTime(startup, platform);
+    }
+
+    return verifications;
 }
 
 async function run(platform, flags, bundle)

@@ -25,8 +25,21 @@ export async function generateReport(log, reportDir) {
     const traces = logLines.map(toTrace).filter(t => !!t);
     const reportDestination = resolve(reportDir, TIMELINE_FILENAME);
 
-    saveTimeline(traces, reportDestination);
-    await restoreProfilingValue();
+    try {
+        saveTimeline(traces, reportDestination);
+        return { reportDestination };
+
+    } catch (originalError) {
+        return {
+            error: {
+                message: "Generating timeline failed!",
+                originalError,
+            },
+        };
+
+    } finally {
+        await restoreProfilingValue();
+    }
 }
 
 async function saveProfilingValue() {
