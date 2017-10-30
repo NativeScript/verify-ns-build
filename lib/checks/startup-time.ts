@@ -19,7 +19,7 @@ export async function verifyStartupTime(
     try {
         startup = await getStartupTime(platform);
     } catch(error) {
-        return { error };
+        return { error: error.message };
     }
 
     if (!startup) {
