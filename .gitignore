@@ -4,3 +4,6 @@ node_modules
 **/*.d.ts
 **/*.swp
 
+!lib/report/sunburst.js
+!lib/report/d3.v3.min.js
+
