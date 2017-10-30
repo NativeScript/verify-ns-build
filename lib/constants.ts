@@ -3,9 +3,11 @@ import { resolve } from "path";
 export const PROJECT_DIR = process.env.INIT_CWD || __dirname;
 export const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 export const TIMELINE_FILENAME = "timeline.html";
-export const REPORT_FILENAME = "report.json";
+export const JSON_REPORT_FILENAME = "final-report.json";
 export const BUILD_REPORT_FILENAME = "build-report.json";
+export const HTML_REPORT_FILENAME = "sunburst-report.html";
 
+export const TIMELINE_REPORT_DIR = PROJECT_DIR;
 export const BUNDLE_REPORT_DIR = resolve(PROJECT_DIR, "report");
 export const BUNDLE_ANALYZER = {
     dir: resolve(PROJECT_DIR, "report"),
@@ -14,8 +16,6 @@ export const BUNDLE_ANALYZER = {
         heatmap: "report.html"
     }
 };
-
-export const TIMELINE_REPORT_DIR = PROJECT_DIR;
 
 export const WEBPACK_PLUGIN = "nativescript-dev-webpack";
 export const VERIFY_WEBPACK_SCRIPT = "ns-verify-bundle";

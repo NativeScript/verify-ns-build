@@ -51,7 +51,6 @@ async function verifyApp(options, releaseConfig, name, action) {
         await saveBuildReport(result, name);
     }
 
-    delete result.execution.log;
     return result;
 }
 

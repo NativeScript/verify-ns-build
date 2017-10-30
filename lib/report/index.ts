@@ -2,17 +2,27 @@ import { resolve } from "path";
 
 import {
     BUILD_REPORT_FILENAME,
-    REPORT_FILENAME,
+    JSON_REPORT_FILENAME,
     REPORT_DIR,
     BUNDLE_ANALYZER,
-} from "./constants";
-import { stringify, ensure } from "./utils";
-import { writeFile, rename } from "./fs";
+} from "../constants";
+import { stringify, ensure, underline } from "../utils";
+import { writeFile, rename } from "../fs";
 
-export async function saveReport(result) {
+import { saveHtmlReport } from "./htmlReport";
+
+export async function saveFinalReports(result) {
     await ensure(REPORT_DIR);
-    const reportPath = resolve(REPORT_DIR, REPORT_FILENAME);
+
+    await saveJsonReport(result);
+    saveHtmlReport(result);
+}
+
+async function saveJsonReport(result) {
+    const reportPath = resolve(REPORT_DIR, JSON_REPORT_FILENAME);
     await writeFile(reportPath, stringify(result));
+
+    console.log(`JSON report saved to file://${underline(reportPath)}`);
 }
 
 export async function saveBuildReport(result, name) {

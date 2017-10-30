@@ -28,9 +28,7 @@
     const runsReport = await verifyApp(run, verify.verifyRun, "run");
     const report = Object.assign({}, buildsReport, runsReport);
 
-    await verify.saveReport(report);
-    console.log(`REPORT: ${JSON.stringify(report, null, 2)}`);
-
+    await verify.saveFinalReports(report);
     process.exit(0);
 
     async function verifyApp(configurations, verification, action) {

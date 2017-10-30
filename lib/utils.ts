@@ -21,6 +21,11 @@ const colors = {
     purple: "\u001b[0;35m",
 };
 
+const underlineCode = "\u001b[4m";
+
+export const underline = (text: string) =>
+    paint(underlineCode, text);
+
 export const info = (text: string) =>
     paint(colors.yellow, text);
     
@@ -32,3 +37,4 @@ export const warn = (text: string) =>
 
 const paint = (color: string, text: string) =>
     `${color}${text}${colors.reset}`;
+
