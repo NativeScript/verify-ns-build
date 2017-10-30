@@ -75,7 +75,6 @@ async function getAndroidStartupTime(): Promise<number> {
 async function getAppName() {
     const { file: packageJson } = await getPackageJson();
 
-
     return packageJson &&
         packageJson["nativescript"] &&
         packageJson["nativescript"]["id"];

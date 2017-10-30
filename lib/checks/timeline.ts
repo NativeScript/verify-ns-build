@@ -21,10 +21,21 @@ export async function enableTraces() {
 }
 
 export async function generateReport(log, reportDir) {
-    const logLines = (log || "").split(/\r?\n/);
-    const traces = logLines.map(toTrace).filter(t => !!t);
-    const reportDestination = resolve(reportDir, TIMELINE_FILENAME);
+    if (!log) {
+        return {
+            error: "Timeline couldn't be generated! Log is empty!"
+        };
+    }
 
+    const logLines = log.split(/\r?\n/);
+    const traces = logLines.map(toTrace).filter(t => !!t);
+    if (!traces.length) {
+        return {
+            error: "Timeline couldn't be generated! No traces!"
+        };
+    }
+
+    const reportDestination = resolve(reportDir, TIMELINE_FILENAME);
     try {
         saveTimeline(traces, reportDestination);
         return { reportDestination };
