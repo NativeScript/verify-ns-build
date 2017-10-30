@@ -1,8 +1,10 @@
 {
     "!releaseConfig": "./.release-args.json",
-    "installPackages": [
-        "~/nativescript-dev-webpack",
+    "dependencies": [
         "nativescript-angular@next"
+    ],
+    "devDependencies": [
+        "nativescript-dev-webpack@next"
     ],
     "updateWebpack": {
         "scripts": true,

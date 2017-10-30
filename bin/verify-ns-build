@@ -10,10 +10,15 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    const { installPackages = [] } = config;
-    for (nodePackage of installPackages) {
-        await verify.install(nodePackage);
-    }
+    const installOptions = {
+        save: "--save",
+        saveDev: "--save-dev"
+    };
+
+    const { dependencies = [] } = config;
+    const { devDependencies = [] } = config;
+    await installPackages(dependencies, installOptions.save);
+    await installPackages(devDependencies, installOptions.saveDev);
 
     const { updateWebpack } = config;
     if (updateWebpack) {
@@ -32,6 +37,12 @@
     console.log(`REPORT: ${JSON.stringify(report, null, 2)}`);
 
     process.exit(0);
+
+    async function installPackages(packages, option) {
+        for (package of packages) {
+            await verify.install(package, option);
+        }
+    }
 
     async function verifyApp(configurations, verification, action) {
         const results = {};
@@ -54,7 +65,7 @@
     }
 
     function loadConfig() {
-        const configPath =  process.env.npm_config_path;
+        const configPath = process.env.npm_config_path;
         if (!configPath) {
             console.error("You must specify configuration file path!");
             process.exit(1);

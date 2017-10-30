@@ -9,8 +9,8 @@ import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
-export async function install(nodePackage: string) {
-    const command = `npm i -D ${nodePackage}`;
+export async function install(nodePackage: string, installOption: string) {
+    const command = `npm i ${installOption} ${nodePackage}`;
     await execute(command, PROJECT_DIR);
 
     if (nodePackage.match(WEBPACK_PLUGIN)) {
