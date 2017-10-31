@@ -10,23 +10,8 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    const installOptions = {
-        save: "--save",
-        saveDev: "--save-dev"
-    };
-
-    const { dependencies = [] } = config;
-    const { devDependencies = [] } = config;
-    await installPackages(dependencies, installOptions.save);
-    await installPackages(devDependencies, installOptions.saveDev);
-
-    const { updateWebpack } = config;
-    if (updateWebpack) {
-        const options = Object.keys(updateWebpack)
-            .filter(o => updateWebpack[o]);
-
-        await verify.updateNsWebpack(options);
-    }
+    await verify.installPackages(config);
+    await verify.updateNsWebpack(config);
 
     const { build = [], run = [] } = config;
     const buildsReport = await verifyApp(build, verify.verifyBuild, "build");
@@ -35,12 +20,6 @@
 
     await verify.saveFinalReports(report);
     process.exit(0);
-
-    async function installPackages(packages, option) {
-        for (package of packages) {
-            await verify.install(package, option);
-        }
-    }
 
     async function verifyApp(configurations, verification, action) {
         const results = {};

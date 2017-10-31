@@ -9,7 +9,32 @@ import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
-export async function install(nodePackage: string, installOption: string) {
+type NpmPackage = {
+    pack: string,
+    flag: "--save"|"--save-dev",
+};
+
+export async function installPackages(config) {
+    const packages = getPackages(config);
+
+    for (const { pack, flag } of packages) {
+        await install(pack, flag);
+    }
+}
+
+function getPackages(config): NpmPackage[] {
+    const { dependencies = [], devDependencies = [] } = config;
+
+    const toNpmPackage = (packages, flag) =>
+        packages.map(pack => ({ pack, flag }));
+
+    return [
+        ...toNpmPackage(dependencies, "--save"),
+        ...toNpmPackage(devDependencies, "--save-dev"),
+    ];
+}
+
+async function install(nodePackage: string, installOption: string) {
     const command = `npm i ${installOption} ${nodePackage}`;
     await execute(command, PROJECT_DIR);
 
@@ -26,9 +51,16 @@ async function addWebpackHelperScripts() {
     await writeFile(packageJsonPath, stringify(packageJson));
 }
 
-export async function updateNsWebpack(options) {
-    const args = options.map(o => `--${o}`).join(" ");
-    const command = `npm run ${UPDATE_WEBPACK_SCRIPT} ${args}`;
+export async function updateNsWebpack(config) {
+    const { updateWebpack } = config;
+    if (!updateWebpack) {
+        return;
+    }
 
+    const options = Object.keys(updateWebpack)
+        .filter(o => updateWebpack[o])
+        .map(o => `--${o}`).join(" ");
+
+    const command = `npm run ${UPDATE_WEBPACK_SCRIPT} ${options}`;
     await execute(command, PROJECT_DIR);
 }
