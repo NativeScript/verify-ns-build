@@ -10,7 +10,8 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    await verify.installPackages(config);
+    const ignore = process.env.npm_config_ignore_package_install;
+    await verify.installPackages(config, ignore);
     await verify.updateNsWebpack(config);
 
     const { build = [], run = [] } = config;

@@ -14,8 +14,11 @@ type NpmPackage = {
     flag: "--save"|"--save-dev",
 };
 
-export async function installPackages(config) {
-    const packages = getPackages(config);
+export async function installPackages(config, ignorePackage) {
+    let packages = getPackages(config);
+    if (ignorePackage) {
+        packages = packages.filter(({ pack }) => !pack.match(ignorePackage));
+    }
 
     for (const { pack, flag } of packages) {
         await install(pack, flag);
