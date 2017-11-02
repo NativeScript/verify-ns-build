@@ -10,7 +10,7 @@
     const config = loadConfig();
     const releaseConfig = loadReleaseConfig();
 
-    const ignore = process.env.npm_config_ignore_package_install;
+    const ignore = process.env.npm_config_ignorePackageInstall;
     await verify.installPackages(config, ignore);
     await verify.updateNsWebpack(config);
 
@@ -59,7 +59,7 @@
             ios: "--release"
         };
 
-        const releaseConfigPath = process.env.npm_config_release_config || config.releaseConfig;
+        const releaseConfigPath = process.env.npm_config_releaseConfig || config.releaseConfig;
         if (releaseConfigPath) {
             const loadedConfig = loadJson(releaseConfigPath);
             const overrideDefaults = key => releaseConfig[key] = loadedConfig[key];
