@@ -1,5 +1,5 @@
 import { getReportDirPath, saveBuildReport } from "./report";
-import { ExecutionResult, executeAndKillWhenIdle } from "./command";
+import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
 import {
     PROJECT_DIR,
     bundleBuild,
@@ -39,7 +39,7 @@ async function verifyApp(options, releaseConfig, name, action) {
     let flags;
     try {
         flags = prepareFlags(tnsOptions, release, releaseConfig, platform);
-    } catch(error) {
+    } catch (error) {
         result.error = error;
         return result;
     }
@@ -103,9 +103,9 @@ async function run(platform, flags, bundle)
 async function build(platform, flags, bundle)
     : Promise<ExecutionResult> {
 
-   const command = bundle ?
+    const command = bundle ?
         bundleBuild(platform, flags) :
         noBundleBuild(platform, flags);
 
-    return await executeAndKillWhenIdle(command, PROJECT_DIR);
+    return await execute(command, PROJECT_DIR, true, false);
 }
