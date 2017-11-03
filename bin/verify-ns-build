@@ -11,8 +11,8 @@
     const releaseConfig = loadReleaseConfig();
 
     const ignore = process.env.npm_config_ignorePackageInstall;
-    await verify.installPackages(config, ignore);
-    await verify.updateNsWebpack(config);
+    await verify.install(config, ignore);
+    await verify.update(config);
 
     const { build = [], run = [] } = config;
     const buildsReport = await verifyApp(build, verify.verifyBuild, "build");

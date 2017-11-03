@@ -23,6 +23,9 @@ export const UPDATE_WEBPACK_SCRIPT = "update-ns-webpack";
 export const WEBPACK_HELPER_SCRIPTS = [ VERIFY_WEBPACK_SCRIPT, UPDATE_WEBPACK_SCRIPT ]
     .reduce(addScript, {});
 
+export const UPDATE_NG_SCRIPT = "update-app-ng-deps";
+export const NG_HELPER_SCRIPTS = [ UPDATE_NG_SCRIPT ].reduce(addScript, {});
+
 function addScript(scripts, current) {
     scripts[current] = current;
     return scripts;
