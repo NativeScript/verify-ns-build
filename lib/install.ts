@@ -16,7 +16,7 @@ export async function install(config, ignorePackage) {
     }
 
     for (const { pack, flag } of packages) {
-        await install(pack, flag);
+        await installPackage(pack, flag);
     }
 }
 
