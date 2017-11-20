@@ -32,13 +32,13 @@ function addScript(scripts, current) {
 }
 
 export const bundleBuild = (platform, tnsOptions) =>
-    `npm run build-${platform}-bundle -- ${tnsOptions}`;
+    `tns build ${platform} --bundle ${tnsOptions}`;
 
 export const noBundleBuild = (platform, tnsOptions) =>
     `tns build ${platform} ${tnsOptions}`;
 
 export const bundleRun = (platform, tnsOptions) =>
-    `npm run start-${platform}-bundle -- ${tnsOptions}`;
+    `tns run ${platform} --bundle ${tnsOptions}`;
 
 export const noBundleRun = (platform, tnsOptions) =>
     `tns run ${platform} ${tnsOptions}`;
