@@ -31,14 +31,15 @@ function addScript(scripts, current) {
     return scripts;
 }
 
-export const bundleBuild = (platform, tnsOptions) =>
-    `tns build ${platform} --bundle ${tnsOptions}`;
-
 export const noBundleBuild = (platform, tnsOptions) =>
     `tns build ${platform} ${tnsOptions}`;
 
-export const bundleRun = (platform, tnsOptions) =>
-    `tns run ${platform} --bundle ${tnsOptions}`;
+export const bundleBuild = (platform, tnsOptions) =>
+    `${noBundleBuild(platform, tnsOptions)} --bundle`;
 
 export const noBundleRun = (platform, tnsOptions) =>
     `tns run ${platform} ${tnsOptions}`;
+
+export const bundleRun = (platform, tnsOptions) =>
+    `${noBundleRun(platform, tnsOptions)} --bundle`;
+
