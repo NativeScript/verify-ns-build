@@ -9,6 +9,7 @@ export const HTML_REPORT_FILENAME = "sunburst-report.html";
 
 export const TIMELINE_REPORT_DIR = PROJECT_DIR;
 export const BUNDLE_REPORT_DIR = resolve(PROJECT_DIR, "report");
+export const PLATFORMS_DIR = resolve(PROJECT_DIR, "platforms");
 export const BUNDLE_ANALYZER = {
     dir: resolve(PROJECT_DIR, "report"),
     files: {

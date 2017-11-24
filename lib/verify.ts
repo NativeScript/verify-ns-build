@@ -1,7 +1,8 @@
 import { getReportDirPath, saveBuildReport } from "./report";
-import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
+import { ExecutionResult, execute, executeAndKillWhenIdle, cleanPlatforms } from "./command";
 import {
     PROJECT_DIR,
+    PLATFORMS_DIR,
     bundleBuild,
     bundleRun,
     noBundleBuild,
@@ -14,6 +15,7 @@ import {
     verifyAssets,
     verifyStartupTime,
 } from "./checks";
+import { spawnSync } from "child_process";
 
 export async function verifyRun(options, releaseConfig, name) {
     const { timeline } = options;
@@ -33,6 +35,9 @@ async function verifyApp(options, releaseConfig, name, action) {
     if (!platform) {
         return;
     }
+
+    // Temporary fix to clean platforms before build
+    cleanPlatforms();
 
     const result: any = { configuration: options };
     const { tnsOptions = [], release, bundle } = options;
