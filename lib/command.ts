@@ -63,15 +63,6 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
 }
 
 export function cleanPlatforms() {
-    // const removedFilesResult = spawnSync("rm", [" -rfv"], {
-    //     cwd: PLATFORMS_DIR,
-    //     stdio: "inherit",
-    //     encoding: "UTF8",
-    // });
-
-    //console.log("removedFilesResult", removedFilesResult)
-
-    console.log("REMOVE FILES: !!!! " + PLATFORMS_DIR);
     removeFiles(PLATFORMS_DIR);
 }
 
