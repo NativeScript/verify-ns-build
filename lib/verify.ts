@@ -2,7 +2,6 @@ import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, execute, executeAndKillWhenIdle, cleanPlatforms } from "./command";
 import {
     PROJECT_DIR,
-    PLATFORMS_DIR,
     bundleBuild,
     bundleRun,
     noBundleBuild,
@@ -15,7 +14,6 @@ import {
     verifyAssets,
     verifyStartupTime,
 } from "./checks";
-import { spawnSync } from "child_process";
 
 export async function verifyRun(options, releaseConfig, name) {
     const { timeline } = options;

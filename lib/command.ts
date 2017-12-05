@@ -163,7 +163,6 @@ function removeFiles(mainDir: string, recursive = true, files: Array<string> = n
     const mainDirFullName = mainDir;
     rootFiles.forEach(fileName => {
         const fullName = resolve(mainDirFullName, fileName);
-        console.log(fullName);
         if (statSync(fullName).isDirectory() && recursive) {
             removeFiles(fullName, recursive, files);
         } else {
@@ -199,6 +198,4 @@ function removeFileOrFolder(fullName: string) {
     } else if (statSync(fullName).isFile() || statSync(fullName).isSymbolicLink()) {
         unlinkSync(fullName);
     }
-
-    console.log(fullName);
 }
