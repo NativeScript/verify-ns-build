@@ -13,12 +13,12 @@ import { getPackageJson } from "./project-helpers";
 export async function update({ updateWebpack, updateAngularDeps }) {
     await addNpmScripts({ updateWebpack, updateAngularDeps });
 
-    if (updateWebpack) {
-        await updateNsWebpack(updateWebpack);
-    }
-
     if (updateAngularDeps) {
         await updateNg();
+    }
+
+    if (updateWebpack) {
+        await updateNsWebpack(updateWebpack);
     }
 }
 
