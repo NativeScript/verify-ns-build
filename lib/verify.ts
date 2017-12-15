@@ -35,7 +35,8 @@ async function verifyApp(options, releaseConfig, name, action) {
     }
 
     // Temporary fix to clean platforms before build
-    cleanPlatforms();
+    
+    // cleanPlatforms();
 
     const result: any = { configuration: options };
     const { tnsOptions = [], release, bundle } = options;
