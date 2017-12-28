@@ -1,5 +1,7 @@
 {
-    "!releaseConfig": "./.release-args.json",
+    // This provides intellisense and validation for your verification configuration.
+    "$schema": "./verify-schema.json",
+
     "dependencies": [
         "nativescript-angular@next"
     ],
@@ -7,22 +9,14 @@
         "nativescript-dev-webpack@next"
     ],
     "updateWebpack": {
-        "scripts": true,
         "configs": true,
         "deps": true
     },
     "updateAngularDeps": true,
     "keepReport": true,
-    "!build": [
-        {
-            "name": "debug",
-            "platform": "android",
-            "bundle": false,
-            "release": true,
-            "tnsOptions": ["--release"]
-        }
-    ],
-    "!build": [
+
+    // Builds are executed in the specified order.
+    "build": [
         {
             "name": "debug",
             "platform": "android",
@@ -51,6 +45,8 @@
             }
         }
     ],
+
+    // Runs are executed in specified order AFTER the builds.
     "run": [
         {
             "platform": "android",
@@ -60,14 +56,5 @@
             "startup": "2000"
         }
 
-    ],
-    "!run": [
-        {
-            "platform": "android",
-            "release": true,
-            "bundle": true,
-            "tnsOptions": ["--release"],
-            "timeline": true
-        }
     ]
 }
