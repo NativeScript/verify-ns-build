@@ -1,60 +1,117 @@
 {
     // This provides intellisense and validation for your verification configuration.
-    "$schema": "./verify-schema.json",
+    // "$schema": "./verify-schema.json",
 
-    "dependencies": [
-        "nativescript-angular@next"
-    ],
-    "devDependencies": [
-        "nativescript-dev-webpack@next"
-    ],
-    "updateWebpack": {
-        "configs": true,
-        "deps": true
-    },
-    "updateAngularDeps": true,
-    "keepReport": true,
-
-    // Builds are executed in the specified order.
-    "build": [
+    "updateTypes": [
         {
-            "name": "debug",
-            "platform": "android",
-            "bundle": false,
-            "release": true,
-            "tnsOptions": ["--release"]
+            "name": "next",
+            "dependencies": [
+                "nativescript-angular@next"
+            ],
+            "devDependencies": [
+                "nativescript-dev-webpack@next"
+            ],
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            },
+            "updateAngularDeps": true,
+            "keepReport": true
         },
         {
-            "keepReport": true,
-            "platform": "android",
-            "bundle": true,
-            "release": true,
-            "outputSizes": {
-                "bundle.js": "15000",
-                "vendor.js": "1700000"
-            }
-        },
-        {
-            "platform": "android",
-            "bundle": true,
-            "release": true,
-            "tnsOptions": ["--env.uglify", "--env.snapshot"],
-            "outputSizes": {
-                "bundle.js": "5000",
-                "vendor.js": "700000"
-            }
+            "name": "official",
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            },
+            "updateAngularDeps": true,
+            "keepReport": true
         }
     ],
 
-    // Runs are executed in specified order AFTER the builds.
-    "run": [
+    "verificationTypes": [
         {
-            "platform": "android",
-            "release": true,
-            "bundle": false,
-            "timeline": true,
-            "startup": "2000"
+            "name": "android",
+            "verifications": [
+                {
+                    "name": "debug",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": true,
+                    "tnsOptions": ["--release"]
+                },
+                {
+                    "type": "build",
+                    "keepReport": true,
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "outputSizes": {
+                        "bundle.js": "15000",
+                        "vendor.js": "1700000"
+                    }
+                },
+                {
+                    "type": "run",
+                    "platform": "android",
+                    "release": true,
+                    "bundle": false,
+                    "timeline": true,
+                    "startup": "2000"
+                },
+                {
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": ["--env.uglify", "--env.snapshot"],
+                    "outputSizes": {
+                        "bundle.js": "5000",
+                        "vendor.js": "700000"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ios",
+            "verifications": [
+                {
+                    "name": "debug",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true,
+                    "tnsOptions": ["--release"]
+                },
+                {
+                    "type": "build",
+                    "keepReport": true,
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "outputSizes": {
+                        "bundle.js": "15000",
+                        "vendor.js": "1700000"
+                    }
+                },
+                {
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": ["--env.uglify", "--env.snapshot"],
+                    "outputSizes": {
+                        "bundle.js": "5000",
+                        "vendor.js": "700000"
+                    }
+                },
+                {
+                    "type": "test",
+                    "platform": "ios",
+                    "options": ["--runType=android23", "--timeout=200000"]
+                }
+            ]
         }
-
     ]
 }
