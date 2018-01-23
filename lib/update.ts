@@ -1,3 +1,5 @@
+import { UpdateFlavor } from "../verify-schema";
+
 import { execute } from "./command";
 import {
     PROJECT_DIR,
@@ -10,7 +12,7 @@ import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
-export async function update({ updateWebpack, updateAngularDeps }) {
+export default async function update({ updateWebpack, updateAngularDeps }: UpdateFlavor) {
     await addNpmScripts({ updateWebpack, updateAngularDeps });
 
     if (updateAngularDeps) {

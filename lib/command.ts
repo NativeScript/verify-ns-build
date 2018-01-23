@@ -62,10 +62,6 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
     }
 }
 
-export function cleanPlatforms() {
-    removeFiles(PLATFORMS_DIR);
-}
-
 const spawnAndTrack = ({ cwd, command, args, printLog }) =>
     new Promise((resolve, reject) => {
         console.log(info(`Spawning ${command} ${args}`));
@@ -153,29 +149,6 @@ function handleClose(resolve, reject, code, log?) {
 
         reject(result);
     }
-}
-
-function removeFiles(mainDir: string, recursive = true, files: Array<string> = new Array()) {
-    if (!existsSync(mainDir)) {
-        return;
-    }
-    const rootFiles = getFileNames(mainDir);
-    const mainDirFullName = mainDir;
-    rootFiles.forEach(fileName => {
-        const fullName = resolve(mainDirFullName, fileName);
-        if (statSync(fullName).isDirectory() && recursive) {
-            removeFiles(fullName, recursive, files);
-        } else {
-            removeFileOrFolder(fullName);
-            files.push(fullName);
-        }
-    });
-
-    if (getFileNames(mainDir).length === 0) {
-        removeFileOrFolder(mainDir);
-    }
-
-    return files;
 }
 
 function getFileNames(folder: string) {

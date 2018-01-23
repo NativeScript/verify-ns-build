@@ -1,5 +1,4 @@
 {
-    // This provides intellisense and validation for your verification configuration.
     "$schema": "./verify-schema.json",
 
     "updateFlavors": [

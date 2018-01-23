@@ -1,4 +1,4 @@
-export interface Schema {
+export interface VerifySchema {
     releaseConfig?: string;
     updateFlavors?: UpdateFlavor[];
     verificationFlavors?: VerificationFlavor[]; 
@@ -10,7 +10,6 @@ export interface UpdateFlavor {
     devDependencies?: string[];
     updateAngularDeps?: boolean;
     updateWebpack?: boolean;
-    keepReport?: boolean;
 }
 
 export interface VerificationFlavor {
@@ -32,4 +31,9 @@ export interface Verification {
 
 interface FileSizeMap {
     [fileName: string]: string;
+}
+
+export interface ReleaseConfig {
+    android: string;
+    ios: string;
 }

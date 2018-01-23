@@ -43,4 +43,3 @@ export const noBundleRun = (platform, tnsOptions) =>
 
 export const bundleRun = (platform, tnsOptions) =>
     `${noBundleRun(platform, tnsOptions)} --bundle`;
-

@@ -1,3 +1,5 @@
+import { UpdateFlavor } from "../verify-schema";
+
 import { execute } from "./command";
 import {
     PROJECT_DIR,
@@ -9,7 +11,7 @@ type NpmPackage = {
     flag: "--save"|"--save-dev",
 };
 
-export async function install(config, ignorePackage) {
+export default async function install(config: UpdateFlavor, ignorePackage: string) {
     let packages = getPackages(config);
     if (ignorePackage) {
         packages = packages.filter(({ pack }) => !pack.match(ignorePackage));
@@ -20,7 +22,7 @@ export async function install(config, ignorePackage) {
     }
 }
 
-function getPackages(config): NpmPackage[] {
+function getPackages(config: UpdateFlavor): NpmPackage[] {
     const { dependencies = [], devDependencies = [] } = config;
 
     const toNpmPackage = (packages, flag) =>
@@ -40,4 +42,3 @@ async function installPackage(nodePackage: string, installOption: string) {
         await execute("npm i", PROJECT_DIR);
     }
 }
-
