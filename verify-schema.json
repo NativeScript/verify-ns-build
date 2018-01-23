@@ -58,8 +58,10 @@
                             "default": false
                         },
                         "additionalProperties": false
-                    }
-
+                    },
+                    "required": [
+                        "name"
+                    ]
                 }
             ]
         },
@@ -113,7 +115,10 @@
                                         },
                                         "tnsOptions": {
                                             "type": "array",
-                                            "description": "A list of options to be passed to the command."
+                                            "description": "A list of options to be passed to the executed command.",
+                                            "items": {
+                                                "type": "string"
+                                            }
                                         },
                                         "outputSizes": {
                                             "type": "object",
@@ -137,7 +142,10 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    "required": [
+                        "name"
+                    ]
                 }
             ]
         },
