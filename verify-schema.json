@@ -4,11 +4,6 @@
     "title": "Schema for validating a 'verify.config.json'.",
     "type": "object",
     "properties": {
-        "keepReport": {
-            "type": "string",
-            "description": "Specifies if report from the verifications should be persisted.",
-            "default": false
-        },
         "releaseConfig": {
             "type": "string",
             "description": "A path to release configuration json"
@@ -54,14 +49,14 @@
                                     "type": "boolean",
                                     "default": false
                                 }
-                            },
-                            "additionalProperties": false
+                            }
                         },
                         "additionalProperties": false
                     },
                     "required": [
                         "name"
-                    ]
+                    ],
+                    "additionalProperties": false
                 }
             ]
         },
@@ -75,11 +70,6 @@
                         "name": {
                             "type": "string",
                             "description": "A name for the update configuration."
-                        },
-                        "keepReport": {
-                            "type": "boolean",
-                            "description": "Specifies if report from the verifications should be persisted.",
-                            "default": true
                         },
                         "verifications": {
                             "type": "array",
@@ -153,7 +143,7 @@
                     ]
                 }
             ]
-        },
-        "additionalProperties": false
-    }
+        }
+    },
+    "additionalProperties": false
 }
