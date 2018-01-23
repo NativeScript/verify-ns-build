@@ -5,8 +5,8 @@ import { readFile } from "../fs";
 
 export async function verifyAssets(outputSizes) {
     const assets = await loadAssets();
-    if (!assets) {
-        return;
+    if (!assets || assets.error) {
+        return assets;
     }
 
     const assetsToCheck = Object.keys(outputSizes);
@@ -37,8 +37,8 @@ export async function verifyAssets(outputSizes) {
 
 async function loadAssets() {
     const stats = await loadBundleStats();
-    if (!stats) {
-        return;
+    if (!stats || stats.error) {
+        return stats;
     }
 
     const { assets } = stats;
@@ -58,8 +58,7 @@ async function loadBundleStats() {
         const statsStream = await readFile(bundleStatsPath, "utf8");
         const stats = JSON.parse(statsStream);
         return stats;
-    } catch(e) {
-        console.error("Stats file does not exist!");
-        return;
+    } catch (e) {
+        return { error: `Stats file could not be loaded! Original error:\n\t${e}` };
     }
 }
