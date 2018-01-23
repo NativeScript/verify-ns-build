@@ -1,8 +1,8 @@
 {
     // This provides intellisense and validation for your verification configuration.
-    // "$schema": "./verify-schema.json",
+    "$schema": "./verify-schema.json",
 
-    "updateTypes": [
+    "updateFlavors": [
         {
             "name": "next",
             "dependencies": [
@@ -29,7 +29,7 @@
         }
     ],
 
-    "verificationTypes": [
+    "verificationFlavors": [
         {
             "name": "android",
             "verifications": [

@@ -1,138 +1,146 @@
 {
-  "$schema": "http://json-schema.org/schema",
-  "id": "NativeScriptVerificationSchema",
-  "title": "Schema for validating a 'verify.config.json'.",
-  "type": "object",
-  "properties": {
-    "releaseConfig": {
-      "type": "string",
-      "description": "A path to release configuration json"
-    },
-    "dependencies": {
-      "type": "array",
-      "description": "A list with node packages to be installed as dependencies.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "devDependencies": {
-      "type": "array",
-      "description": "A list with node packages to be installed as development dependencies.",
-      "items": {
-        "type": "string"
-      }
-    },
-   "keepReport": {
-      "type": "boolean",
-      "description": "Specifies if report from the verifications should be persisted.",
-      "default": false
-    },
-    "build": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "platform": {
-              "type": "string",
-              "enum": [
-                "android",
-                "ios"
-              ],
-              "description": "A target platform for the build."
-            },
-            "name": {
-              "type": "string",
-              "description": "A name for the build configuration."
-            },
-            "bundle": {
-              "type": "boolean",
-              "default": "false",
-              "description": "Specifies if the app should be bundled"
-            },
-            "release": {
-              "type": "boolean",
-              "default": "false",
-              "description": "Specifies if the app should be built for release"
-            },
-            "tnsOptions": {
-              "type": "array",
-              "description": "A list of options to be passed to the build command."
-            },
-            "outputSizes": {
-              "type": "object",
-              "description": "A list of key-value pairs for validating the output assets' sizes. Ex: { 'bundle.js': '5000' }"
-            }
-          },
-          "required": [
-            "platform"
-          ]
-        }
-      ]
-    },
-    "run": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "platform": {
-              "type": "string",
-              "enum": [
-                "android",
-                "ios"
-              ],
-              "description": "A target platform for the build."
-            },
-            "name": {
-              "type": "string",
-              "description": "A name for the build configuration."
-            },
-            "bundle": {
-              "type": "boolean",
-              "default": "false",
-              "description": "Specifies if the app should be bundled"
-            },
-            "release": {
-              "type": "boolean",
-              "default": "false",
-              "description": "Specifies if the app should be built for release"
-            },
-            "timeline": {
-              "type": "boolean",
-              "default": false,
-              "description": "Specifies if a timeline startup time report should be persisted."
-            },
-            "startup": {
-              "type": "string",
-              "description": "Specifies the max startup time in ms."
-            }
-          },
-          "required": [
-            "platform"
-          ]
-        }
-      ]
-    },
-    "updateAngularDeps": {
-      "type": "boolean",
-      "description": "Specified if the dependencies for nativescript angular apps should be updated."
-    },
-    "updateWebpack": {
-      "type": "object",
-      "description": "Key-value pairs specifying what should be updated for the {N} webpack plugin.",
-      "properties": {
-        "configs": {
-          "type": "boolean",
-          "default": false
+    "$schema": "http://json-schema.org/schema",
+    "id": "NativeScriptVerificationSchema",
+    "title": "Schema for validating a 'verify.config.json'.",
+    "type": "object",
+    "properties": {
+        "releaseConfig": {
+            "type": "string",
+            "description": "A path to release configuration json"
         },
-        "deps": {
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
+        "updateFlavors": {
+            "type": "array",
+            "description": "Different update configurations to choose from.",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "A name for the update configuration."
+                        },
+                        "dependencies": {
+                            "type": "array",
+                            "description": "A list with node packages to be installed as dependencies.",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "devDependencies": {
+                            "type": "array",
+                            "description": "A list with node packages to be installed as development dependencies.",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "updateAngularDeps": {
+                            "type": "boolean",
+                            "description": "Specified if the dependencies for nativescript angular apps should be updated."
+                        },
+                        "updateWebpack": {
+                            "type": "object",
+                            "description": "Key-value pairs specifying what should be updated for the {N} webpack plugin.",
+                            "properties": {
+                                "configs": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "deps": {
+                                    "type": "boolean",
+                                    "default": false
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "keepReport": {
+                            "type": "boolean",
+                            "description": "Specifies if report from the verifications should be persisted.",
+                            "default": false
+                        },
+                        "additionalProperties": false
+                    }
+
+                }
+            ]
+        },
+        "verificationFlavors": {
+            "type": "array",
+            "description": "Different verification configurations to choose from.",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "A name for the update configuration."
+                        },
+                        "verifications": {
+                            "type": "array",
+                            "description": "List of commands to be executed",
+                            "items": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "platform": {
+                                            "type": "string",
+                                            "enum": [
+                                                "android",
+                                                "ios"
+                                            ],
+                                            "description": "A target platform."
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "build",
+                                                "run"
+                                            ],
+                                            "description": "A verification command to be executed."
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "A name for the configuration."
+                                        },
+                                        "bundle": {
+                                            "type": "boolean",
+                                            "default": "false",
+                                            "description": "Specifies if the app should be bundled"
+                                        },
+                                        "release": {
+                                            "type": "boolean",
+                                            "default": "false",
+                                            "description": "Specifies if the app should be built for release"
+                                        },
+                                        "tnsOptions": {
+                                            "type": "array",
+                                            "description": "A list of options to be passed to the command."
+                                        },
+                                        "outputSizes": {
+                                            "type": "object",
+                                            "description": "A list of key-value pairs for validating the output assets' sizes. Ex: { 'bundle.js': '5000' }"
+                                        },
+                                        "timeline": {
+                                            "type": "boolean",
+                                            "default": false,
+                                            "description": "Specifies if a timeline startup time report should be persisted. Available only for 'run' type is specified."
+                                        },
+                                        "startup": {
+                                            "type": "string",
+                                            "description": "Specifies the max startup time in ms. Available only for Android and when 'run' type is specified."
+                                        }
+                                    },
+                                    "required": [
+                                        "platform",
+                                        "type"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "additionalProperties": false
     }
-  },
-  "additionalProperties": false
 }
