@@ -15,17 +15,21 @@ export interface Config {
 }
 
 export function loadConfig(): Config {
-    const { configPath, updateFlavor, verificationFlavor } = getArgs();
+    const errors = [];
+
+    const configPath = process.env.npm_config_path;
+    if (!configPath) {
+        throw new Error(`You must specify --path!`);
+    }
     const config = <VerifySchema>loadJson(configPath);
 
-    const update = config.updateFlavors.find(u => u.name === updateFlavor);
-    if (!update) {
-        throw new Error(`Cannot find update flavor with name '${updateFlavor}'!`)
-    }
-    const verification = config.verificationFlavors.find(v => v.name === verificationFlavor);
-    if (!verification) {
-        throw new Error(`Cannot find verification flavor with name '${verification}'`);
-    }
+    const update = getFlavor(config.updateFlavors,
+        process.env.npm_config_update,
+        "update");
+    const verification = getFlavor(config.verificationFlavors,
+        process.env.npm_config_verification,
+        "verification");
+
 
     const releaseConfigPath = process.env.npm_config_releaseConfig || config.releaseConfig;
     const releaseConfig = loadReleaseConfig(releaseConfigPath);
@@ -37,33 +41,22 @@ export function loadConfig(): Config {
     };
 }
 
-function getArgs() {
-    const configPath = process.env.npm_config_path;
-    const updateFlavor = process.env.npm_config_update;
-    const verificationFlavor = process.env.npm_config_verification;
+function getFlavor(flavors: any[], name: string, categoryName: string) {
+    if (!name) {
+        const defaultFlavor = flavors.find(f => f.name === "default");
 
-    const errors = [];
-    if (!configPath) {
-        errors.push(argIsRequiredErrorMessage("path"));
+        if (defaultFlavor) {
+            return defaultFlavor;
+        } else {
+            throw new Error(`You must specify --${categoryName} or provide a default flavor!`);
+        }
     }
 
-    if (!updateFlavor) {
-        errors.push(argIsRequiredErrorMessage("update"));
-    }
-
-    if(!verificationFlavor) {
-        errors.push(argIsRequiredErrorMessage("verification"));
-    }
-
-    if (errors.length) {
-        const message = errors.reduce((acc, curr) => `${acc}\n\t${curr}`, "");
-        throw new Error(message);
+    const flavor = flavors.find(f => f.name === name)
+    if (flavor) {
+        return flavor;
     } else {
-        return {
-            configPath,
-            updateFlavor,
-            verificationFlavor,
-        };
+        throw new Error(`${categoryName} with name ${name} not found!`);
     }
 }
 
