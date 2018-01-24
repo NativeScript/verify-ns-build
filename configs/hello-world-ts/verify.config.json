@@ -2,20 +2,36 @@
     "$schema": "../../verify-schema.json",
 
     "updateFlavors": [
+
         {
             "name": "latest",
-            "devDependencies": [
-                "nativescript-dev-webpack@latest"
+            "dependencies": [
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@latest",
+                    "type": "devDependency"
+                }
             ]
         },
         {
             "name": "next",
             "dependencies": [
-                "tns-core-modules@next"
-            ],
-            "devDependencies": [
-                "nativescript-dev-typescript@next",
-                "nativescript-dev-webpack@next"
+                {
+                    "name": "tns-core-modules",
+                    "package": "tns-core-modules@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "nativescript-dev-typescript@next",
+                    "type": "devDependency"
+                },
+
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@next",
+                    "type": "devDependency"
+                }
             ]
         }
     ],
@@ -87,7 +103,15 @@
                     "name": "ios-bundle",
                     "type": "build",
                     "platform": "ios",
-                    "bundle": true,
+              
+            "dependencies": [
+                "nativescript-angular@next",
+                "tns-core-modules@next"
+            ],
+            "devDependencies": [
+                "nativescript-dev-typescript@next",
+                "nativescript-dev-webpack@next"
+            ],      "bundle": true,
                     "release": true,
                     "tnsOptions": [
                         "--env.report"

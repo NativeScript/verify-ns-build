@@ -1,4 +1,4 @@
-import { UpdateFlavor } from "../verify-schema";
+import { UpdateFlavor, NpmDependency } from "../verify-schema";
 
 import { execute } from "./command";
 import {
@@ -6,39 +6,26 @@ import {
     WEBPACK_PLUGIN,
 } from "./constants";
 
-type NpmPackage = {
-    pack: string,
-    flag: "--save"|"--save-dev",
+const PACKAGE_TYPE_FLAG_MAP = {
+    dependency: "--save",
+    devDependency: "--save-dev",
 };
 
-export default async function install(config: UpdateFlavor, ignorePackage: string) {
-    let packages = getPackages(config);
-    if (ignorePackage) {
-        packages = packages.filter(({ pack }) => !pack.match(ignorePackage));
-    }
-
-    for (const { pack, flag } of packages) {
-        await installPackage(pack, flag);
+export default async function install(dependencies: NpmDependency[]) {
+    for (const dependency of dependencies) {
+        await installPackage(dependency);
     }
 }
 
-function getPackages(config: UpdateFlavor): NpmPackage[] {
-    const { dependencies = [], devDependencies = [] } = config;
-
-    const toNpmPackage = (packages, flag) =>
-        packages.map(pack => ({ pack, flag }));
-
-    return [
-        ...toNpmPackage(dependencies, "--save"),
-        ...toNpmPackage(devDependencies, "--save-dev"),
-    ];
-}
-
-async function installPackage(nodePackage: string, installOption: string) {
-    const command = `npm i ${installOption} ${nodePackage}`;
+async function installPackage(dependency: NpmDependency) {
+    const command = toCommand(dependency);
     await execute(command, PROJECT_DIR);
 
-    if (nodePackage.match(WEBPACK_PLUGIN)) {
+    if (dependency.name === WEBPACK_PLUGIN) {
         await execute("npm i", PROJECT_DIR);
     }
+}
+
+function toCommand(dependency: NpmDependency) {
+    return `npm i ${dependency.package} ${PACKAGE_TYPE_FLAG_MAP[dependency.type]}`;
 }

@@ -1,4 +1,4 @@
-import { UpdateFlavor } from "../verify-schema";
+import { WebpackUpdateOptions } from "../verify-schema";
 
 import { execute } from "./command";
 import {
@@ -12,7 +12,7 @@ import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
-export default async function update({ updateWebpack, updateAngularDeps }: UpdateFlavor) {
+export default async function update(updateWebpack: WebpackUpdateOptions, updateAngularDeps: boolean) {
     await addNpmScripts({ updateWebpack, updateAngularDeps });
 
     if (updateAngularDeps) {

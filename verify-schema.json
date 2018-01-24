@@ -22,20 +22,40 @@
                         "dependencies": {
                             "type": "array",
                             "description": "A list with node packages to be installed as dependencies.",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "devDependencies": {
-                            "type": "array",
-                            "description": "A list with node packages to be installed as development dependencies.",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Name of the package to be installed."
+                                        },
+                                        "package": {
+                                            "type": "string",
+                                            "description": "Package to be installed with 'npm install'."
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "enum": [
+                                                "dependency",
+                                                "devDependency"
+                                            ],
+                                            "description": "Specifies whether the package should be installed as a dependency or as a development dependency."
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "package",
+                                        "type"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            ]
                         },
                         "updateAngularDeps": {
                             "type": "boolean",
-                            "description": "Specified if the dependencies for nativescript angular apps should be updated."
+                            "description": "Specifies if the dependencies for nativescript angular apps should be updated."
                         },
                         "updateWebpack": {
                             "type": "object",

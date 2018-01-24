@@ -5,12 +5,27 @@
         {
             "name": "latest",
             "dependencies": [
-                "nativescript-angular@latest",
-                "tns-core-modules@latest"
-            ],
-            "devDependencies": [
-                "nativescript-dev-typescript@latest",
-                "nativescript-dev-webpack@latest"
+                {
+                    "name": "tns-core-modules",
+                    "package": "tns-core-modules@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-angular",
+                    "package": "nativescript-angular@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "nativescript-dev-typescript@next",
+                    "type": "devDependency"
+                },
+
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@next",
+                    "type": "devDependency"
+                }
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
@@ -21,12 +36,27 @@
         {
             "name": "next",
             "dependencies": [
-                "nativescript-angular@next",
-                "tns-core-modules@next"
-            ],
-            "devDependencies": [
-                "nativescript-dev-typescript@next",
-                "nativescript-dev-webpack@next"
+                {
+                    "name": "tns-core-modules",
+                    "package": "tns-core-modules@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-angular",
+                    "package": "nativescript-angular@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "nativescript-dev-typescript@next",
+                    "type": "devDependency"
+                },
+
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@next",
+                    "type": "devDependency"
+                }
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
@@ -35,7 +65,6 @@
             }
         }
     ],
-
 
     "verificationFlavors": [
         {

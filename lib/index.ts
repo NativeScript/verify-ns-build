@@ -13,10 +13,13 @@ const ACTIONS = {
 
 export async function execute() {
     const config: Config = loadConfig();
-    const ignore = process.env.npm_config_ignorePackageInstall;
 
-    await install(config.update, ignore);
-    await update(config.update);
+    await install(config.update.dependencies);
+    await update(config.update.updateWebpack, config.update.updateAngularDeps);
+
+    if (!config.verification.verifications.length) {
+        throw new Error('Verification array is empty!');
+    }
 
     const results = {};
     for (const [index, build] of config.verification.verifications.entries()) {

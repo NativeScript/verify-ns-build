@@ -6,10 +6,33 @@ export interface VerifySchema {
 
 export interface UpdateFlavor {
     name: string;
-    dependencies?: string[];
-    devDependencies?: string[];
+    dependencies?: NpmDependency[];
     updateAngularDeps?: boolean;
-    updateWebpack?: boolean;
+    updateWebpack?: WebpackUpdateOptions;
+}
+
+export interface NpmDependency {
+    /**
+     * Name of the package to be installed.
+     */
+    name: string;
+    /**
+     * Package to be installed with 'npm install'.
+     * - 'tns-core-modules'
+     * - 'tns-core-modules@latest'
+     * - '../some-path/tns-core-modules-3.4.0.tgz'
+     */
+    package: string;
+    /**
+     * Specifies whether the package should be installed as
+     * a dependency or as a development dependency.
+     */
+    type: "dependency" | "devDependency";
+}
+
+export interface WebpackUpdateOptions {
+    configs?: boolean;
+    deps?: boolean;
 }
 
 export interface VerificationFlavor {

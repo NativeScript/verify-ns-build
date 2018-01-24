@@ -4,17 +4,22 @@
     "updateFlavors": [
         {
             "name": "latest",
-            "devDependencies": [
-                "nativescript-dev-webpack@latest"
+            "dependencies": [
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@latest",
+                    "type": "devDependency"
+                }
             ]
         },
         {
             "name": "next",
             "dependencies": [
-                "tns-core-modules@next"
-            ],
-            "devDependencies": [
-                "nativescript-dev-webpack@next"
+                {
+                    "name": "tns-core-modules",
+                    "package": "tns-core-modules@next",
+                    "type": "dependency"
+                }
             ]
         }
     ],

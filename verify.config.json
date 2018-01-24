@@ -5,17 +5,22 @@
         {
             "name": "next",
             "dependencies": [
-                "nativescript-angular@next"
-            ],
-            "devDependencies": [
-                "nativescript-dev-webpack@next"
+                {
+                    "name": "nativescript-dev-angular",
+                    "package": "nativescript-dev-angular@next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "nativescript-dev-webpack@next",
+                    "type": "devDependency"
+                }
             ],
             "updateWebpack": {
                 "configs": true,
                 "deps": true
             },
-            "updateAngularDeps": true,
-            "keepReport": true
+            "updateAngularDeps": true
         },
         {
             "name": "official",
