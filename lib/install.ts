@@ -13,11 +13,16 @@ const PACKAGE_TYPE_FLAG_MAP = {
 
 export default async function install(dependencies: NpmDependency[]) {
     for (const dependency of dependencies) {
-        await installPackage(dependency);
+        dependency.package = getPackage(dependency);
+        await runNpmInstall(dependency);
     }
 }
 
-async function installPackage(dependency: NpmDependency) {
+function getPackage(dependency: NpmDependency) {
+    return process.env[dependency.name] || dependency.package;
+}
+
+async function runNpmInstall(dependency: NpmDependency) {
     const command = toCommand(dependency);
     await execute(command, PROJECT_DIR);
 
@@ -26,6 +31,6 @@ async function installPackage(dependency: NpmDependency) {
     }
 }
 
-function toCommand(dependency: NpmDependency) {
-    return `npm i ${dependency.package} ${PACKAGE_TYPE_FLAG_MAP[dependency.type]}`;
+function toCommand({ name, package: npmPackage, type }: NpmDependency) {
+    return `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]}`;
 }
