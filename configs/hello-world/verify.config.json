@@ -7,7 +7,7 @@
             "dependencies": [
                 {
                     "name": "nativescript-dev-webpack",
-                    "package": "nativescript-dev-webpack@latest",
+                    "package": "latest",
                     "type": "devDependency"
                 }
             ]
@@ -17,7 +17,7 @@
             "dependencies": [
                 {
                     "name": "tns-core-modules",
-                    "package": "tns-core-modules@next",
+                    "package": "next",
                     "type": "dependency"
                 }
             ]

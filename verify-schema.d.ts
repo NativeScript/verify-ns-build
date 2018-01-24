@@ -18,9 +18,9 @@ export interface NpmDependency {
     name: string;
     /**
      * Package to be installed with 'npm install'.
-     * - 'tns-core-modules'
-     * - 'tns-core-modules@latest'
-     * - '../some-path/tns-core-modules-3.4.0.tgz'
+     * Will be concatenated with the package name and @. Examples:
+     * - 'latest' -> 'name@latest'
+     * - '../some-path/tns-core-modules-3.4.0.tgz' -> 'name@../some-path/tns-core-modules-3.4.0.tgz'
      */
     package: string;
     /**
