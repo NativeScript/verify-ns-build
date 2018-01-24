@@ -1,0 +1,117 @@
+{
+    "$schema": "../../verify-schema.json",
+
+    "updateFlavors": [
+        {
+            "name": "latest",
+            "devDependencies": [
+                "nativescript-dev-webpack@latest"
+            ]
+        },
+        {
+            "name": "next",
+            "dependencies": [
+                "tns-core-modules@next"
+            ],
+            "devDependencies": [
+                "nativescript-dev-webpack@next"
+            ]
+        }
+    ],
+
+    "verificationFlavors": [
+        {
+            "name": "default",
+            "verifications": [
+                {
+                    "name": "android-release",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "android-bundle",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "5000",
+                        "vendor.js": "1300000"
+                    }
+                },
+                {
+                    "name": "android-uglify",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "2000",
+                        "vendor.js": "700000"
+                    }
+                },
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.snapshot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "2000",
+                        "vendor.js": "700000"
+                    }
+                },
+                {
+                    "name": "ios-release",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "ios-bundle",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "5000",
+                        "vendor.js": "1400000"
+                    }
+                },
+                {
+                    "name": "ios-uglify",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "2000",
+                        "vendor.js": "700000"
+                    }
+                }
+            ]
+        }
+    ]
+}

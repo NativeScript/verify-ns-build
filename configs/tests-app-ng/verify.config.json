@@ -1,0 +1,152 @@
+{
+    "$schema": "../../verify-schema.json",
+
+    "updateFlavors": [
+        {
+            "name": "latest",
+            "dependencies": [
+                "nativescript-angular@latest",
+                "tns-core-modules@latest"
+            ],
+            "devDependencies": [
+                "nativescript-dev-typescript@latest",
+                "nativescript-dev-webpack@latest"
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
+        },
+        {
+            "name": "next",
+            "dependencies": [
+                "nativescript-angular@next",
+                "tns-core-modules@next"
+            ],
+            "devDependencies": [
+                "nativescript-dev-typescript@next",
+                "nativescript-dev-webpack@next"
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
+        }
+    ],
+
+
+    "verificationFlavors": [
+        {
+            "name": "default",
+            "verifications": [
+                {
+                    "name": "android-release",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "android-bundle",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "294000",
+                        "vendor.js": "3200000"
+                    }
+                },
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.snapshot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+                },
+                {
+                    "name": "ios-release",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "ios-bundle",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "295000",
+                        "vendor.js": "3300000"
+                    }
+                },
+                {
+                    "name": "ios-aot-uglify",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+                },
+                {
+                    "name": "android-snapshot",
+                    "type": "run",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.snapshot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+
+                },
+                {
+                    "name": "ios-uglify-run",
+                    "type": "run",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+                }
+            ]
+        }
+    ]
+}

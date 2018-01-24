@@ -1,0 +1,108 @@
+{
+    "!appName": "sdk-samples",
+    "dependencies": [
+        "nativescript-angular@next",
+        "nativescript-theme-core@latest",
+        "tns-core-modules@next"
+    ],
+    "devDependencies": ["nativescript-dev-typescript@next"],
+    "!devDependencies": ["nativescript-dev-webpack@next"],
+    "updateWebpack": {
+        "scripts": true,
+        "configs": true,
+        "deps": true
+    },
+    "updateAngularDeps": true,
+    "keepReport": true,
+    "build": [
+        {
+            "name": "android-release",
+            "platform": "android",
+            "bundle": false,
+            "release": true
+        },
+        {
+            "name": "android-bundle",
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "outputSizes": {
+                "bundle.js": "50000",
+                "vendor.js": "3587000"
+            }
+        },
+        {
+            "name": "android-snapshot-0",
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.aot", "--env.uglify", "--env.snapshot"],
+            "outputSizes": {
+                "bundle.js": "30000",
+                "vendor.js": "1446000"
+            }
+        },
+        {
+            "name": "android-snapshot-1",
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.aot", "--env.uglify", "--env.snapshot"],
+            "outputSizes": {
+                "bundle.js": "30000",
+                "vendor.js": "1446000"
+            }
+        },
+        {
+            "name": "ios-release",
+            "platform": "ios",
+            "bundle": false,
+            "release": true
+        },
+        {
+            "name": "ios-bundle",
+            "platform": "ios",
+            "bundle": true,
+            "release": true,
+            "outputSizes": {
+                "bundle.js": "50000",
+                "vendor.js": "3689000"
+            }
+        },
+        {
+            "name": "ios-aot-uglify",
+            "platform": "ios",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.aot", "--env.uglify"],
+            "outputSizes": {
+                "bundle.js": "30000",
+                "vendor.js": "1407000"
+            }
+        }
+    ],
+    "!run": [
+        {
+            "name": "android-snapshot-run",
+            "platform": "android",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.uglify", "--env.snapshot"],
+            "outputSizes": {
+                "bundle.js": "30000",
+                "vendor.js": "1446000"
+            }
+        },
+        {
+            "name": "ios-uglify",
+            "platform": "ios",
+            "bundle": true,
+            "release": true,
+            "tnsOptions": ["--env.uglify"],
+            "outputSizes": {
+                "bundle.js": "30000",
+                "vendor.js": "1407000"
+            }
+        }
+    ]
+}
