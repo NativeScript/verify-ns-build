@@ -36,11 +36,23 @@ async function runNpmInstall(dependency: NpmDependency) {
     }
 }
 
-function toNpmCommand({ name, package: npmPackage, type }: NpmDependency) {
-    return `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]}`;
-}
+const toNpmCommand = ({ name, package: npmPackage, type }: NpmDependency) =>
+    `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]}`;
 
 async function runPlatformAdd({ name, package: npmPackage }: NpmDependency) {
-    const command = `tns platform add ${name}@${npmPackage}`;
+    let command = `tns platform add ${name}`;
+
+    command += isArchive(npmPackage) ?
+        ` --frameworkPath ${npmPackage}` :
+        `@${npmPackage}`;
+
     await execute(command, PROJECT_DIR);
 }
+
+const archiveExtensions = [
+    "tgz",
+    "tar",
+    "tar.gz",
+];
+
+const isArchive = name => archiveExtensions.some(ext => name.endsWith(ext));
