@@ -4,7 +4,7 @@ export interface ConfigOptions {
      * It can be either relative ("./verify.config.json")
      * or absolute ("verify.config.json").
      */
-    path: string;
+    config: string;
     /**
      * Path to the release configuration.
      * It can be either relative ("./release.config.json")

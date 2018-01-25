@@ -4,7 +4,7 @@
     const { execute } = require("..");
 
     const options = {
-        path: process.env.npm_config_path,
+        config: process.env.npm_config_config,
         releaseConfig: process.env.npm_config_releaseConfig,
         update: process.env.npm_config_update,
         verification: process.env.npm_config_verification,

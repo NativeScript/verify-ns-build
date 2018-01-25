@@ -19,9 +19,9 @@ export interface Config {
 export function loadConfig(options: ConfigOptions): Config {
     const errors = [];
 
-    const configPath = options.path;
+    const configPath = options.config;
     if (!configPath) {
-        throw new Error(`You must specify --path!`);
+        throw new Error(`You must specify config path!`);
     }
     const config = <VerifySchema>loadJson(configPath);
 
