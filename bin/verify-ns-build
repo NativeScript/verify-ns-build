@@ -3,7 +3,14 @@
 (async () => {
     const { execute } = require("..");
 
-    await execute().catch(e => {
+    const options = {
+        path: process.env.npm_config_path,
+        releaseConfig: process.env.npm_config_releaseConfig,
+        update: process.env.npm_config_update,
+        verification: process.env.npm_config_verification,
+    };
+
+    await execute(options).catch(e => {
         console.error(e);
         process.exit(1);
     });

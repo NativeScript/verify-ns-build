@@ -1,12 +1,14 @@
 import { join } from "path";
 import { homedir } from "os";
 
+import { ConfigOptions } from "./config-options";
+
 import {
     VerifySchema,
     ReleaseConfig,
     UpdateFlavor,
     VerificationFlavor,
- } from "../verify-schema";
+} from "../verify-schema";
 
 export interface Config {
     update: UpdateFlavor;
@@ -14,24 +16,24 @@ export interface Config {
     releaseConfig: ReleaseConfig;
 }
 
-export function loadConfig(): Config {
+export function loadConfig(options: ConfigOptions): Config {
     const errors = [];
 
-    const configPath = process.env.npm_config_path;
+    const configPath = options.path;
     if (!configPath) {
         throw new Error(`You must specify --path!`);
     }
     const config = <VerifySchema>loadJson(configPath);
 
     const update = getFlavor(config.updateFlavors,
-        process.env.npm_config_update,
+        options.update,
         "update");
     const verification = getFlavor(config.verificationFlavors,
-        process.env.npm_config_verification,
+        options.verification,
         "verification");
 
 
-    const releaseConfigPath = process.env.npm_config_releaseConfig || config.releaseConfig;
+    const releaseConfigPath = options.releaseConfig || config.releaseConfig;
     const releaseConfig = loadReleaseConfig(releaseConfigPath);
 
     return {

@@ -11,7 +11,7 @@ const PACKAGE_TYPE_FLAG_MAP = {
     devDependency: "--save-dev",
 };
 
-export default async function install(dependencies: NpmDependency[]) {
+export default async function install(dependencies: NpmDependency[] = []) {
     for (const dependency of dependencies) {
         dependency.package = getPackage(dependency);
         await runNpmInstall(dependency);
