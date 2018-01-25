@@ -25,9 +25,10 @@ export interface NpmDependency {
     package: string;
     /**
      * Specifies whether the package should be installed as
-     * a dependency or as a development dependency.
+     * a dependency or as a development dependency,
+     * or it should be added as nativescript platform.
      */
-    type: "dependency" | "devDependency";
+    type: "dependency" | "devDependency" | "nsPlatform";
 }
 
 export interface WebpackUpdateOptions {

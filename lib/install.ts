@@ -14,7 +14,12 @@ const PACKAGE_TYPE_FLAG_MAP = {
 export default async function install(dependencies: NpmDependency[] = []) {
     for (const dependency of dependencies) {
         dependency.package = getPackage(dependency);
-        await runNpmInstall(dependency);
+
+        if (dependency.type === "nsPlatform") {
+            await runPlatformAdd(dependency);
+        } else {
+            await runNpmInstall(dependency);
+        }
     }
 }
 
@@ -23,7 +28,7 @@ function getPackage(dependency: NpmDependency) {
 }
 
 async function runNpmInstall(dependency: NpmDependency) {
-    const command = toCommand(dependency);
+    const command = toNpmCommand(dependency);
     await execute(command, PROJECT_DIR);
 
     if (dependency.name === WEBPACK_PLUGIN) {
@@ -31,6 +36,11 @@ async function runNpmInstall(dependency: NpmDependency) {
     }
 }
 
-function toCommand({ name, package: npmPackage, type }: NpmDependency) {
+function toNpmCommand({ name, package: npmPackage, type }: NpmDependency) {
     return `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]}`;
+}
+
+async function runPlatformAdd({ name, package: npmPackage }: NpmDependency) {
+    const command = `tns platform add ${name}@${npmPackage}`;
+    await execute(command, PROJECT_DIR);
 }

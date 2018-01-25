@@ -39,9 +39,10 @@
                                             "type": "string",
                                             "enum": [
                                                 "dependency",
-                                                "devDependency"
+                                                "devDependency",
+                                                "nsPlatform"
                                             ],
-                                            "description": "Specifies whether the package should be installed as a dependency or as a development dependency."
+                                            "description": "Specifies if the package should be installed as a dependency or as a development dependency, or it should be added as nativescript platform."
                                         }
                                     },
                                     "required": [
