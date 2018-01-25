@@ -32,7 +32,6 @@ export function loadConfig(options: ConfigOptions): Config {
         options.verification,
         "verification");
 
-
     const releaseConfigPath = options.releaseConfig || config.releaseConfig;
     const releaseConfig = loadReleaseConfig(releaseConfigPath);
 
