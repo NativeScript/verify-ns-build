@@ -3,7 +3,7 @@
 
     "updateFlavors": [
         {
-            "name": "latest",
+            "name": "default",
             "dependencies": [
                 {
                     "name": "tns-core-modules",
