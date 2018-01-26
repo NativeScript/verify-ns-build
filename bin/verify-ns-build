@@ -5,6 +5,7 @@
 
     const options = {
         config: process.env.npm_config_config,
+        defaultConfig: process.env.npm_config_defaultConfig,
         releaseConfig: process.env.npm_config_releaseConfig,
         update: process.env.npm_config_update,
         verification: process.env.npm_config_verification,

@@ -19,11 +19,22 @@ export interface Config {
 export function loadConfig(options: ConfigOptions): Config {
     const errors = [];
 
-    const configPath = options.config;
-    if (!configPath) {
+    const { config: configPath, defaultConfig: defaultConfigName } = options;
+    if (!configPath && !defaultConfigName) {
         throw new Error(`You must specify config path!`);
     }
-    const config = <VerifySchema>loadJson(configPath);
+
+    let config: VerifySchema;
+    if (configPath) {
+        config = loadJson(configPath);
+    } else {
+        const defaultConfigPath = join(__dirname, `../configs/${defaultConfigName}/verify.config.json`);
+        try {
+            config = loadJson(defaultConfigPath);
+        } catch (e) {
+            throw new Error(`Cannot find default configuration called ${defaultConfigName}!`);
+        }
+    }
 
     const update = getFlavor(config.updateFlavors,
         options.update,

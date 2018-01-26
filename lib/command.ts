@@ -1,10 +1,10 @@
 import { spawn, spawnSync } from "child_process";
+import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
+import { resolve } from "path";
 
 import { track, info } from "./utils";
 
 import { PLATFORMS_DIR } from "./constants";
-import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
-import { resolve } from "path";
 
 const NEW_DATA_WAIT_TIME = 2 * 60 * 1000;
 const nsSpawnedProcesses = [];

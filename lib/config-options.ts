@@ -4,13 +4,19 @@ export interface ConfigOptions {
      * It can be either relative ("./verify.config.json")
      * or absolute ("verify.config.json").
      */
-    config: string;
+    config?: string;
+    /**
+     * Name of a preloaded configuration to be used.
+     * The path for the config to be fetched from will be:
+     * ./node_modules/verify-ns-build/config/${defaultConfig}/verify.config.json
+     */
+    defaultConfig?: string;
     /**
      * Path to the release configuration.
      * It can be either relative ("./release.config.json")
      * or absolute ("release.config.json").
      */
-    releaseConfig: string;
+    releaseConfig?: string;
     /**
      * The update flavor to be used.
      * It should match an update configuration
