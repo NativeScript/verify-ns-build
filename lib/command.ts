@@ -150,25 +150,3 @@ function handleClose(resolve, reject, code, log?) {
         reject(result);
     }
 }
-
-function getFileNames(folder: string) {
-    let files: Array<string> = new Array();
-    readdirSync(resolve(folder)).forEach(file => {
-        files.push(file);
-    });
-
-    return files;
-}
-
-function removeFileOrFolder(fullName: string) {
-    if (statSync(fullName).isDirectory()) {
-        try {
-            rmdirSync(fullName);
-        } catch (error) {
-            unlinkSync(fullName);
-        }
-
-    } else if (statSync(fullName).isFile() || statSync(fullName).isSymbolicLink()) {
-        unlinkSync(fullName);
-    }
-}
