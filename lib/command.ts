@@ -6,7 +6,7 @@ import { PLATFORMS_DIR } from "./constants";
 import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
 import { resolve } from "path";
 
-const NEW_DATA_WAIT_TIME = 15 * 1000;
+const NEW_DATA_WAIT_TIME = 2 * 60 * 1000;
 const nsSpawnedProcesses = [];
 const nsTimeoutIntervals = [];
 
