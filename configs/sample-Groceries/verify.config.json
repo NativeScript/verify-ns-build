@@ -185,6 +185,7 @@
                     "bundle": true,
                     "release": true,
                     "tnsOptions": [
+                        "--env.aot",
                         "--env.report"
                     ],
                     "outputSizes": {
@@ -223,6 +224,7 @@
                     "bundle": true,
                     "release": true,
                     "tnsOptions": [
+                        "--env.aot",
                         "--env.report"
                     ],
                     "outputSizes": {
@@ -253,6 +255,7 @@
                     "bundle": true,
                     "release": true,
                     "tnsOptions": [
+                        "--env.aot",
                         "--env.uglify",
                         "--env.snapshot",
                         "--env.report"
@@ -269,6 +272,7 @@
                     "bundle": true,
                     "release": true,
                     "tnsOptions": [
+                        "--env.aot",
                         "--env.uglify",
                         "--env.report"
                     ],
