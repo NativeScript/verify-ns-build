@@ -58,7 +58,7 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
         const log = await action(options);
         return { log };
     } catch (error) {
-        return error;
+        return { error };
     }
 }
 

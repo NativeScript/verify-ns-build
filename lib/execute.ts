@@ -4,6 +4,7 @@ import { ConfigOptions } from "./config-options";
 import { Config, loadConfig } from "./config";
 import { verifyBuild, verifyRun } from "./verify";
 import { saveFinalReports } from "./report";
+import { hasError } from "./utils";
 import install from "./install";
 import update from "./update";
 
@@ -35,4 +36,7 @@ export async function execute(options: ConfigOptions) {
     }
 
     await saveFinalReports(results);
+
+    const isSuccessful = !hasError(results);
+    return isSuccessful;
 }

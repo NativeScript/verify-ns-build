@@ -11,8 +11,12 @@
         verification: process.env.npm_config_verification,
     };
 
-    await execute(options).catch(e => {
+    const success = await execute(options).catch(e => {
         console.error(e);
         process.exit(1);
     });
+
+    if (!success) {
+        process.exit(1);
+    }
 })();
