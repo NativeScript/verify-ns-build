@@ -44,8 +44,10 @@ export function loadConfig(options: ConfigOptions): Config {
         options.verification,
         "verification");
 
-    const releaseConfigPath = options.releaseConfig || config.releaseConfig;
-    const releaseConfig = loadReleaseConfig(releaseConfigPath);
+    const releaseConfigPath = options.releaseConfigPath || config.releaseConfigPath;
+    const releaseConfig = options.releaseConfig;
+    const augmentedReleaseConfig = loadReleaseConfig(releaseConfigPath, releaseConfig);
+
 
     return {
         outFileName: config.outFileName,
@@ -78,16 +80,18 @@ function argIsRequiredErrorMessage(name: string) {
     return `You must specify --${name}!`;
 }
 
-function loadReleaseConfig(path: string): ReleaseConfig {
+function loadReleaseConfig(path: string, providedConfig: ReleaseConfig): ReleaseConfig {
     const releaseConfig = {
         android: "--release",
         ios: "--release",
     };
 
+    const overrideDefaults = (key, config) => releaseConfig[key] = config[key];
     if (path) {
         const loadedConfig = loadJson(path);
-        const overrideDefaults = key => releaseConfig[key] = loadedConfig[key];
-        Object.keys(loadedConfig).forEach(overrideDefaults);
+        Object.keys(loadedConfig).forEach(key => overrideDefaults(key, loadedConfig));
+    } else if (providedConfig) {
+        Object.keys(providedConfig).forEach(key => overrideDefaults(key, providedConfig));
     }
 
     return releaseConfig;

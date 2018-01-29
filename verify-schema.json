@@ -7,9 +7,9 @@
         "outFileName": {
             "type": "string"
         },
-        "releaseConfig": {
+        "releaseConfigPath": {
             "type": "string",
-            "description": "A path to release configuration json."
+            "description": "A path to release configuration json file."
         },
         "updateFlavors": {
             "type": "array",

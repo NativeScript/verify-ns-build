@@ -1,3 +1,5 @@
+import { ReleaseConfig } from "../verify-schema";
+
 export interface ConfigOptions {
     /**
      * Path to the verify.config.json.
@@ -16,7 +18,14 @@ export interface ConfigOptions {
      * It can be either relative ("./release.config.json")
      * or absolute ("release.config.json").
      */
-    releaseConfig?: string;
+    releaseConfigPath?: string;
+    /**
+     * Release configuration object.
+     * Should be provided when the package is used as
+     * a javascript library.
+     * Cannot be provided from the command line.
+     */
+    releaseConfig?: ReleaseConfig;
     /**
      * The update flavor to be used.
      * It should match an update configuration
@@ -26,7 +35,6 @@ export interface ConfigOptions {
      * will be used.
      */
     update?: string;
-
     /**
      * The verification flavor to be used.
      * It should match an update configuration

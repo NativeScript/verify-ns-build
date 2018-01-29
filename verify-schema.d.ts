@@ -1,5 +1,5 @@
 export interface VerifySchema {
-    releaseConfig?: string;
+    releaseConfigPath?: string;
     updateFlavors?: UpdateFlavor[];
     verificationFlavors?: VerificationFlavor[]; 
     outFileName?: string;
