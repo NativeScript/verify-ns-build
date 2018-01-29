@@ -58,6 +58,7 @@ function generateSunburstHtml(data): string {
 }
 
 function dump(file: string) {
+    console.log(`Dump file ${file} full path ${join(__dirname, file)}`);
     return readFileSync(join(__dirname, file)).toString();
 }
 
