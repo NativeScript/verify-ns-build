@@ -2,6 +2,7 @@ export interface VerifySchema {
     releaseConfig?: string;
     updateFlavors?: UpdateFlavor[];
     verificationFlavors?: VerificationFlavor[]; 
+    outFileName?: string;
 }
 
 export interface UpdateFlavor {

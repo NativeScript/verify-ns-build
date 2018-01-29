@@ -1,5 +1,6 @@
 {
     "$schema": "../../verify-schema.json",
+    "outFileName": "template-hello-world",
 
     "updateFlavors": [
         {

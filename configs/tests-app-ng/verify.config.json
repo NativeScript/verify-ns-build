@@ -1,5 +1,7 @@
 {
     "$schema": "../../verify-schema.json",
+    "outFileName": "TestsAppNg",
+
     "updateFlavors": [
         {
             "name": "android",

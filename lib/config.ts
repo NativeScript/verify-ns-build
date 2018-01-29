@@ -11,6 +11,7 @@ import {
 } from "../verify-schema";
 
 export interface Config {
+    outFileName: string;
     update: UpdateFlavor;
     verification: VerificationFlavor;
     releaseConfig: ReleaseConfig;
@@ -47,6 +48,7 @@ export function loadConfig(options: ConfigOptions): Config {
     const releaseConfig = loadReleaseConfig(releaseConfigPath);
 
     return {
+        outFileName: config.outFileName,
         update,
         verification,
         releaseConfig,

@@ -4,9 +4,12 @@
     "title": "Schema for validating a 'verify.config.json'.",
     "type": "object",
     "properties": {
+        "outFileName": {
+            "type": "string"
+        },
         "releaseConfig": {
             "type": "string",
-            "description": "A path to release configuration json"
+            "description": "A path to release configuration json."
         },
         "updateFlavors": {
             "type": "array",

@@ -37,6 +37,6 @@ export async function execute(options: ConfigOptions) {
 
     await saveFinalReports(results);
 
-    const isSuccessful = !hasError(results);
-    return isSuccessful;
+    const success: boolean = !hasError(results);
+    return { success, outFileName: config.outFileName };
 }
