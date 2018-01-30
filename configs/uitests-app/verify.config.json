@@ -43,16 +43,6 @@
                 }
             ],
             "updateAngularDeps": false
-        },
-        {
-            "name": "latest",
-            "dependencies": [
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "latest",
-                    "type": "devDependency"
-                }
-            ]
         }
     ],
     "verificationFlavors": [
