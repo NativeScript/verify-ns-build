@@ -43,17 +43,14 @@ export function loadConfig(options: ConfigOptions): Config {
     const verification = getFlavor(config.verificationFlavors,
         options.verification,
         "verification");
-
-    const releaseConfigPath = options.releaseConfigPath || config.releaseConfigPath;
-    const releaseConfig = options.releaseConfig;
-    const augmentedReleaseConfig = loadReleaseConfig(releaseConfigPath, releaseConfig);
-
+    const releaseConfig = loadReleaseConfig(options, config);
+    const { outFileName } = config;
 
     return {
-        outFileName: config.outFileName,
         update,
         verification,
         releaseConfig,
+        outFileName,
     };
 }
 
@@ -80,21 +77,25 @@ function argIsRequiredErrorMessage(name: string) {
     return `You must specify --${name}!`;
 }
 
-function loadReleaseConfig(path: string, providedConfig: ReleaseConfig): ReleaseConfig {
-    const releaseConfig = {
-        android: "--release",
-        ios: "--release",
+function loadReleaseConfig(configOptions: ConfigOptions, schemaOptions: VerifySchema): ReleaseConfig {
+    const path: string = configOptions.releaseConfigPath ||
+        schemaOptions.releaseConfigPath;
+    const providedConfig: ReleaseConfig = configOptions.releaseConfig;
+
+    const config = {
+        android: "--release ",
+        ios: "--release ",
     };
 
-    const overrideDefaults = (key, config) => releaseConfig[key] = config[key];
+    const augmentDefaults = (key, newConfig) => config[key] += newConfig[key];
     if (path) {
         const loadedConfig = loadJson(path);
-        Object.keys(loadedConfig).forEach(key => overrideDefaults(key, loadedConfig));
+        Object.keys(loadedConfig).forEach(key => augmentDefaults(key, loadedConfig));
     } else if (providedConfig) {
-        Object.keys(providedConfig).forEach(key => overrideDefaults(key, providedConfig));
+        Object.keys(providedConfig).forEach(key => augmentDefaults(key, providedConfig));
     }
 
-    return releaseConfig;
+    return config;
 }
 
 function loadJson(path) {
