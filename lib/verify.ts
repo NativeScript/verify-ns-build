@@ -40,6 +40,7 @@ async function verifyApp(options, releaseConfig, name, action) {
     try {
         flags = prepareFlags(tnsOptions, release, releaseConfig, platform);
     } catch (error) {
+        console.dir(error);
         result.error = error;
         return result;
     }
