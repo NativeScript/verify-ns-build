@@ -63,7 +63,7 @@
                     "name": "android-snapshot",
                     "type": "build",
                     "platform": "android",
-                    "bundle": true,
+                    "bundle": false,
                     "release": true
                 }
             ]
@@ -75,7 +75,7 @@
                     "name": "android-snapshot",
                     "type": "build",
                     "platform": "ios",
-                    "bundle": true,
+                    "bundle": false,
                     "release": true
                 }
             ]
