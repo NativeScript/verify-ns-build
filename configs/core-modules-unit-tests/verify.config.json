@@ -17,21 +17,12 @@
                     "type": "devDependency"
                 },
                 {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
-            "updateWebpack": {
-                "configs": true,
-                "deps": true
-            }
+            "updateAngularDeps": false
         },
         {
             "name": "ios",
@@ -47,21 +38,12 @@
                     "type": "devDependency"
                 },
                 {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "ios",
                     "package": "next",
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
-            "updateWebpack": {
-                "configs": true,
-                "deps": true
-            }
+            "updateAngularDeps": false
         },
         {
             "name": "latest",
@@ -103,13 +85,7 @@
                     "type": "build",
                     "platform": "android",
                     "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.uglify",
-                        "--env.snapshot",
-                        "--env.report"
-                    ]
+                    "release": true
                 }
             ]
         },
@@ -121,12 +97,7 @@
                     "type": "build",
                     "platform": "ios",
                     "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.uglify",
-                        "--env.report"
-                    ]
+                    "release": true
                 }
             ]
         },
