@@ -2,7 +2,6 @@ const { join, resolve } = require("path");
 const { readFileSync, writeFileSync } = require("fs");
 
 const { REPORT_DIR, HTML_REPORT_FILENAME } = require("../constants");
-const { writeFile } = require("../fs");
 const { underline } = require("../utils");
 
 export function saveHtmlReport(data) {
