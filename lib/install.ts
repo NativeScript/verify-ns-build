@@ -1,43 +1,58 @@
+import { UpdateFlavor, NpmDependency } from "../verify-schema";
+
 import { execute } from "./command";
 import {
     PROJECT_DIR,
     WEBPACK_PLUGIN,
 } from "./constants";
 
-type NpmPackage = {
-    pack: string,
-    flag: "--save"|"--save-dev",
+const PACKAGE_TYPE_FLAG_MAP = {
+    dependency: "--save",
+    devDependency: "--save-dev",
 };
 
-export async function install(config, ignorePackage) {
-    let packages = getPackages(config);
-    if (ignorePackage) {
-        packages = packages.filter(({ pack }) => !pack.match(ignorePackage));
-    }
+export default async function install(dependencies: NpmDependency[] = []) {
+    for (const dependency of dependencies) {
+        dependency.package = getPackage(dependency);
 
-    for (const { pack, flag } of packages) {
-        await installPackage(pack, flag);
+        if (dependency.type === "nsPlatform") {
+            await runPlatformAdd(dependency);
+        } else {
+            await runNpmInstall(dependency);
+        }
     }
 }
 
-function getPackages(config): NpmPackage[] {
-    const { dependencies = [], devDependencies = [] } = config;
-
-    const toNpmPackage = (packages, flag) =>
-        packages.map(pack => ({ pack, flag }));
-
-    return [
-        ...toNpmPackage(dependencies, "--save"),
-        ...toNpmPackage(devDependencies, "--save-dev"),
-    ];
+function getPackage(dependency: NpmDependency) {
+    return process.env[dependency.name] || dependency.package;
 }
 
-async function installPackage(nodePackage: string, installOption: string) {
-    const command = `npm i ${installOption} ${nodePackage}`;
+async function runNpmInstall(dependency: NpmDependency) {
+    const command = toNpmCommand(dependency);
     await execute(command, PROJECT_DIR);
 
-    if (nodePackage.match(WEBPACK_PLUGIN)) {
+    if (dependency.name === WEBPACK_PLUGIN) {
         await execute("npm i", PROJECT_DIR);
     }
 }
 
+const toNpmCommand = ({ name, package: npmPackage, type }: NpmDependency) =>
+    `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]}`;
+
+async function runPlatformAdd({ name, package: npmPackage }: NpmDependency) {
+    let command = `tns platform add ${name}`;
+
+    command += isArchive(npmPackage) ?
+        ` --frameworkPath ${npmPackage}` :
+        `@${npmPackage}`;
+
+    await execute(command, PROJECT_DIR);
+}
+
+const archiveExtensions = [
+    "tgz",
+    "tar",
+    "tar.gz",
+];
+
+const isArchive = name => archiveExtensions.some(ext => name.endsWith(ext));

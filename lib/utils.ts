@@ -38,3 +38,8 @@ export const warn = (text: string) =>
 const paint = (color: string, text: string) =>
     `${color}${text}${colors.reset}`;
 
+export const hasError = (report: object) =>
+    report.hasOwnProperty("error") ||
+        Object.values(report)
+            .filter(value => value !== null && typeof value === "object")
+            .some(hasError);

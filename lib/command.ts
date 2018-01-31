@@ -1,10 +1,10 @@
 import { spawn, spawnSync } from "child_process";
+import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
+import { resolve } from "path";
 
 import { track, info } from "./utils";
 
 import { PLATFORMS_DIR } from "./constants";
-import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
-import { resolve } from "path";
 
 const NEW_DATA_WAIT_TIME = 15 * 1000;
 const nsSpawnedProcesses = [];
@@ -58,12 +58,8 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
         const log = await action(options);
         return { log };
     } catch (error) {
-        return error;
+        return { error };
     }
-}
-
-export function cleanPlatforms() {
-    removeFiles(PLATFORMS_DIR);
 }
 
 const spawnAndTrack = ({ cwd, command, args, printLog }) =>
@@ -152,50 +148,5 @@ function handleClose(resolve, reject, code, log?) {
         };
 
         reject(result);
-    }
-}
-
-function removeFiles(mainDir: string, recursive = true, files: Array<string> = new Array()) {
-    if (!existsSync(mainDir)) {
-        return;
-    }
-    const rootFiles = getFileNames(mainDir);
-    const mainDirFullName = mainDir;
-    rootFiles.forEach(fileName => {
-        const fullName = resolve(mainDirFullName, fileName);
-        if (statSync(fullName).isDirectory() && recursive) {
-            removeFiles(fullName, recursive, files);
-        } else {
-            removeFileOrFolder(fullName);
-            files.push(fullName);
-        }
-    });
-
-    if (getFileNames(mainDir).length === 0) {
-        removeFileOrFolder(mainDir);
-    }
-
-    return files;
-}
-
-function getFileNames(folder: string) {
-    let files: Array<string> = new Array();
-    readdirSync(resolve(folder)).forEach(file => {
-        files.push(file);
-    });
-
-    return files;
-}
-
-function removeFileOrFolder(fullName: string) {
-    if (statSync(fullName).isDirectory()) {
-        try {
-            rmdirSync(fullName);
-        } catch (error) {
-            unlinkSync(fullName);
-        }
-
-    } else if (statSync(fullName).isFile() || statSync(fullName).isSymbolicLink()) {
-        unlinkSync(fullName);
     }
 }

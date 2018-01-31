@@ -1,6 +1,6 @@
 import { resolve } from "path";
 
-export const PROJECT_DIR = process.env.INIT_CWD || __dirname;
+export const PROJECT_DIR = process.env.INIT_CWD || process.cwd();
 export const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 export const TIMELINE_FILENAME = "timeline.html";
 export const JSON_REPORT_FILENAME = "final-report.json";
@@ -43,4 +43,3 @@ export const noBundleRun = (platform, tnsOptions) =>
 
 export const bundleRun = (platform, tnsOptions) =>
     `${noBundleRun(platform, tnsOptions)} --bundle`;
-

@@ -1,84 +1,22 @@
 #!/usr/bin/env node
 
 (async () => {
-    const { join } = require("path");
-    const { homedir } = require("os");
-    const verify = require("..");
+    const { execute } = require("..");
 
-    const projectDir = process.env.INIT_CWD || process.cwd();
+    const options = {
+        config: process.env.npm_config_config,
+        defaultConfig: process.env.npm_config_defaultConfig,
+        releaseConfigPath: process.env.npm_config_releaseConfigPath,
+        update: process.env.npm_config_update,
+        verification: process.env.npm_config_verification,
+    };
 
-    const config = loadConfig();
-    const releaseConfig = loadReleaseConfig();
+    const success = await execute(options).catch(e => {
+        console.error(e);
+        process.exit(1);
+    });
 
-    const ignore = process.env.npm_config_ignorePackageInstall;
-    await verify.install(config, ignore);
-    await verify.update(config);
-
-    const { build = [], run = [] } = config;
-    const buildsReport = await verifyApp(build, verify.verifyBuild, "build");
-    const runsReport = await verifyApp(run, verify.verifyRun, "run");
-    const report = Object.assign({}, buildsReport, runsReport);
-
-    await verify.saveFinalReports(report);
-    process.exit(0);
-
-    async function verifyApp(configurations, verification, action) {
-        const results = {};
-        for (const [index, build] of configurations.entries()) {
-            const keepReport = shouldKeepReport(build, config);
-            const configurationName = build.name || (index + 1).toString();
-            const name = action ? `${action}-${configurationName}` : configurationName;
-
-            results[name] = await
-                verification(build, releaseConfig, keepReport && name);
-        }
-
-        return results;
-    }
-
-    function shouldKeepReport(build, config) {
-        return build.hasOwnProperty("keepReport") ?
-            build.keepReport :
-            config.keepReport;
-    }
-
-    function loadConfig() {
-        const configPath = process.env.npm_config_path;
-        if (!configPath) {
-            console.error("You must specify configuration file path!");
-            process.exit(1);
-        }
-        const config = loadJson(configPath);
-
-        return config;
-    }
-
-    function loadReleaseConfig() {
-        const releaseConfig = {
-            android: "--release",
-            ios: "--release"
-        };
-
-        const releaseConfigPath = process.env.npm_config_releaseConfig || config.releaseConfig;
-        if (releaseConfigPath) {
-            const loadedConfig = loadJson(releaseConfigPath);
-            const overrideDefaults = key => releaseConfig[key] = loadedConfig[key];
-            Object.keys(loadedConfig).forEach(overrideDefaults)
-        }
-
-        return releaseConfig;
-    }
-
-    function loadJson(path) {
-        if (path.startsWith(".")) {
-            path = join(projectDir, path);
-        } else if (path.startsWith("~")) {
-            path = join(homedir(), path.substr(1));
-        }
-
-        const file = require(path);
-
-        return file;
+    if (!success) {
+        process.exit(1);
     }
 })();
-

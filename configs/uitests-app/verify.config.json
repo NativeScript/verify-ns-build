@@ -1,0 +1,74 @@
+{
+    "$schema": "../../verify-schema.json",
+    "outFileName": "UnitTestApp",
+    "updateFlavors": [
+        {
+            "name": "android",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "android",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": false
+        },
+        {
+            "name": "ios",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "ios",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": false
+        }
+    ],
+    "verificationFlavors": [
+        {
+            "name": "build-android-bundle",
+            "verifications": [
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": true
+                }
+            ]
+        },
+        {
+            "name": "build-ios-bundle",
+            "verifications": [
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true
+                }
+            ]
+        }
+    ]
+}

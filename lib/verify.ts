@@ -1,5 +1,5 @@
 import { getReportDirPath, saveBuildReport } from "./report";
-import { ExecutionResult, execute, executeAndKillWhenIdle, cleanPlatforms } from "./command";
+import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
 import {
     PROJECT_DIR,
     bundleBuild,
@@ -34,16 +34,13 @@ async function verifyApp(options, releaseConfig, name, action) {
         return;
     }
 
-    // Temporary fix to clean platforms before build
-    
-    // cleanPlatforms();
-
     const result: any = { configuration: options };
     const { tnsOptions = [], release, bundle } = options;
     let flags;
     try {
         flags = prepareFlags(tnsOptions, release, releaseConfig, platform);
     } catch (error) {
+        console.dir(error);
         result.error = error;
         return result;
     }
