@@ -40,6 +40,6 @@ const paint = (color: string, text: string) =>
 
 export const hasError = (report: object) =>
     report.hasOwnProperty("error") ||
-        Object.values(report)
-            .filter(value => value !== null && typeof value === "object")
-            .some(hasError);
+        Object.keys(report)
+            .filter(key => report[key] !== null && typeof report[key] === "object")
+            .forEach(obj => hasError);

@@ -7,8 +7,7 @@
     "declaration": true,
     "noEmitOnError": true,
     "lib": [
-        "es6",
-        "es2017.object"
+        "es6"
     ]
   }
 }

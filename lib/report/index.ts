@@ -46,12 +46,12 @@ export async function getReportDirPath(buildName) {
 async function moveBundleReport(reportDir, name) {
     const { dir: bundleReportDir, files } = BUNDLE_ANALYZER;
 
-    const filesToMove = Object.values(BUNDLE_ANALYZER.files).map(fileName => ({
-        oldLocation: resolve(BUNDLE_ANALYZER.dir, fileName),
-        newLocation: resolve(reportDir, fileName),
+    const filesToMove = Object.keys(BUNDLE_ANALYZER.files).map(key => ({
+        oldLocation: resolve(BUNDLE_ANALYZER.dir, BUNDLE_ANALYZER.files[key]),
+        newLocation: resolve(reportDir, BUNDLE_ANALYZER.files[key]),
     }));
 
-    for (const {oldLocation, newLocation} of filesToMove) {
+    for (const { oldLocation, newLocation } of filesToMove) {
         await rename(oldLocation, newLocation);
     }
 }
