@@ -1,5 +1,6 @@
-import { WebpackUpdateOptions } from "../verify-schema";
+import { writeFileSync } from "fs";
 
+import { WebpackUpdateOptions } from "../verify-schema";
 import { execute } from "./command";
 import {
     PROJECT_DIR,
@@ -8,7 +9,6 @@ import {
     UPDATE_NG_SCRIPT,
     NG_HELPER_SCRIPTS,
 } from "./constants";
-import { writeFile } from "./fs";
 import { stringify } from "./utils";
 import { getPackageJson } from "./project-helpers";
 
@@ -39,7 +39,7 @@ async function addNpmScripts({ updateWebpack, updateAngularDeps }) {
 
     packageJson.scripts = Object.assign((packageJson.scripts || {}), WEBPACK_HELPER_SCRIPTS);
 
-    await writeFile(packageJsonPath, stringify(packageJson));
+    writeFileSync(packageJsonPath, stringify(packageJson));
 }
 
 async function updateNsWebpack(config) {

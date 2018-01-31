@@ -1,7 +1,7 @@
 import { resolve } from "path";
+import { readFileSync } from "fs";
 
 import { BUNDLE_ANALYZER } from "../constants";
-import { readFile } from "../fs";
 
 export async function verifyAssets(outputSizes) {
     const assets = await loadAssets();
@@ -55,7 +55,7 @@ async function loadBundleStats() {
     try {
         const { dir: bundleReportDir, files } = BUNDLE_ANALYZER;
         const bundleStatsPath = resolve(bundleReportDir, files.stats);
-        const statsStream = await readFile(bundleStatsPath, "utf8");
+        const statsStream = readFileSync(bundleStatsPath, "utf8");
         const stats = JSON.parse(statsStream);
         return stats;
     } catch (e) {
