@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import { writeFileSync, renameSync } from "fs";
 
 import {
     BUILD_REPORT_FILENAME,
@@ -7,7 +8,6 @@ import {
     BUNDLE_ANALYZER,
 } from "../constants";
 import { stringify, ensure, underline } from "../utils";
-import { writeFile, rename } from "../fs";
 
 import { saveHtmlReport } from "./htmlReport";
 
@@ -20,7 +20,7 @@ export async function saveFinalReports(result) {
 
 async function saveJsonReport(result) {
     const reportPath = resolve(REPORT_DIR, JSON_REPORT_FILENAME);
-    await writeFile(reportPath, stringify(result));
+    await writeFileSync(reportPath, stringify(result));
 
     console.log(`JSON report saved to file://${underline(reportPath)}`);
 }
@@ -28,7 +28,7 @@ async function saveJsonReport(result) {
 export async function saveBuildReport(result, name) {
     const reportDir = await getReportDirPath(name);
     const reportPath = resolve(reportDir, BUILD_REPORT_FILENAME);
-    await writeFile(reportPath, stringify(result));
+    await writeFileSync(reportPath, stringify(result));
 
     if (result.bundle) {
         await moveBundleReport(reportDir, name);
@@ -51,7 +51,7 @@ async function moveBundleReport(reportDir, name) {
         newLocation: resolve(reportDir, fileName),
     }));
 
-    for (const {oldLocation, newLocation} of filesToMove) {
-        await rename(oldLocation, newLocation);
+    for (const { oldLocation, newLocation } of filesToMove) {
+        await renameSync(oldLocation, newLocation);
     }
 }

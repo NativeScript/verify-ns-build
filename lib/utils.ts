@@ -1,4 +1,4 @@
-import { mkdir } from "./fs";
+import { mkdirSync } from "fs";
 
 export function stringify(obj) {
     return JSON.stringify(obj, null, 2);
@@ -6,7 +6,7 @@ export function stringify(obj) {
 
 export async function ensure(dir) {
     try {
-        await mkdir(dir);
+        mkdirSync(dir);
     } catch(e) {
         if (e.code !== "EEXIST") {
             throw e;
