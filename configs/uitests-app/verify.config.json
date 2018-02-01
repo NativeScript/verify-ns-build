@@ -57,10 +57,10 @@
     ],
     "verificationFlavors": [
         {
-            "name": "android-release",
+            "name": "android-build",
             "verifications": [
                 {
-                    "name": "android-build",
+                    "name": "android-release",
                     "type": "build",
                     "platform": "android",
                     "bundle": false,
