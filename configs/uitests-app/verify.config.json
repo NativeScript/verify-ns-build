@@ -16,6 +16,11 @@
                     "type": "devDependency"
                 },
                 {
+                    "name": "tns-platform-declarations",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
@@ -37,6 +42,11 @@
                     "type": "devDependency"
                 },
                 {
+                    "name": "tns-platform-declarations",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
                     "name": "ios",
                     "package": "next",
                     "type": "nsPlatform"
@@ -47,10 +57,10 @@
     ],
     "verificationFlavors": [
         {
-            "name": "build-android-bundle",
+            "name": "android-release",
             "verifications": [
                 {
-                    "name": "android-snapshot",
+                    "name": "android-build",
                     "type": "build",
                     "platform": "android",
                     "bundle": false,
@@ -59,14 +69,14 @@
             ]
         },
         {
-            "name": "build-ios-bundle",
+            "name": "build-ios",
             "verifications": [
                 {
-                    "name": "android-snapshot",
+                    "name": "ios-debug",
                     "type": "build",
                     "platform": "ios",
                     "bundle": false,
-                    "release": true
+                    "release": false
                 }
             ]
         }

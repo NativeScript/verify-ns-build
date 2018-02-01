@@ -16,6 +16,11 @@
                     "type": "devDependency"
                 },
                 {
+                    "name": "tns-platform-declarations",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
@@ -32,6 +37,11 @@
                     "type": "dependency"
                 },
                 {
+                    "name": "tns-platform-declarations",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
                     "name": "nativescript-dev-typescript",
                     "package": "next",
                     "type": "devDependency"
@@ -43,24 +53,14 @@
                 }
             ],
             "updateAngularDeps": false
-        },
-        {
-            "name": "latest",
-            "dependencies": [
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "latest",
-                    "type": "devDependency"
-                }
-            ]
         }
     ],
     "verificationFlavors": [
         {
-            "name": "build-android-bundle",
+            "name": "build-android",
             "verifications": [
                 {
-                    "name": "android-snapshot",
+                    "name": "android-release",
                     "type": "build",
                     "platform": "android",
                     "bundle": false,
@@ -69,10 +69,10 @@
             ]
         },
         {
-            "name": "build-ios-bundle",
+            "name": "build-ios",
             "verifications": [
                 {
-                    "name": "android-snapshot",
+                    "name": "ios-debug",
                     "type": "build",
                     "platform": "ios",
                     "bundle": false,
