@@ -1,6 +1,6 @@
 {
     "$schema": "../../verify-schema.json",
-    "outFileName": "UnitTestApp",
+    "outFileName": "UITests",
     "updateFlavors": [
         {
             "name": "android",
@@ -57,7 +57,7 @@
     ],
     "verificationFlavors": [
         {
-            "name": "android-build",
+            "name": "build-android",
             "verifications": [
                 {
                     "name": "android-release",
