@@ -64,7 +64,7 @@
                     "type": "build",
                     "platform": "android",
                     "bundle": false,
-                    "release": true
+                    "release": false
                 }
             ]
         },
