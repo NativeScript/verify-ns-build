@@ -87,6 +87,38 @@
 
     "verificationFlavors": [
         {
+            "name": "ios-startup",
+            "verifications": [
+                {
+                    "name": "ios-plain",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "startup": "2800"
+                },
+                {
+                    "name": "ios-webpack",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "startup": "2600"
+                },
+                {
+                    "name": "ios-webpack-full",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "startup": "2400"
+                }
+            ]
+        },
+        {
             "name": "build-android-bundle",
             "verifications": [
                 {
