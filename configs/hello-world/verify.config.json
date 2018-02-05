@@ -12,11 +12,6 @@
                     "type": "dependency"
                 },
                 {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "nativescript-dev-webpack",
                     "package": "next",
                     "type": "devDependency"
@@ -27,7 +22,6 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
             "updateWebpack": {
                 "configs": true,
                 "deps": true
@@ -40,11 +34,6 @@
                     "name": "tns-core-modules",
                     "package": "next",
                     "type": "dependency"
-                },
-                {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
                 },
                 {
                     "name": "nativescript-dev-webpack",
