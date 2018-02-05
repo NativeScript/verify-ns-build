@@ -8,15 +8,15 @@ const ADB_STARTUP_FILTER = (appName) =>
 new RegExp(`Displayed ${appName}/com.tns.NativeScriptActivity: ${TIME_FILTER}`, "g");
 
 const MEASURE_FAILED_MESSAGE = "Startup time couldn't be measured!";
-const warnMeasuringFailed = (message?: string) => {
-    const errorMessage = message ?
-        `${MEASURE_FAILED_MESSAGE} ${message}`:
-        MEASURE_FAILED_MESSAGE;
+const throwMeasuringFailed = (message: string) => {
+    const errorMessage = `${MEASURE_FAILED_MESSAGE} ${message}`;
+    logMeasuringFailed(errorMessage);
 
-    console.log(warn(errorMessage));
-
-    return errorMessage;
+    return new Error(errorMessage);
 }
+
+const logMeasuringFailed = (message: string = MEASURE_FAILED_MESSAGE) =>
+    console.log(warn(message));
 
 export async function verifyStartupTime(
     maxTime: number,
@@ -32,8 +32,8 @@ export async function verifyStartupTime(
     }
 
     if (!startup) {
-        const error = warnMeasuringFailed();
-        return { error };
+        logMeasuringFailed();
+        return { error: MEASURE_FAILED_MESSAGE };
     }
 
     const result = { expected: maxTime, actual: startup };
@@ -66,21 +66,23 @@ function getIosStartupTime(log: string): number {
         lastMatch = match;
     }
 
+    if (!lastMatch) {
+        throw throwMeasuringFailed("'onDisplayed' event not found in the provided log!");
+    }
+
     const TIME_GROUP_INDEX = 1;
     const timeString = lastMatch[TIME_GROUP_INDEX];
 
     if (!timeString) {
         const MATCHED_STRING_INDEX = 0;
         const matchedString = lastMatch[MATCHED_STRING_INDEX];
-        const error = warnMeasuringFailed(`Time not found in ${matchedString}`);
 
-        throw { error };
+        throw throwMeasuringFailed(`Time not found in ${matchedString}`);
     }
 
     const time = parseFloat(timeString);
     if (isNaN(time)) {
-        const error = warnMeasuringFailed(`Logged time - ${time} is not a string!`);
-        throw { error };
+        throw throwMeasuringFailed(`Logged time - ${time} is not a string!`);
     }
 
     return time;
@@ -92,7 +94,7 @@ async function getAndroidStartupTime(): Promise<number> {
         await executeAndKillWhenIdle(command, PROJECT_DIR, false);
 
     if (error) {
-        warnMeasuringFailed();
+        logMeasuringFailed();
         throw error;
     }
 
@@ -100,10 +102,7 @@ async function getAndroidStartupTime(): Promise<number> {
     const filter = ADB_STARTUP_FILTER(appName);
     const startupLine = log.match(filter).pop();
     if (!startupLine) {
-        const logNotFoundError =
-            warnMeasuringFailed("'Displayed' event not found in device log!");
-
-        throw { error: logNotFoundError };
+        throw throwMeasuringFailed("'Displayed' event not found in device log!");
     }
 
     const time = startupLine.match(TIME_FILTER);
