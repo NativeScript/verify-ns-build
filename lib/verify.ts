@@ -85,7 +85,7 @@ async function runChecks(options, name, result) {
 
     const { startup, platform } = options;
     if (startup) {
-        verifications.startup = await verifyStartupTime(startup, platform);
+        verifications.startup = await verifyStartupTime(startup, platform, log);
     }
 
     return verifications;
