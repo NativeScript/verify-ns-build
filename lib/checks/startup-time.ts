@@ -82,7 +82,7 @@ function getIosStartupTime(log: string): number {
 
     const time = parseFloat(timeString);
     if (isNaN(time)) {
-        throw throwMeasuringFailed(`Logged time - ${time} is not a string!`);
+        throw throwMeasuringFailed(`Logged time - ${time} is not a number!`);
     }
 
     return time;
