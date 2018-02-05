@@ -1,6 +1,6 @@
 *.ts
 !*.d.ts
+*.spec.js
 *.js.map
 tsconfig.json
 .npmignore
-
