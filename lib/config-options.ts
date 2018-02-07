@@ -34,7 +34,7 @@ export interface ConfigOptions {
      * If it's not specified, the flavor with name 'default'
      * will be used.
      */
-    update?: string;
+    update?: string | 'none';
     /**
      * The verification flavor to be used.
      * It should match an update configuration
@@ -43,5 +43,5 @@ export interface ConfigOptions {
      * If it's not specified, the verification with name 'default'
      * will be used.
       */
-    verification?: string;
+    verification?: string | 'none';
 }
