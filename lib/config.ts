@@ -65,6 +65,10 @@ function getFlavor(flavors: any[], name: string, categoryName: string) {
         }
     }
 
+    if (name === 'none') {
+        return {};
+    }
+
     const flavor = flavors.find(f => f.name === name)
     if (flavor) {
         return flavor;
