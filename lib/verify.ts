@@ -9,16 +9,19 @@ import {
 } from "./constants";
 
 import {
-    enableTraces,
     generateReport,
     verifyAssets,
     verifyStartupTime,
 } from "./checks";
 
+import { enableTraces } from "./traces";
+
 export async function verifyRun(options, releaseConfig, name) {
-    const { timeline } = options;
+    const { timeline, startup } = options;
     if (timeline) {
-        await enableTraces();
+        await enableTraces("timeline");
+    } else if (startup) {
+        await enableTraces("lifecycle");
     }
 
     return await verifyApp(options, releaseConfig, name, run);
