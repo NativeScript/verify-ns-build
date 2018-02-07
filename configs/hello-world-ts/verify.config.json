@@ -27,7 +27,6 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
             "updateWebpack": {
                 "configs": true,
                 "deps": true
@@ -57,7 +56,6 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
             "updateWebpack": {
                 "configs": true,
                 "deps": true
@@ -273,7 +271,6 @@
                     "type": "build",
                     "platform": "ios",
                     "dependencies": [
-                        "nativescript-angular@next",
                         "tns-core-modules@next"
                     ],
                     "devDependencies": [
