@@ -10,8 +10,10 @@ const NEW_DATA_WAIT_TIME = 15 * 1000;
 let nsSpawnedProcesses = [];
 let nsTimeoutIntervals = [];
 
-const clearIntervals = () =>
+const clearIntervals = () => {
     nsTimeoutIntervals.forEach(interval => clearInterval(interval));
+    nsTimeoutIntervals = [];
+}
 
 const stopDetachedProcess = childProcess => {
     try {
@@ -22,9 +24,6 @@ const stopDetachedProcess = childProcess => {
 const clearOnExit = () => {
     nsSpawnedProcesses.forEach(stopDetachedProcess);
     clearIntervals();
-
-    nsSpawnedProcesses = [];
-    nsTimeoutIntervals = [];
 };
 
 process.on("exit", clearOnExit);
@@ -107,6 +106,11 @@ const spawnAndTrack = ({ cwd, command, args, printLog }) =>
                 console.log(info(`Waiting time expired.\nKilling ${command} ${args}`));
                 clearIntervals();
                 stopDetachedProcess(childProcess);
+                const processIndex = nsSpawnedProcesses.indexOf(childProcess);
+                if (processIndex > -1) {
+                    nsSpawnedProcesses.splice(processIndex, 1);
+                }
+
                 resolve(log);
             }
         }, NEW_DATA_WAIT_TIME);
