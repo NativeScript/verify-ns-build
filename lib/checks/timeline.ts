@@ -1,25 +1,9 @@
 import { resolve } from "path";
-import { writeFileSync } from "fs";
 
 import { toTrace, saveTimeline } from "timeline-view";
 
+import { restoreProfilingValue } from "../traces";
 import { TIMELINE_FILENAME } from "../constants";
-import { getInnerPackageJson } from "../project-helpers";
-import { stringify } from "../utils";
-
-let profilingOriginalValue;
-let updatedValue = false;
-
-process.on("exit", restoreProfilingValue);
-process.on("SIGINT", restoreProfilingValue);
-
-export async function enableTraces() {
-    await saveProfilingValue();
-    const { file: packageJson, path: packageJsonPath } = await getInnerPackageJson();
-    packageJson["profiling"] = "timeline";
-
-    writeFileSync(packageJsonPath, stringify(packageJson));
-}
 
 export async function generateReport(log, reportDir) {
     if (!log) {
@@ -52,28 +36,4 @@ export async function generateReport(log, reportDir) {
     } finally {
         await restoreProfilingValue();
     }
-}
-
-async function saveProfilingValue() {
-    const { file } = await getInnerPackageJson();
-    profilingOriginalValue = file["profiling"];
-    updatedValue = true;
-}
-
-async function restoreProfilingValue() {
-    if (!updatedValue) {
-        return;
-    }
-
-    const { file, path } = await getInnerPackageJson();
-    if (!profilingOriginalValue) {
-        delete file["profiling"];
-    } else {
-        file["profiling"] = profilingOriginalValue;
-    }
-
-    updatedValue = false;
-    profilingOriginalValue = null;
-
-    writeFileSync(path, stringify(file));
 }
