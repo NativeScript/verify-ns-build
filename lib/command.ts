@@ -7,8 +7,8 @@ import { track, info } from "./utils";
 import { PLATFORMS_DIR } from "./constants";
 
 const NEW_DATA_WAIT_TIME = 15 * 1000;
-const nsSpawnedProcesses = [];
-const nsTimeoutIntervals = [];
+let nsSpawnedProcesses = [];
+let nsTimeoutIntervals = [];
 
 const clearIntervals = () =>
     nsTimeoutIntervals.forEach(interval => clearInterval(interval));
@@ -20,8 +20,11 @@ const stopDetachedProcess = childProcess => {
 };
 
 const clearOnExit = () => {
-    nsSpawnedProcesses.forEach(stopDetachedProcess)
+    nsSpawnedProcesses.forEach(stopDetachedProcess);
     clearIntervals();
+
+    nsSpawnedProcesses = [];
+    nsTimeoutIntervals = [];
 };
 
 process.on("exit", clearOnExit);
