@@ -111,6 +111,73 @@
     ],
     "verificationFlavors": [
         {
+            "name": "nexus5x-startup",
+            "verifications": [
+                {
+                    "name": "android-plain",
+                    "type": "run",
+                    "platform": "android",
+                    "release": true,
+                    "startup": "2800"
+                },
+                {
+                    "name": "android-webpack",
+                    "type": "run",
+                    "platform": "android",
+                    "release": true,
+                    "bundle": true,
+                    "startup": "2600"
+                },
+                {
+                    "name": "android-webpack-full",
+                    "type": "run",
+                    "platform": "android",
+                    "release": true,
+                    "bundle": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "startup": "2400"
+                }
+            ]
+        },
+
+        {
+            "name": "iphone6s-startup",
+            "verifications": [
+                {
+                    "name": "ios-plain",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "startup": "600"
+                },
+                {
+                    "name": "ios-webpack",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "startup": "500"
+                },
+                {
+                    "name": "ios-webpack-full",
+                    "type": "run",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "startup": "450"
+                }
+            ]
+        },
+
+
+        {
             "name": "bundle-android",
             "verifications": [
                 {
