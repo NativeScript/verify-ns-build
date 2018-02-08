@@ -39,7 +39,7 @@ export const bundleBuild = (platform, tnsOptions) =>
     `${noBundleBuild(platform, tnsOptions)} --bundle`;
 
 export const noBundleRun = (platform, tnsOptions) =>
-    `tns run ${platform} ${tnsOptions}`;
+    `tns run ${platform} ${tnsOptions} --justlaunch`;
 
 export const bundleRun = (platform, tnsOptions) =>
     `${noBundleRun(platform, tnsOptions)} --bundle`;
