@@ -51,18 +51,17 @@ async function getStartupTime(platform: "ios"|"android", log: string)
     : Promise<number> {
 
     if (platform === "ios") {
-        return getIosStartupTime(log);
+        return await getIosStartupTime(log);
     } else {
-        return await getAndroidStartupTime();
+        return await getAndroidStartupTime(log);
     }
 }
 
-function getIosStartupTime(log: string): number {
+async function getIosStartupTime(log: string): Promise<number> {
     const DISPLAYED_EVENT_MATCHER = /Timeline: Modules: Displayed in ((\d|\.)*)ms/g;
-
     let lastMatch;
     let match;
-    while((match = DISPLAYED_EVENT_MATCHER.exec(log)) !== null) {
+    while ((match = DISPLAYED_EVENT_MATCHER.exec(log)) !== null) {
         lastMatch = match;
     }
 
@@ -88,16 +87,7 @@ function getIosStartupTime(log: string): number {
     return time;
 }
 
-async function getAndroidStartupTime(): Promise<number> {
-    const command = `adb logcat -d`;
-    const { error, log } =
-        await executeAndKillWhenIdle(command, PROJECT_DIR, false);
-
-    if (error) {
-        logMeasuringFailed();
-        throw error;
-    }
-
+async function getAndroidStartupTime(log: string): Promise<number> {
     const appName = await getAppName();
     const filter = ADB_STARTUP_FILTER(appName);
     const startupLine = log.match(filter).pop();
