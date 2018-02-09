@@ -1,7 +1,6 @@
 {
     "$schema": "../../verify-schema.json",
     "outFileName": "template-hello-world-ng",
-
     "updateFlavors": [
         {
             "name": "android",
@@ -112,7 +111,7 @@
     ],
     "verificationFlavors": [
         {
-            "name": "build-android-bundle",
+            "name": "bundle-android",
             "verifications": [
                 {
                     "name": "android-snapshot",
@@ -130,7 +129,7 @@
             ]
         },
         {
-            "name": "build-ios-bundle",
+            "name": "bundle-ios",
             "verifications": [
                 {
                     "name": "android-snapshot",
@@ -147,7 +146,7 @@
             ]
         },
         {
-            "name": "default",
+            "name": "default-android",
             "verifications": [
                 {
                     "name": "android-release",
@@ -158,14 +157,9 @@
                 },
                 {
                     "name": "android-bundle",
-                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.report"
-                    ],
                     "outputSizes": {
                         "bundle.js": "70000",
                         "vendor.js": "3200000"
@@ -173,7 +167,6 @@
                 },
                 {
                     "name": "android-aot",
-                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -188,12 +181,10 @@
                 },
                 {
                     "name": "android-uglify",
-                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
                     "tnsOptions": [
-                        "--env.aot",
                         "--env.uglify",
                         "--env.report"
                     ],
@@ -204,7 +195,6 @@
                 },
                 {
                     "name": "android-snapshot",
-                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -219,6 +209,18 @@
                         "vendor.js": "1350000"
                     }
                 },
+                {
+                    "name": "ios-release",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true
+                }
+            ]
+        },
+        {
+            "name": "default-ios",
+            "verifications": [
                 {
                     "name": "ios-release",
                     "type": "build",
@@ -287,39 +289,9 @@
                         "bundle.js": "40000",
                         "vendor.js": "1350000"
                     }
-                },
-                {
-                    "name": "android-snapshot-run",
-                    "type": "run",
-                    "platform": "android",
-                    "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.uglify",
-                        "--env.snapshot",
-                        "--env.report"
-                    ],
-                    "outputSizes": {
-                        "bundle.js": "40000",
-                        "vendor.js": "1350000"
-                    }
-                },
-                {
-                    "name": "ios-uglify-run",
-                    "type": "run",
-                    "platform": "ios",
-                    "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.uglify",
-                        "--env.report"
-                    ],
-                    "outputSizes": {
-                        "bundle.js": "40000",
-                        "vendor.js": "1350000"
-                    }
                 }
             ]
         }
+        
     ]
 }
