@@ -28,7 +28,6 @@ describe("Start up time verification", () => {
                 expect(result.actual).toEqual(time);
             });
 
-
             describe("and the start up time is within the limits", () => {
                 it("should not have errors", async () => {
                     const time = maxTime - 1;

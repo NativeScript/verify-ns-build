@@ -3,9 +3,13 @@ import { executeAndKillWhenIdle, ExecutionResult } from "../command";
 import { getPackageJson } from "../project-helpers";
 import { warn } from "../utils";
 
-const TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
+const ADB_TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
 const ADB_STARTUP_FILTER = (appName) =>
-new RegExp(`Displayed ${appName}/com.tns.NativeScriptActivity: ${TIME_FILTER}`, "g");
+    new RegExp(`Displayed ${appName}/com.tns.NativeScriptActivity: ${ADB_TIME_FILTER}`, "g");
+
+const DISPLAYED_EVENT_TIME_FILTER = `(\\d+).(\\d+)`;
+const DISPLAYED_EVENT_FILTER =
+    new RegExp(`Timeline: Modules: Displayed in (${DISPLAYED_EVENT_TIME_FILTER})ms`, "g");
 
 const MEASURE_FAILED_MESSAGE = "Startup time couldn't be measured!";
 const throwMeasuringFailed = (message: string) => {
@@ -58,25 +62,16 @@ async function getStartupTime(platform: "ios"|"android", log: string)
 }
 
 async function getIosStartupTime(log: string): Promise<number> {
-    const DISPLAYED_EVENT_MATCHER = /Timeline: Modules: Displayed in ((\d|\.)*)ms/g;
-    let lastMatch;
-    let match;
-    while ((match = DISPLAYED_EVENT_MATCHER.exec(log)) !== null) {
-        lastMatch = match;
-    }
-
-    if (!lastMatch) {
+    const matches = log.match(DISPLAYED_EVENT_FILTER);
+    if (!matches.length) {
         throw throwMeasuringFailed("'onDisplayed' event not found in the provided log!");
     }
 
-    const TIME_GROUP_INDEX = 1;
-    const timeString = lastMatch[TIME_GROUP_INDEX];
+    const startupLine = matches.pop();
+    const timeString = startupLine.match(DISPLAYED_EVENT_TIME_FILTER)[0];
 
     if (!timeString) {
-        const MATCHED_STRING_INDEX = 0;
-        const matchedString = lastMatch[MATCHED_STRING_INDEX];
-
-        throw throwMeasuringFailed(`Time not found in ${matchedString}`);
+        throw throwMeasuringFailed(`Time not found in ${startupLine}`);
     }
 
     const time = parseFloat(timeString);
@@ -90,12 +85,13 @@ async function getIosStartupTime(log: string): Promise<number> {
 async function getAndroidStartupTime(log: string): Promise<number> {
     const appName = await getAppName();
     const filter = ADB_STARTUP_FILTER(appName);
-    const startupLine = log.match(filter).pop();
-    if (!startupLine) {
+    const matches = log.match(filter);
+    if (!matches.length) {
         throw throwMeasuringFailed("'Displayed' event not found in device log!");
     }
 
-    const time = startupLine.match(TIME_FILTER);
+    const startupLine = matches.pop();
+    const time = startupLine.match(ADB_TIME_FILTER);
     const [, seconds, milliseconds ] = time.map(s => parseInt(s));
 
     return (seconds * 1000) + milliseconds;
