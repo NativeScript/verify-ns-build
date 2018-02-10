@@ -76,7 +76,7 @@
     ],
     "verificationFlavors": [
        {
-            "name": "nexus5x-startup",
+            "name": "startup-android",
             "verifications": [
                 {
                     "name": "android-plain",
@@ -109,7 +109,7 @@
         },
 
         {
-            "name": "iphone6s-startup",
+            "name": "startup-ios",
             "verifications": [
                 {
                     "name": "ios-plain",
