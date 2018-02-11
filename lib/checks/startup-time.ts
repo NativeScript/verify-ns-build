@@ -12,15 +12,6 @@ const DISPLAYED_EVENT_FILTER =
     new RegExp(`Timeline: Modules: Displayed in (${DISPLAYED_EVENT_TIME_FILTER})ms`, "g");
 
 const MEASURE_FAILED_MESSAGE = "Startup time couldn't be measured!";
-const throwMeasuringFailed = (message: string) => {
-    const errorMessage = `${MEASURE_FAILED_MESSAGE} ${message}`;
-    logMeasuringFailed(errorMessage);
-
-    return new Error(errorMessage);
-}
-
-const logMeasuringFailed = (message: string = MEASURE_FAILED_MESSAGE) =>
-    console.log(warn(message));
 
 export async function verifyStartupTime(
     maxTime: number,
@@ -104,3 +95,14 @@ async function getAppName() {
         packageJson["nativescript"] &&
         packageJson["nativescript"]["id"];
 }
+
+const throwMeasuringFailed = (message: string) => {
+    const errorMessage = `${MEASURE_FAILED_MESSAGE} ${message}`;
+    logMeasuringFailed(errorMessage);
+
+    return new Error(errorMessage);
+}
+
+const logMeasuringFailed = (message: string = MEASURE_FAILED_MESSAGE) =>
+    console.log(warn(message));
+

@@ -1,12 +1,58 @@
 import { getInnerPackageJson } from "./project-helpers";
 import { stringify } from "./utils";
 import { writeFileSync } from "fs";
+import { ChildProcess, spawn } from "child_process";
+import { splitCommnad } from "./command";
+import { Verification } from "../verify-schema";
 
 process.on("exit", restoreProfilingValue);
 process.on("SIGINT", restoreProfilingValue);
 
+const DEVICE_LOG_COMMANDS = {
+    android: "adb logcat",
+    ios: "idevicesyslog"
+};
+
 let profilingOriginalValue;
 let updatedValue = false;
+
+export class LogTracker {
+    private log: string;
+    private trackerProcess: ChildProcess;
+
+    constructor(fullCommand: string) {
+        const { command, args } = splitCommnad(fullCommand);
+        this.start(command, args);
+    }
+
+    private start(command: string, args: string[]) {
+        this.trackerProcess = spawn(command, args);
+
+        this.trackerProcess.stdout.on("data", data => this.log += data);
+        this.trackerProcess.stderr.on("data", data => this.log += data);
+    }
+
+    public close(): string {
+        this.trackerProcess.kill();
+        return this.log;
+    }
+}
+
+export async function enableProfiling({ timeline, startup, platform }: Verification):
+    Promise<void | LogTracker> {
+
+    if (timeline) {
+        await enableTraces("timeline");
+    } else if (startup) {
+        await enableTraces("lifecycle");
+    }
+
+    if (timeline || startup) {
+        const command = DEVICE_LOG_COMMANDS[platform];
+        const tracker = new LogTracker(command);
+        return tracker;
+    }
+}
 
 export async function enableTraces(tracingLvl: string) {
     await saveProfilingValue();
