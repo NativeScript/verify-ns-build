@@ -14,49 +14,21 @@ import {
     verifyStartupTime,
 } from "./checks";
 
-import { enableTraces } from "./traces";
+import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { spawn, ChildProcess } from "child_process";
 import { setTimeout } from "timers";
-
-interface Watcher {
-    process: ChildProcess;
-    log: string;
-}
 
 export async function verifyRun(options: Verification, releaseConfig, name) {
     const watcher = await enableProfiling(options);
     return await verifyApp(options, releaseConfig, name, run, watcher);
 }
 
-async function enableProfiling({ timeline, startup, platform }: Verification):
-    Promise<void | Watcher> {
-
-    if (timeline) {
-        await enableTraces("timeline");
-    } else if (startup) {
-        await enableTraces("lifecycle");
-    }
-
-    if (timeline || startup) {
-        const command = platform === "ios" ? "idevicesyslog" : "adb";
-        const args = platform === "ios" ? [] : ["logcat"];
-
-        const child = spawn(command, args);
-        const watcher = { process: child, log: "" };
-
-        child.stdout.on("data", data => watcher.log += data);
-        child.stderr.on("data", data => watcher.log += data);
-
-        return watcher;
-    }
-}
-
 export async function verifyBuild(options: Verification, releaseConfig, name) {
     return await verifyApp(options, releaseConfig, name, build);
 }
 
-async function verifyApp(options: Verification, releaseConfig, name, action, watcher?: void | Watcher) {
+async function verifyApp(options: Verification, releaseConfig, name, action, tracker?: void | LogTracker) {
     const { platform } = options;
     if (!platform) {
         return;
@@ -74,10 +46,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, wat
     }
 
     result.execution = await action(platform, flags, bundle);
-    if (watcher) {
+    if (tracker) {
         await sleep(5000);
-        watcher.process.kill();
-        result.execution.log = watcher.log;
+        result.execution.log = tracker.close();
     }
 
     result.verifications = await runChecks(options, name, result.execution);

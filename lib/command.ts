@@ -50,9 +50,8 @@ export async function executeAndKillWhenIdle(command, cwd, printLog = true)
 export async function execute(fullCommand, cwd, printLog = true, kill = false)
     : Promise<ExecutionResult> {
 
-    const [command, ...args] = fullCommand.split(" ");
-    const filteredArgs = args.filter(a => !!a);
-    const options = { cwd, command, args: filteredArgs, printLog };
+    const { command, args } = splitCommnad(fullCommand);
+    const options = { cwd, command, args, printLog };
 
     const action = kill ? spawnAndTrack : spawnAndWait;
 
@@ -62,6 +61,17 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
     } catch (error) {
         return { error };
     }
+
+}
+
+export function splitCommnad(fullCommand: string) {
+    const [command, ...args] = fullCommand.split(" ");
+    const filteredArgs = args.filter(a => !!a);
+
+    return {
+        command,
+        args: filteredArgs,
+    };
 }
 
 const spawnAndTrack = ({ cwd, command, args, printLog }) =>
