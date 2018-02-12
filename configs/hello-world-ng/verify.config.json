@@ -304,22 +304,7 @@
                     ],
                     "outputSizes": {
                         "bundle.js": "70000",
-                        "vendor.js": "3300000"
-                    }
-                },
-                {
-                    "name": "ios-aot",
-                    "type": "build",
-                    "platform": "ios",
-                    "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.report"
-                    ],
-                    "outputSizes": {
-                        "bundle.js": "40000",
-                        "vendor.js": "1350000"
+                        "vendor.js": "3700000"
                     }
                 },
                 {
