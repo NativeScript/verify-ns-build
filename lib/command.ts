@@ -6,7 +6,7 @@ import { track, info } from "./utils";
 
 import { PLATFORMS_DIR } from "./constants";
 
-const NEW_DATA_WAIT_TIME = 15 * 1000;
+const NEW_DATA_WAIT_TIME = 2 * 60 * 1000;
 let nsSpawnedProcesses = [];
 let nsTimeoutIntervals = [];
 

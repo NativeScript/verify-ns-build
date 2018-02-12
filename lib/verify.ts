@@ -115,5 +115,5 @@ async function build(platform, flags, bundle)
         bundleBuild(platform, flags) :
         noBundleBuild(platform, flags);
 
-    return await execute(command, PROJECT_DIR, false);
+    return await executeAndKillWhenIdle(command, PROJECT_DIR);
 }
