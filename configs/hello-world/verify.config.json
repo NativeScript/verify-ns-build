@@ -95,7 +95,7 @@
                         "--env.report",
                         "--env.snapshot"
                     ],
-                    "startup": "1700"
+                    "startup": "1300"
                 }
             ]
         },
