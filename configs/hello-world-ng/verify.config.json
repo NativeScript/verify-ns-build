@@ -221,6 +221,7 @@
                 },
                 {
                     "name": "android-bundle",
+                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -231,6 +232,7 @@
                 },
                 {
                     "name": "android-aot",
+                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -245,6 +247,7 @@
                 },
                 {
                     "name": "android-uglify",
+                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -259,6 +262,7 @@
                 },
                 {
                     "name": "android-snapshot",
+                    "type": "build",
                     "platform": "android",
                     "bundle": true,
                     "release": true,
@@ -272,13 +276,6 @@
                         "bundle.js": "40000",
                         "vendor.js": "1350000"
                     }
-                },
-                {
-                    "name": "ios-release",
-                    "type": "build",
-                    "platform": "ios",
-                    "bundle": false,
-                    "release": true
                 }
             ]
         },

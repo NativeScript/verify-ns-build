@@ -338,39 +338,6 @@
                         "bundle.js": "30000",
                         "vendor.js": "1407000"
                     }
-                },
-                {
-                    "name": "android-snapshot-run",
-                    "type": "run",
-                    "platform": "android",
-                    "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.uglify",
-                        "--env.snapshot",
-                        "--env.report"
-                    ],
-                    "outputSizes": {
-                        "bundle.js": "30000",
-                        "vendor.js": "1446000"
-                    }
-                },
-                {
-                    "name": "ios-uglify",
-                    "type": "run",
-                    "platform": "ios",
-                    "bundle": true,
-                    "release": true,
-                    "tnsOptions": [
-                        "--env.aot",
-                        "--env.uglify",
-                        "--env.report"
-                    ],
-                    "outputSizes": {
-                        "bundle.js": "30000",
-                        "vendor.js": "1407000"
-                    }
                 }
             ]
         }
