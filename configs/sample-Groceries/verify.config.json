@@ -142,7 +142,7 @@
                     "type": "run",
                     "platform": "android",
                     "release": true,
-                    "startup": "2800"
+                    "startup": "4400"
                 },
                 {
                     "name": "android-webpack",
@@ -150,7 +150,7 @@
                     "platform": "android",
                     "release": true,
                     "bundle": true,
-                    "startup": "2600"
+                    "startup": "4300"
                 },
                 {
                     "name": "android-webpack-full",
@@ -163,7 +163,7 @@
                         "--env.report",
                         "--env.snapshot"
                     ],
-                    "startup": "2400"
+                    "startup": "3500"
                 }
             ]
         },
