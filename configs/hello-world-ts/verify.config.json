@@ -135,7 +135,7 @@
                     "type": "run",
                     "platform": "ios",
                     "release": true,
-                    "startup": "600"
+                    "startup": "1100"
                 },
                 {
                     "name": "ios-webpack",
@@ -143,7 +143,7 @@
                     "platform": "ios",
                     "release": true,
                     "bundle": true,
-                    "startup": "500"
+                    "startup": "900"
                 },
                 {
                     "name": "ios-webpack-full",
@@ -155,11 +155,10 @@
                         "--env.uglify",
                         "--env.report"
                     ],
-                    "startup": "450"
+                    "startup": "850"
                 }
             ]
         },
-
 
         {
             "name": "bundle-android",
