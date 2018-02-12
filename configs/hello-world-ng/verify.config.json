@@ -132,7 +132,8 @@
                     "bundle": true,
                     "tnsOptions": [
                         "--env.uglify",
-                        "--env.report"
+                        "--env.report",
+                        "--env.snapshot"
                     ],
                     "startup": "2400"
                 }

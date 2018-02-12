@@ -101,7 +101,7 @@
                     "type": "run",
                     "platform": "android",
                     "release": true,
-                    "startup": "2800"
+                    "startup": "1900"
                 },
                 {
                     "name": "android-webpack",
@@ -109,7 +109,7 @@
                     "platform": "android",
                     "release": true,
                     "bundle": true,
-                    "startup": "2600"
+                    "startup": "1700"
                 },
                 {
                     "name": "android-webpack-full",
@@ -119,9 +119,10 @@
                     "bundle": true,
                     "tnsOptions": [
                         "--env.uglify",
-                        "--env.report"
+                        "--env.report",
+                        "--env.snapshot"
                     ],
-                    "startup": "2400"
+                    "startup": "1700"
                 }
             ]
         },
