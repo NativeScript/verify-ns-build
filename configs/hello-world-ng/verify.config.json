@@ -225,24 +225,12 @@
                     "platform": "android",
                     "bundle": true,
                     "release": true,
-                    "outputSizes": {
-                        "bundle.js": "70000",
-                        "vendor.js": "3200000"
-                    }
-                },
-                {
-                    "name": "android-aot",
-                    "type": "build",
-                    "platform": "android",
-                    "bundle": true,
-                    "release": true,
                     "tnsOptions": [
-                        "--env.aot",
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "40000",
-                        "vendor.js": "1350000"
+                        "bundle.js": "70000",
+                        "vendor.js": "3200000"
                     }
                 },
                 {
@@ -257,6 +245,22 @@
                     ],
                     "outputSizes": {
                         "bundle.js": "40000",
+                        "vendor.js": "1350000"
+                    }
+                },
+                {
+                    "name": "android-uglify-aot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "500000",
                         "vendor.js": "1350000"
                     }
                 },
