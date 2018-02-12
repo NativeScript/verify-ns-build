@@ -151,8 +151,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "5000",
-                        "vendor.js": "1300000"
+                        "bundle.js": "9200",
+                        "vendor.js": "1350000"
                     }
                 },
                 {
@@ -167,7 +167,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "2000",
+                        "bundle.js": "3450",
                         "vendor.js": "700000"
                     }
                 },
@@ -184,7 +184,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "2000",
+                        "bundle.js": "3450",
                         "vendor.js": "700000"
                     }
                 }
@@ -220,7 +220,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "5000",
+                        "bundle.js": "9300",
                         "vendor.js": "1400000"
                     }
                 },
@@ -236,7 +236,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "2000",
+                        "bundle.js": "3450",
                         "vendor.js": "750000"
                     }
                 }
