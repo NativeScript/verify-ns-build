@@ -2,7 +2,7 @@ import { getInnerPackageJson } from "./project-helpers";
 import { stringify } from "./utils";
 import { writeFileSync } from "fs";
 import { ChildProcess, spawn } from "child_process";
-import { splitCommnad } from "./command";
+import { splitCommand } from "./command";
 import { Verification } from "../verify-schema";
 
 process.on("exit", restoreProfilingValue);
@@ -21,7 +21,7 @@ export class LogTracker {
     private trackerProcess: ChildProcess;
 
     constructor(fullCommand: string) {
-        const { command, args } = splitCommnad(fullCommand);
+        const { command, args } = splitCommand(fullCommand);
         this.start(command, args);
     }
 
