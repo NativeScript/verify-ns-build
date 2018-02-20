@@ -1,16 +1,27 @@
 import { getInnerPackageJson } from "./project-helpers";
 import { stringify } from "./utils";
 import { writeFileSync } from "fs";
-import { ChildProcess, spawn } from "child_process";
-import { splitCommand } from "./command";
+import { ChildProcess, spawn, spawnSync } from "child_process";
+import { splitCommand, execute } from "./command";
 import { Verification } from "../verify-schema";
+import { PROJECT_DIR } from "./constants";
 
 process.on("exit", restoreProfilingValue);
 process.on("SIGINT", restoreProfilingValue);
 
+export interface LogCommands {
+    prepareCommand?: string;
+    startCommand: string;
+}
+
 const DEVICE_LOG_COMMANDS = {
-    android: "adb logcat",
-    ios: "idevicesyslog"
+    android: {
+        prepareCommand: "adb logcat -c",
+        startCommand: "adb logcat",
+    },
+    ios: {
+        startCommand: "idevicesyslog",
+    }
 };
 
 let profilingOriginalValue;
@@ -20,9 +31,17 @@ export class LogTracker {
     private log: string;
     private trackerProcess: ChildProcess;
 
-    constructor(fullCommand: string) {
-        const { command, args } = splitCommand(fullCommand);
+    constructor({ prepareCommand, startCommand }: LogCommands) {
+        if (prepareCommand) {
+            this.prepare(prepareCommand);
+        }
+
+        const { command, args } = splitCommand(startCommand);
         this.start(command, args);
+    }
+
+    private async prepare(command: string) {
+        spawnSync(command, { cwd: PROJECT_DIR, shell: true });
     }
 
     private start(command: string, args: string[]) {
@@ -50,8 +69,8 @@ export async function enableProfiling(
     }
 
     if (timeline || startup || expectedInOutput) {
-        const command = DEVICE_LOG_COMMANDS[platform];
-        const tracker = new LogTracker(command);
+        const commands = DEVICE_LOG_COMMANDS[platform];
+        const tracker = new LogTracker(commands);
         return tracker;
     }
 }
