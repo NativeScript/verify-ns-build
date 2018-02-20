@@ -142,7 +142,7 @@
                     "type": "run",
                     "platform": "android",
                     "release": true,
-                    "startup": "4100"
+                    "startup": 4100
                 },
                 {
                     "name": "android-webpack",
@@ -150,7 +150,7 @@
                     "platform": "android",
                     "release": true,
                     "bundle": true,
-                    "startup": "4000"
+                    "startup": 4000
                 },
                 {
                     "name": "android-webpack-full",
@@ -163,7 +163,7 @@
                         "--env.report",
                         "--env.snapshot"
                     ],
-                    "startup": "3800"
+                    "startup": 3800
                 }
             ]
         },
@@ -176,7 +176,7 @@
                     "type": "run",
                     "platform": "ios",
                     "release": true,
-                    "startup": "2200"
+                    "startup": 2200
                 },
                 {
                     "name": "ios-webpack",
@@ -184,7 +184,7 @@
                     "platform": "ios",
                     "release": true,
                     "bundle": true,
-                    "startup": "1800"
+                    "startup": 1800
                 },
                 {
                     "name": "ios-webpack-full",
@@ -196,7 +196,7 @@
                         "--env.uglify",
                         "--env.report"
                     ],
-                    "startup": "1300"
+                    "startup": 1300
                 }
             ]
         },
