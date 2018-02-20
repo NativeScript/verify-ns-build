@@ -38,7 +38,9 @@ export class LogTracker {
     }
 }
 
-export async function enableProfiling({ timeline, startup, platform }: Verification):
+export async function enableProfiling(
+    { timeline, startup, platform, expectedInOutput }: Verification
+):
     Promise<void | LogTracker> {
 
     if (timeline) {
@@ -47,7 +49,7 @@ export async function enableProfiling({ timeline, startup, platform }: Verificat
         await enableTraces("lifecycle");
     }
 
-    if (timeline || startup) {
+    if (timeline || startup || expectedInOutput) {
         const command = DEVICE_LOG_COMMANDS[platform];
         const tracker = new LogTracker(command);
         return tracker;

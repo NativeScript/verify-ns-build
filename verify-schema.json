@@ -150,8 +150,19 @@
                                             "description": "Specifies if a timeline startup time report should be persisted. Available only for 'run' type is specified."
                                         },
                                         "startup": {
-                                            "type": "string",
+                                            "type": "number",
                                             "description": "Specifies the max startup time in ms. Available only for Android and when 'run' type is specified."
+                                        },
+                                        "expectedInOutput": {
+                                            "type": "array",
+                                            "description": "A list of strings that should be present in the log.",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "trackerTimeout": {
+                                            "type": "number",
+                                            "description": "Specifies for how long the device log tracker should run after the app is launched."
                                         }
                                     },
                                     "required": [
