@@ -12,6 +12,7 @@ import {
     generateReport,
     verifyAssets,
     verifyStartupTime,
+    verifyLogs,
 } from "./checks";
 
 import { enableTraces, enableProfiling, LogTracker } from "./traces";
@@ -47,7 +48,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, tra
 
     result.execution = await action(platform, flags, bundle);
     if (tracker) {
-        await sleep(5000);
+        await sleep(options.trackerTimeout || 5000);
         result.execution.log = tracker.close();
     }
 
@@ -76,7 +77,7 @@ function prepareFlags(tnsOptions, release, releaseConfig, platform) {
     return flags.concat(" ", releaseConfig[platform]);
 }
 
-async function runChecks(options, name, result) {
+async function runChecks(options: Verification, name: string, result) {
     const verifications: any = {};
 
     const { log } = result;
@@ -93,6 +94,11 @@ async function runChecks(options, name, result) {
     const { startup, platform } = options;
     if (startup) {
         verifications.startup = await verifyStartupTime(startup, platform, log);
+    }
+
+    const { expectedInOutput } = options;
+    if (expectedInOutput) {
+        verifications.expectedInOutput = await verifyLogs(expectedInOutput, log);
     }
 
     return verifications;

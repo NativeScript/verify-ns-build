@@ -51,7 +51,9 @@ export interface Verification {
     tnsOptions?: string[];
     outputSizes?: FileSizeMap;
     timeline?: boolean;
-    startup?: string;
+    startup?: number;
+    expectedInOutput?: string[];
+    trackerTimeout?: number;
 }
 
 interface FileSizeMap {
