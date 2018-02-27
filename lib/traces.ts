@@ -1,9 +1,11 @@
-import { getInnerPackageJson } from "./project-helpers";
-import { stringify } from "./utils";
 import { writeFileSync } from "fs";
 import { ChildProcess, spawn, spawnSync } from "child_process";
-import { splitCommand, execute } from "./command";
+import { resolve } from "path";
+
 import { Verification } from "../verify-schema";
+import { getInnerPackageJson } from "./project-helpers";
+import { stringify } from "./utils";
+import { splitCommand, execute } from "./command";
 import { PROJECT_DIR } from "./constants";
 
 process.on("exit", restoreProfilingValue);
@@ -14,10 +16,13 @@ export interface LogCommands {
     startCommand: string;
 }
 
+const ANDROID_HOME_PATH = process.env["ANDROID_HOME"];
+const ADB_PATH = resolve(ANDROID_HOME_PATH, "platform-tools", "adb");
+
 const DEVICE_LOG_COMMANDS = {
     android: {
-        prepareCommand: "adb logcat -c",
-        startCommand: "adb logcat",
+        prepareCommand: `${ADB_PATH} logcat -c`,
+        startCommand: `${ADB_PATH} logcat`,
     },
     ios: {
         startCommand: "idevicesyslog",
