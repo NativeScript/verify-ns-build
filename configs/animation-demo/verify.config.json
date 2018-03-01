@@ -1,0 +1,68 @@
+{
+    "$schema": "../../verify-schema.json",
+    "outFileName": "animationdemo",
+    "updateFlavors": [
+        {
+            "name": "android",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "android",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ]
+        },
+        {
+            "name": "ios",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "next",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "ios",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ]
+        }
+    ],
+    "verificationFlavors": [
+        {
+            "name": "build-android",
+            "verifications": [
+                {
+                    "type": "build",
+                    "platform": "android",
+                    "release": true
+                }
+            ]
+        },
+        {
+            "name": "build-ios",
+            "verifications": [
+                {
+                    "type": "build",
+                    "platform": "ios",
+                    "release": true
+                }
+            ]
+        }
+   ]
+}
