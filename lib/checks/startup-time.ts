@@ -54,7 +54,7 @@ async function getStartupTime(platform: "ios"|"android", log: string)
 
 async function getIosStartupTime(log: string): Promise<number> {
     const matches = log.match(DISPLAYED_EVENT_FILTER);
-    if (!matches.length) {
+    if (!matches || !matches.length) {
         throw throwMeasuringFailed("'onDisplayed' event not found in the provided log!");
     }
 
@@ -77,7 +77,7 @@ async function getAndroidStartupTime(log: string): Promise<number> {
     const appName = await getAppName();
     const filter = ADB_STARTUP_FILTER(appName);
     const matches = log.match(filter);
-    if (!matches.length) {
+    if (!matches || !matches.length) {
         throw throwMeasuringFailed("'Displayed' event not found in device log!");
     }
 
