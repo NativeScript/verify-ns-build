@@ -1,6 +1,6 @@
 {
     "$schema": "../../verify-schema.json",
-    "outFileName": "animationdemo",
+    "outFileName": "Animations",
     "updateFlavors": [
         {
             "name": "android",
