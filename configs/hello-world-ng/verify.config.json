@@ -230,7 +230,7 @@
                     ],
                     "outputSizes": {
                         "bundle.js": "1400000",
-                        "vendor.js": "3600000"
+                        "vendor.js": "3650000"
                     }
                 },
                 {
