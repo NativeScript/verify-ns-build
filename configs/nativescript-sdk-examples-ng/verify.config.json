@@ -203,7 +203,7 @@
 
 
         {
-            "name": "bundle_android",
+            "name": "bundle-android",
             "verifications": [
                 {
                     "name": "android-snapshot",
