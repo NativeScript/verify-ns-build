@@ -21,7 +21,11 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "ios",
@@ -41,7 +45,11 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "latest",
@@ -60,6 +68,11 @@
                     "name": "tns-core-modules",
                     "package": "next",
                     "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "next",
+                    "type": "devDependency"
                 }
             ]
         }
