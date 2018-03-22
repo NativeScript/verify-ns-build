@@ -107,6 +107,30 @@
     ],
     "verificationFlavors": [
         {
+            "name": "build-android",
+            "verifications": [
+                {
+                    "name": "android-release",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": false
+                }
+            ]
+        },
+        {
+            "name": "build-ios",
+            "verifications": [
+                {
+                    "name": "ios-debug",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": false
+                }
+            ]
+        },
+        {
             "name": "startup-android",
             "verifications": [
                 {
@@ -139,7 +163,6 @@
                 }
             ]
         },
-
         {
             "name": "startup-ios",
             "verifications": [
@@ -172,8 +195,6 @@
                 }
             ]
         },
-
-
         {
             "name": "bundle-android",
             "verifications": [
@@ -342,6 +363,5 @@
                 }
             ]
         }
-        
     ]
 }
