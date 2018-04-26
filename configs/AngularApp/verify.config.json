@@ -6,6 +6,11 @@
             "name": "android",
             "dependencies": [
                 {
+                    "name": "nativescript-dev-webpack",
+                    "package": "next",
+                    "type": "devDependency"
+                },
+                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
@@ -16,6 +21,11 @@
         {
             "name": "ios",
             "dependencies": [
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "next",
+                    "type": "devDependency"
+                },
                 {
                     "name": "ios",
                     "package": "next",
