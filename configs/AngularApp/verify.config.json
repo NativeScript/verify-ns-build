@@ -6,26 +6,6 @@
             "name": "android",
             "dependencies": [
                 {
-                    "name": "tns-core-modules",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-angular",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
@@ -37,36 +17,12 @@
             "name": "ios",
             "dependencies": [
                 {
-                    "name": "tns-core-modules",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-angular",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "ios",
                     "package": "next",
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
-            "updateWebpack": {
-                "configs": true,
-                "deps": true
-            }
+            "updateAngularDeps": true
         },
         {
             "name": "latest",

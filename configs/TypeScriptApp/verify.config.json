@@ -7,59 +7,21 @@
             "name": "android",
             "dependencies": [
                 {
-                    "name": "tns-core-modules",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ],
-            "updateWebpack": {
-                "configs": true,
-                "deps": true
-            }
+            ]
         },
         {
             "name": "ios",
             "dependencies": [
                 {
-                    "name": "tns-core-modules",
-                    "package": "next",
-                    "type": "dependency"
-                },
-                {
-                    "name": "nativescript-dev-typescript",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "ios",
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ],
-            "updateWebpack": {
-                "configs": true,
-                "deps": true
-            }
+            ]
         },
         {
             "name": "latest",
