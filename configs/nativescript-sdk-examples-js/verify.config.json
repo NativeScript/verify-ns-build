@@ -21,7 +21,12 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "ios",
@@ -41,7 +46,12 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "latest",
