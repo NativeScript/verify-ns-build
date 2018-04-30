@@ -26,12 +26,13 @@ export default async function update(updateWebpack: WebpackUpdateOptions, update
 
 async function addNpmScripts({ updateWebpack, updateAngularDeps }) {
     let helperScripts = {};
-    if (updateWebpack) {
-        helperScripts = { ...helperScripts, ...WEBPACK_HELPER_SCRIPTS };
-    }
 
     if (updateAngularDeps) {
         helperScripts = { ...helperScripts, ...NG_HELPER_SCRIPTS };
+    }
+
+    if (updateWebpack) {
+        helperScripts = { ...helperScripts, ...WEBPACK_HELPER_SCRIPTS };
     }
 
     const { file: packageJson, path: packageJsonPath } = await getPackageJson();
