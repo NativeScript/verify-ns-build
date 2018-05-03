@@ -232,7 +232,7 @@
                     ],
                     "outputSizes": {
                         "bundle.js": "1400000",
-                        "vendor.js": "3650000"
+                        "vendor.js": "5000000"
                     }
                 },
                 {
@@ -246,8 +246,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "500000",
-                        "vendor.js": "1350000"
+                        "bundle.js": "20000",
+                        "vendor.js": "1750000"
                     }
                 },
                 {
@@ -262,8 +262,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "30000",
-                        "vendor.js": "1350000"
+                        "bundle.js": "20000",
+                        "vendor.js": "1750000"
                     }
                 },
                 {
@@ -279,8 +279,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "30000",
-                        "vendor.js": "1350000"
+                        "bundle.js": "20000",
+                        "vendor.js": "1750000"
                     }
                 }
             ]
@@ -307,7 +307,7 @@
                     ],
                     "outputSizes": {
                         "bundle.js": "70000",
-                        "vendor.js": "3750000"
+                        "vendor.js": "4000000"
                     }
                 },
                 {
