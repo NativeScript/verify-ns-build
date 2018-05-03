@@ -213,7 +213,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "9200",
+                        "bundle.js": "20000",
                         "vendor.js": "1350000"
                     }
                 },
@@ -228,8 +228,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "3450",
-                        "vendor.js": "700000"
+                        "bundle.js": "10000",
+                        "vendor.js": "650000"
                     }
                 },
                 {
@@ -244,8 +244,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "3450",
-                        "vendor.js": "700000"
+                        "bundle.js": "5000",
+                        "vendor.js": "650000"
                     }
                 }
             ]
@@ -278,7 +278,7 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "9300",
+                        "bundle.js": "20000",
                         "vendor.js": "1450000"
                     }
                 },
@@ -293,8 +293,8 @@
                         "--env.report"
                     ],
                     "outputSizes": {
-                        "bundle.js": "3450",
-                        "vendor.js": "750000"
+                        "bundle.js": "10000",
+                        "vendor.js": "650000"
                     }
                 }
             ]
