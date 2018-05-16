@@ -64,10 +64,10 @@ async function verifyApp(options: Verification, releaseConfig, name, action, tra
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 function prepareFlags(tnsOptions, release, releaseConfig, platform) {
-    const flags = tnsOptions.join(" ");
+    let flags = tnsOptions.join(" ");
     const isRelease = release || tnsOptions.indexOf("--release") > -1;
     if (isRelease) {
-        flags.concat(" ", "--release");
+        flags = flags.concat(" --release");
     }
 
     const shouldUseReleaseArgs = isRelease || tnsOptions.indexOf("--for-device") > -1;
