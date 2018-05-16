@@ -40,7 +40,7 @@ export function loadConfig(options: ConfigOptions): Config {
     const update = getFlavor(config.updateFlavors,
         options.update,
         "update");
-    const verification = getFlavor(config.verificationFlavors,
+    const verification: VerificationFlavor = getFlavor(config.verificationFlavors,
         options.verification,
         "verification");
     const releaseConfig = loadReleaseConfig(options, config);
@@ -87,8 +87,8 @@ function loadReleaseConfig(configOptions: ConfigOptions, schemaOptions: VerifySc
     const providedConfig: ReleaseConfig = configOptions.releaseConfig;
 
     const config = {
-        android: "--release ",
-        ios: "--release ",
+        android: "",
+        ios: "",
     };
 
     const augmentDefaults = (key, newConfig) => config[key] += newConfig[key];

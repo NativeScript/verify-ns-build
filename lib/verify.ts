@@ -65,8 +65,13 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 function prepareFlags(tnsOptions, release, releaseConfig, platform) {
     const flags = tnsOptions.join(" ");
-    const isReleaseBuild = release || tnsOptions.indexOf("--release") > -1;
-    if (!isReleaseBuild) {
+    const isRelease = release || tnsOptions.indexOf("--release") > -1;
+    if (isRelease) {
+        flags.concat(" ", "--release");
+    }
+
+    const shouldUseReleaseArgs = isRelease || tnsOptions.indexOf("--for-device") > -1;
+    if (!shouldUseReleaseArgs) {
         return flags;
     }
 
