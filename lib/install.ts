@@ -24,7 +24,7 @@ export default async function install(dependencies: NpmDependency[] = []) {
 }
 
 function getPackage(dependency: NpmDependency) {
-    return process.env[dependency.name] || process.env[dependency.name.replace("-", "_")] || dependency.package;
+    return process.env[dependency.name] || process.env[dependency.name.replace(/-/g, '_')] || dependency.package;
 }
 
 async function runNpmInstall(dependency: NpmDependency) {
