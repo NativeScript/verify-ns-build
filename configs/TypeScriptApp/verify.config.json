@@ -1,7 +1,6 @@
 {
     "$schema": "../../verify-schema.json",
     "outFileName": "TypeScriptApp",
-
     "updateFlavors": [
         {
             "name": "android",
@@ -16,7 +15,11 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "ios",
@@ -31,7 +34,11 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ]
+            ],
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "latest",
@@ -98,7 +105,6 @@
                 }
             ]
         },
-
         {
             "name": "startup-ios",
             "verifications": [
@@ -131,7 +137,6 @@
                 }
             ]
         },
-
         {
             "name": "bundle-android",
             "verifications": [
