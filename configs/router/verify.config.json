@@ -31,7 +31,11 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         },
         {
             "name": "ios",
