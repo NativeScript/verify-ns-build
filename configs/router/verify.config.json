@@ -21,11 +21,6 @@
                     "type": "devDependency"
                 },
                 {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "android",
                     "package": "next",
                     "type": "nsPlatform"
@@ -33,7 +28,6 @@
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
-                "configs": true,
                 "deps": true
             }
         },
@@ -56,11 +50,6 @@
                     "type": "devDependency"
                 },
                 {
-                    "name": "nativescript-dev-webpack",
-                    "package": "next",
-                    "type": "devDependency"
-                },
-                {
                     "name": "ios",
                     "package": "next",
                     "type": "nsPlatform"
@@ -68,7 +57,6 @@
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
-                "configs": true,
                 "deps": true
             }
         },
