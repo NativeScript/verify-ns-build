@@ -1,0 +1,161 @@
+{
+    "$schema": "../../verify-schema.json",
+    "outFileName": "NsNgRoutableAnimations",
+
+    "updateFlavors": [
+        {
+            "name": "android",
+            "dependencies": [
+                {
+                    "name": "android",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
+        },
+        {
+            "name": "ios",
+            "dependencies": [
+                {
+                    "name": "ios",
+                    "package": "next",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
+        }
+    ],
+    "verificationFlavors": [
+        {
+            "name": "bundle-android",
+            "verifications": [
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.snapshot",
+                        "--env.report"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "bundle-ios",
+            "verifications": [
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.report"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "default-android",
+            "verifications": [
+                {
+                    "name": "android-release",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "android-bundle",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "294000",
+                        "vendor.js": "3200000"
+                    }
+                },
+                {
+                    "name": "android-snapshot",
+                    "type": "build",
+                    "platform": "android",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.snapshot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "default-ios",
+            "verifications": [
+                {
+                    "name": "ios-release",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": false,
+                    "release": true
+                },
+                {
+                    "name": "ios-bundle",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "295000",
+                        "vendor.js": "3300000"
+                    }
+                },
+                {
+                    "name": "ios-aot-uglify",
+                    "type": "build",
+                    "platform": "ios",
+                    "bundle": true,
+                    "release": true,
+                    "tnsOptions": [
+                        "--env.aot",
+                        "--env.uglify",
+                        "--env.report"
+                    ],
+                    "outputSizes": {
+                        "bundle.js": "140000",
+                        "vendor.js": "1300000"
+                    }
+                }
+            ]
+        }
+    ]
+}
