@@ -17,7 +17,7 @@
                 }
             ],
             "updateWebpack": {
-                "configs": true,
+                "configs": false,
                 "deps": true
             }
         },
@@ -36,7 +36,7 @@
                 }
             ],
             "updateWebpack": {
-                "configs": true,
+                "configs": false,
                 "deps": true
             }
         },
