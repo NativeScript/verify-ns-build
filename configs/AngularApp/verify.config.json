@@ -18,7 +18,7 @@
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
-                "configs": true,
+                "configs": false,
                 "deps": true
             }
         },
@@ -38,7 +38,7 @@
             ],
             "updateAngularDeps": true,
             "updateWebpack": {
-                "configs": true,
+                "configs": false,
                 "deps": true
             }
         },
