@@ -45,6 +45,6 @@ export async function execute(options: ConfigOptions) {
 }
 
 async function runCleanInstall() {
-    await executeCommand("rm -rf node_modules package-loc.json || true", PROJECT_DIR);
+    await executeCommand("rm -rf node_modules package-lock.json || true", PROJECT_DIR);
     await executeCommand("npm i", PROJECT_DIR);
 }
