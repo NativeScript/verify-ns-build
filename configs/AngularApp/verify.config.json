@@ -16,10 +16,7 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
-            "updateWebpack": {
-                "deps": true
-            }
+            "updateAngularDeps": true
         },
         {
             "name": "ios",
@@ -35,10 +32,7 @@
                     "type": "nsPlatform"
                 }
             ],
-            "updateAngularDeps": true,
-            "updateWebpack": {
-                "deps": true
-            }
+            "updateAngularDeps": true
         },
         {
             "name": "latest",

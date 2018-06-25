@@ -15,10 +15,7 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ],
-            "updateWebpack": {
-                "deps": true
-            }
+            ]
         },
         {
             "name": "ios",
@@ -33,10 +30,7 @@
                     "package": "next",
                     "type": "nsPlatform"
                 }
-            ],
-            "updateWebpack": {
-                "deps": true
-            }
+            ]
         },
         {
             "name": "latest",
