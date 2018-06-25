@@ -17,7 +17,6 @@
                 }
             ],
             "updateWebpack": {
-                "configs": false,
                 "deps": true
             }
         },
@@ -36,7 +35,6 @@
                 }
             ],
             "updateWebpack": {
-                "configs": false,
                 "deps": true
             }
         },
