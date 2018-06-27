@@ -13,27 +13,21 @@ const DISPLAYED_EVENT_FILTER =
 
 export const MEASURE_FAILED_MESSAGE = "Startup and second run time couldn't be measured!";
 
-export function verifyTime(expected: number, actual: number, tolerance: number) {
-    try {
-        const difference = (expected * tolerance * 0.01);
-        const minimumTime = expected - difference;
-        const maxTime = expected + difference;
-        let verifyTime = false;
-        if (actual > maxTime) {
-            verifyTime = true;
+export function verifyTime(expected:number, actual:number, tolerance:number)
+{
+    var diffrence = Math.abs(expected - actual) * 1.00
+    var expectedDifference = (expected * tolerance * 0.01)
+    try{
+        if( diffrence <= expectedDifference)
+        {
+            return false;
         }
-        else if (actual < minimumTime) {
-            if (process.env['SKIP_MINIMUM_TIME_FAIL']) {
-                verifyTime = false;
-                console.log(warn("Skip Minimum time fail: Build wan't fail! Actual time " + actual + " is less than expected time " + expected + " with tolerance (" + minimumTime + ") !"));
-            }
-            else {
-                verifyTime = true;
-            }
+        else
+        {   
+            return true;
         }
-        return verifyTime;
     }
-    catch (error) {
+    catch (error){
         console.log(error);
         throwMeasuringFailed(error);
     }
@@ -42,7 +36,7 @@ export function verifyTime(expected: number, actual: number, tolerance: number) 
 export async function verifyStartupTime(
     expectedStartupTime: number,
     expectedSecondTime: number,
-    platform: "ios" | "android",
+    platform: "ios"|"android",
     log: string[],
     numberOfRuns: number,
     tolerance: number
@@ -60,59 +54,62 @@ export async function verifyStartupTime(
     const result = { expectedStartupTime: expectedStartupTime, actualStartupTime: startup[0], expectedSecondTime: expectedSecondTime, actualSecondTime: startup[1] };
 
     if (verifyTime(expectedStartupTime, startup[0], tolerance)) {
-        if (verifyTime(expectedSecondTime, startup[1], tolerance)) {
+        if(verifyTime(expectedSecondTime, startup[1], tolerance))
+        {
             return {
                 error: `Startup and second start time is more than expected!`,
                 ...result,
             };
         }
-        else {
-            return {
-                error: `Startup time is more than expected!`,
-                ...result,
-            };
-        }
+            else{
+                return {
+                    error: `Startup time is more than expected!`,
+                    ...result,
+                };
+            }
     }
-    else if (verifyTime(expectedSecondTime, startup[1], tolerance)) {
+    else if(verifyTime(expectedSecondTime, startup[1], tolerance))
+    {
         return {
             error: `Second start time is more than expected!`,
             ...result,
         };
     }
-    else {
+    else{
         return result;
     }
 }
 
-export async function getStartupTime(platform: "ios" | "android", log: string[], numberOfRuns: number)
+export async function getStartupTime(platform: "ios"|"android", log: string[], numberOfRuns: number)
     : Promise<number[]> {
-    let time = [0.0, 0.0];
+    let time = [0.0,0.0]; 
     if (platform === "ios") {
-        let i;
-
+        var i;
+        
         for (i = 0; i < numberOfRuns; i++) {
-            const newTime = await getIosStartupTime(log[i]);
+            var newTime = await getIosStartupTime(log[i]);
             time[0] += newTime[0];
             time[1] += newTime[1];
         }
         time[0] = time[0] / numberOfRuns;
         time[1] = time[1] / numberOfRuns;
-
+        
     } else {
-        let i;
-        for (i = 0; i < numberOfRuns; i++) {
-            const newTime = await getAndroidStartupTime(log[i]);
+        var i;
+        for (i = 0; i < numberOfRuns; i++) { 
+            var newTime = await getAndroidStartupTime(log[i]);
             time[0] += newTime[0];
             time[1] += newTime[1];
         }
         time[0] = time[0] / numberOfRuns;
         time[1] = time[1] / numberOfRuns;
-
+        
     }
-    if (time[0] === 0.0 && time[1] === 0.0) {
+    if(time[0] === 0.0 && time[1] === 0.0)
+    {
         return;
     }
-    else {
+    else{
         return time;
     }
 }
@@ -152,12 +149,12 @@ async function getAndroidStartupTime(log: string): Promise<number[]> {
         throw throwMeasuringFailed("'Displayed' event not found in device log!");
     }
 
-    const secondStartupLine = matches.pop();
-    const startupLine = matches.pop();
+    const  secondStartupLine = matches.pop();
+    const  startupLine = matches.pop();
     const startupTimeString = startupLine.match(ADB_TIME_FILTER);
     const secondTimeString = secondStartupLine.match(ADB_TIME_FILTER);
-    const [, startupSeconds, startupSilliseconds] = startupTimeString.map(s => parseInt(s));
-    const [, secondStartSeconds, secondStartilliseconds] = secondTimeString.map(s => parseInt(s));
+    const [, startupSeconds, startupSilliseconds ] = startupTimeString.map(s => parseInt(s));
+    const [, secondStartSeconds, secondStartilliseconds ] = secondTimeString.map(s => parseInt(s));
     return [(startupSeconds * 1000) + startupSilliseconds, (secondStartSeconds * 1000) + secondStartilliseconds];
 }
 
