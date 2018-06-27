@@ -131,6 +131,76 @@
                 "configs": true,
                 "deps": true
             }
+        },
+        {
+            "name": "android-latest",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "latest",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-angular",
+                    "package": "latest",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "latest",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "latest",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "android",
+                    "package": "latest",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
+        },
+        {
+            "name": "ios-latest",
+            "dependencies": [
+                {
+                    "name": "tns-core-modules",
+                    "package": "latest",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-angular",
+                    "package": "latest",
+                    "type": "dependency"
+                },
+                {
+                    "name": "nativescript-dev-typescript",
+                    "package": "latest",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "nativescript-dev-webpack",
+                    "package": "latest",
+                    "type": "devDependency"
+                },
+                {
+                    "name": "ios",
+                    "package": "latest",
+                    "type": "nsPlatform"
+                }
+            ],
+            "updateAngularDeps": true,
+            "updateWebpack": {
+                "configs": true,
+                "deps": true
+            }
         }
     ],
     "verificationFlavors": [
@@ -142,7 +212,12 @@
                     "type": "run",
                     "platform": "android",
                     "release": true,
-                    "startup": 4100
+                    "device": true,
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 },
                 {
                     "name": "android-webpack",
@@ -150,7 +225,12 @@
                     "platform": "android",
                     "release": true,
                     "bundle": true,
-                    "startup": 4000
+                    "device": true,
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 },
                 {
                     "name": "android-webpack-full",
@@ -158,12 +238,18 @@
                     "platform": "android",
                     "release": true,
                     "bundle": true,
+                    "device": true,
                     "tnsOptions": [
                         "--env.uglify",
                         "--env.report",
-                        "--env.snapshot"
+                        "--env.snapshot",
+                        "--env.aot"
                     ],
-                    "startup": 3800
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 }
             ]
         },
@@ -176,7 +262,11 @@
                     "type": "run",
                     "platform": "ios",
                     "release": true,
-                    "startup": 2200
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 },
                 {
                     "name": "ios-webpack",
@@ -184,7 +274,12 @@
                     "platform": "ios",
                     "release": true,
                     "bundle": true,
-                    "startup": 1800
+                    "device": true,
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 },
                 {
                     "name": "ios-webpack-full",
@@ -192,11 +287,17 @@
                     "platform": "ios",
                     "release": true,
                     "bundle": true,
+                    "device": true,
                     "tnsOptions": [
                         "--env.uglify",
-                        "--env.report"
+                        "--env.report",
+                        "--env.aot"
                     ],
-                    "startup": 1300
+                    "startup": 1,
+                    "secondStartTime": 0,
+                    "numberOfRuns": 2,
+                    "getExpectedTime": true,
+                    "tolerance": 10
                 }
             ]
         },
@@ -338,6 +439,86 @@
                         "bundle.js": "30000",
                         "vendor.js": "1407000"
                     }
+                }
+            ]
+        },
+        {
+            "name": "android-latest",
+            "verifications": [
+                {
+                    "name": "android-plain",
+                    "type": "build",
+                    "platform": "android",
+                    "release": true,
+                    "device": true,
+                    "copyInstallable":true,
+                    "enableLifecycle":true
+                },
+                {
+                    "name": "android-webpack",
+                    "type": "build",
+                    "platform": "android",
+                    "release": true,
+                    "bundle": true,
+                    "device": true,
+                    "copyInstallable":true,
+                    "enableLifecycle":true
+                },
+                {
+                    "name": "android-webpack-full",
+                    "type": "build",
+                    "platform": "android",
+                    "release": true,
+                    "bundle": true,
+                    "device": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report",
+                        "--env.snapshot",
+                        "--env.aot"
+                    ],
+                    "copyInstallable":true,
+                    "enableLifecycle":true
+                }
+            ]
+        },
+
+        {
+            "name": "ios-latest",
+            "verifications": [
+                {
+                    "name": "ios-plain",
+                    "type": "build",
+                    "platform": "ios",
+                    "release": true,
+                    "device": true,
+                    "copyInstallable":true,
+                    "enableLifecycle":true
+                },
+                {
+                    "name": "ios-webpack",
+                    "type": "build",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "device": true,
+                    "copyInstallable":true,
+                    "enableLifecycle":true
+                },
+                {
+                    "name": "ios-webpack-full",
+                    "type": "build",
+                    "platform": "ios",
+                    "release": true,
+                    "bundle": true,
+                    "device": true,
+                    "tnsOptions": [
+                        "--env.uglify",
+                        "--env.report",
+                        "--env.aot"
+                    ],
+                    "copyInstallable":true,
+                    "enableLifecycle":true
                 }
             ]
         }
