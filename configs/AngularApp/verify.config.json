@@ -404,84 +404,84 @@
                     }
                 },
                 {
-            "name": "android-latest",
-            "verifications": [
-                {
-                    "name": "android-plain",
-                    "type": "build",
-                    "platform": "android",
-                    "release": true,
-                    "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "name": "android-latest",
+                    "verifications": [
+                        {
+                            "name": "android-plain",
+                            "type": "build",
+                            "platform": "android",
+                            "release": true,
+                            "device": true,
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        },
+                        {
+                            "name": "android-webpack",
+                            "type": "build",
+                            "platform": "android",
+                            "release": true,
+                            "bundle": true,
+                            "device": true,
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        },
+                        {
+                            "name": "android-webpack-full",
+                            "type": "build",
+                            "platform": "android",
+                            "release": true,
+                            "bundle": true,
+                            "device": true,
+                            "tnsOptions": [
+                                "--env.uglify",
+                                "--env.report",
+                                "--env.snapshot",
+                                "--env.aot"
+                            ],
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        }
+                    ]
                 },
                 {
-                    "name": "android-webpack",
-                    "type": "build",
-                    "platform": "android",
-                    "release": true,
-                    "bundle": true,
-                    "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
-                },
-                {
-                    "name": "android-webpack-full",
-                    "type": "build",
-                    "platform": "android",
-                    "release": true,
-                    "bundle": true,
-                    "device": true,
-                    "tnsOptions": [
-                        "--env.uglify",
-                        "--env.report",
-                        "--env.snapshot",
-                        "--env.aot"
-                    ],
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "name": "ios-latest",
+                    "verifications": [
+                        {
+                            "name": "ios-plain",
+                            "type": "build",
+                            "platform": "ios",
+                            "release": true,
+                            "device": true,
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        },
+                        {
+                            "name": "ios-webpack",
+                            "type": "build",
+                            "platform": "ios",
+                            "release": true,
+                            "bundle": true,
+                            "device": true,
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        },
+                        {
+                            "name": "ios-webpack-full",
+                            "type": "build",
+                            "platform": "ios",
+                            "release": true,
+                            "bundle": true,
+                            "device": true,
+                            "tnsOptions": [
+                                "--env.uglify",
+                                "--env.report",
+                                "--env.aot"
+                            ],
+                            "copyInstallable": true,
+                            "enableLifecycle": true
+                        }
+                    ]
                 }
-            ]
-        },
-        {
-            "name": "ios-latest",
-            "verifications": [
-                {
-                    "name": "ios-plain",
-                    "type": "build",
-                    "platform": "ios",
-                    "release": true,
-                    "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
-                },
-                {
-                    "name": "ios-webpack",
-                    "type": "build",
-                    "platform": "ios",
-                    "release": true,
-                    "bundle": true,
-                    "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
-                },
-                {
-                    "name": "ios-webpack-full",
-                    "type": "build",
-                    "platform": "ios",
-                    "release": true,
-                    "bundle": true,
-                    "device": true,
-                    "tnsOptions": [
-                        "--env.uglify",
-                        "--env.report",
-                        "--env.aot"
-                    ],
-                    "copyInstallable":true,
-                    "enableLifecycle":true
-                }
-            ]
-        }
             ]
         }
     ]

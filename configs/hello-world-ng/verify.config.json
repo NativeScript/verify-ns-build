@@ -217,7 +217,6 @@
                 }
             ]
         },
-
         {
             "name": "startup-ios",
             "verifications": [
@@ -266,8 +265,6 @@
                 }
             ]
         },
-
-
         {
             "name": "bundle-android",
             "verifications": [
@@ -445,8 +442,8 @@
                     "platform": "android",
                     "release": true,
                     "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 },
                 {
                     "name": "android-webpack",
@@ -455,8 +452,8 @@
                     "release": true,
                     "bundle": true,
                     "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 },
                 {
                     "name": "android-webpack-full",
@@ -471,12 +468,11 @@
                         "--env.snapshot",
                         "--env.aot"
                     ],
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 }
             ]
         },
-
         {
             "name": "ios-latest",
             "verifications": [
@@ -486,8 +482,8 @@
                     "platform": "ios",
                     "release": true,
                     "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 },
                 {
                     "name": "ios-webpack",
@@ -496,8 +492,8 @@
                     "release": true,
                     "bundle": true,
                     "device": true,
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 },
                 {
                     "name": "ios-webpack-full",
@@ -511,11 +507,10 @@
                         "--env.report",
                         "--env.aot"
                     ],
-                    "copyInstallable":true,
-                    "enableLifecycle":true
+                    "copyInstallable": true,
+                    "enableLifecycle": true
                 }
             ]
         }
-        
     ]
 }

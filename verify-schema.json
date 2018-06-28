@@ -29,7 +29,6 @@
                                 {
                                     "type": "object",
                                     "properties": {
-
                                         "name": {
                                             "type": "string",
                                             "description": "Name of the package to be installed."
