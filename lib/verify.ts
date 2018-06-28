@@ -1,6 +1,6 @@
 import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
-import {runApp, stopApp, uninstallApp, installApp, getDevice} from "./device";
+import { runApp, stopApp, uninstallApp, installApp, getDevice } from "./device";
 import { resolve } from "path";
 import { readdirSync, existsSync, mkdirSync, copyFileSync } from "fs";
 import {
@@ -33,16 +33,15 @@ export async function verifyBuild(options: Verification, releaseConfig, name) {
     return await verifyApp(options, releaseConfig, name, build);
 }
 
-async function verifyApp(options: Verification, releaseConfig, name, action, tracker=false) {
+async function verifyApp(options: Verification, releaseConfig, name, action, tracker = false) {
     const { platform } = options;
     if (!platform) {
         return;
     }
 
-    if(tracker)
-    {
-        if(!options.numberOfRuns){ options.numberOfRuns = 1; } 
-        if(!options.tolerance){ options.tolerance = 10; } 
+    if (tracker) {
+        if (!options.numberOfRuns) { options.numberOfRuns = 1; }
+        if (!options.tolerance) { options.tolerance = 10; }
     }
 
     const result: any = { configuration: options };
@@ -58,13 +57,12 @@ async function verifyApp(options: Verification, releaseConfig, name, action, tra
         return result;
     }
 
-    if(getExpectedTime)
-    {
+    if (getExpectedTime) {
         let expectedTimeLogs = []
-        var appPath = resolve(PROJECT_DIR.toString(), "releaseApps");
-        await getPerformanceTimeLogsFromApp(options, platform, tracker, appPath, options.name).then(function(logs) {
+        const appPath = resolve(PROJECT_DIR.toString(), "releaseApps");
+        await getPerformanceTimeLogsFromApp(options, platform, tracker, appPath, options.name).then(function (logs) {
             expectedTimeLogs = logs.slice();
-        }); 
+        });
         let expectedTime: number[];
         try {
             expectedTime = await getStartupTime(platform, expectedTimeLogs, numberOfRuns);
@@ -72,148 +70,128 @@ async function verifyApp(options: Verification, releaseConfig, name, action, tra
             logMeasuringFailed(error.message);
         }
         if (!expectedTime) {
-            logMeasuringFailed( MEASURE_FAILED_MESSAGE );
+            logMeasuringFailed(MEASURE_FAILED_MESSAGE);
         }
         options.startup = expectedTime[0];
         options.secondStartTime = expectedTime[1];
     }
 
-    if(enableLifecycle)
-    {
+    if (enableLifecycle) {
         await enableTraces("lifecycle");
     }
 
     result.execution = await action(platform, flags, bundle);
 
-    if(copyInstallable)
-    {
-        var dir = resolve(PROJECT_DIR, 'buildApps');
-        if (!existsSync(dir)){
+    if (copyInstallable) {
+        const dir = resolve(PROJECT_DIR, 'buildApps');
+        if (!existsSync(dir)) {
             mkdirSync(dir);
         }
-         
-        var appPathAndAppName = getInstallablePath(platform, "", "", true);
-        var pathToCopy = resolve(dir, appPathAndAppName.appName);
-        if(platform === "ios")
-        {
+
+        const appPathAndAppName = getInstallablePath(platform, "", "", true);
+        let pathToCopy = resolve(dir, appPathAndAppName.appName);
+        if (platform === "ios") {
             pathToCopy = pathToCopy.replace(".ipa", "-" + name + ".ipa");
         }
-        else{
+        else {
             pathToCopy = pathToCopy.replace(".apk", "-" + name + ".apk");
         }
-        
+
         await copyFileSync(appPathAndAppName.appPath, pathToCopy);
     }
-    
-    if(tracker){
+
+    if (tracker) {
         result.execution.log = [];
-        await getPerformanceTimeLogsFromApp(options, platform, tracker).then(function(logs) {
+        await getPerformanceTimeLogsFromApp(options, platform, tracker).then(function (logs) {
             result.execution.log = logs.slice();
         });
     }
 
     result.verifications = await runChecks(options, name, result.execution)
-    
+
     if (name) {
         await saveBuildReport(result, name);
     }
-return result;
+    return result;
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios"|"android", tracker, appPath = "", fileName = ""):Promise<string[]>{
-    var i;
-    var watcher;
+async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
+    let i;
+    let watcher;
     let logs = [];
 
     const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
-    var pjson = require(APP_CONFIG);
-    var  app = pjson.nativescript.id;
+    const pjson = require(APP_CONFIG);
+    const app = pjson.nativescript.id;
 
     const { numberOfRuns } = options;
     await getDevice(platform);
 
     appPath = getInstallablePath(platform, appPath, fileName);
 
-    for (i = 0; i < numberOfRuns; i++) { 
-        if(tracker)
-        {
+    for (i = 0; i < numberOfRuns; i++) {
+        await sleep(10000);
+        if (tracker) {
             watcher = await enableProfiling(options);
         }
-        await sleep(10000);
         await uninstallApp(app, platform);
-        await sleep(5000);
         await installApp(appPath, platform);
-        await sleep(10000);
         await stopApp(app, platform);
-        await sleep(3000);
         await runApp(app, platform);
-        await sleep(30000);
         await stopApp(app, platform);
-        await sleep(8000);
         await runApp(app, platform);
-        await sleep(30000);
         await stopApp(app, platform);
-        await sleep(4000);
         await uninstallApp(app, platform);
-        await sleep(5000);
         if (tracker && watcher) {
             await sleep(options.trackerTimeout || 5000);
-            logs[i]= await watcher.close();
-        }    
+            logs[i] = await watcher.close();
+        }
     }
 
     return logs;
 }
 
-function getInstallablePath(platform, folderWithInstallable="", fileName = "", returnAppName = false){
+function getInstallablePath(platform, folderWithInstallable = "", fileName = "", returnAppName = false) {
     let appPath;
-    var appName;
+    let appName;
     let appNameSearchText;
-    if(folderWithInstallable === "")
-    {
-        if(platform === "ios")
-        {
+    if (folderWithInstallable === "") {
+        if (platform === "ios") {
             appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "device");
             appNameSearchText = fileName + ".ipa";
         }
-        else
-        {
-            appPath = resolve(PROJECT_DIR, "platforms", "android", "app","build", "outputs", "apk", "release");
+        else {
+            appPath = resolve(PROJECT_DIR, "platforms", "android", "app", "build", "outputs", "apk", "release");
             appNameSearchText = fileName + ".apk";
         }
     }
-    else
-    {
+    else {
         appPath = folderWithInstallable;
-        if(platform === "ios")
-        {
+        if (platform === "ios") {
             appNameSearchText = fileName + ".ipa";
         }
-        else
-        {
+        else {
             appNameSearchText = fileName + ".apk";
         }
     }
 
-    var files = readdirSync(appPath);
-    for (var file in files) {
-        if(files[file].toString().includes(appNameSearchText))
-        {
+    const files = readdirSync(appPath);
+    for (const file in files) {
+        if (files[file].toString().includes(appNameSearchText)) {
             appName = files[file].toString();
             break;
         }
     }
     appPath = resolve(appPath, appName);
-    if(returnAppName)
-    {
-        return{
+    if (returnAppName) {
+        return {
             appPath,
             appName
         }
     }
-    else{
+    else {
         return appPath;
     }
 }
@@ -223,13 +201,11 @@ function prepareFlags(tnsOptions, release, releaseConfig, platform, device) {
     const isRelease = release || tnsOptions.indexOf("--release") > -1;
     if (isRelease) {
         flags = flags.concat(" --release");
-        
+
     }
 
-    if(device)
-    {
-        if(!(tnsOptions.indexOf("--for-device") > -1))
-        {
+    if (device) {
+        if (!(tnsOptions.indexOf("--for-device") > -1)) {
             flags = flags.concat(" --for-device");
         }
     }
@@ -263,9 +239,8 @@ async function runChecks(options: Verification, name: string, result) {
 
     const { startup, secondStartTime, tolerance, platform, numberOfRuns } = options;
 
-    var secondStartTimeVariable = secondStartTime;
-    if(!secondStartTime)
-    {
+    let secondStartTimeVariable = secondStartTime;
+    if (!secondStartTime) {
         secondStartTimeVariable = startup;
     }
 
