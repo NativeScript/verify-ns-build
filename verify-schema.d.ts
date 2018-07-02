@@ -1,7 +1,7 @@
 export interface VerifySchema {
     releaseConfigPath?: string;
     updateFlavors?: UpdateFlavor[];
-    verificationFlavors?: VerificationFlavor[]; 
+    verificationFlavors?: VerificationFlavor[];
     outFileName?: string;
 }
 
@@ -52,8 +52,16 @@ export interface Verification {
     outputSizes?: FileSizeMap;
     timeline?: boolean;
     startup?: number;
+    secondStartTime?: number;
+    numberOfRuns?: number;
     expectedInOutput?: string[];
     trackerTimeout?: number;
+    getExpectedTime?: boolean;
+    tolerance?: number;
+    copyInstallable?: boolean;
+    enableLifecycle?: boolean;
+    device?: boolean;
+
 }
 
 interface FileSizeMap {
