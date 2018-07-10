@@ -1,6 +1,6 @@
 import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
-import { runApp, stopApp, uninstallApp, installApp, getDevice } from "./device";
+import { runApp, stopApp, uninstallApp, installApp, getDevice, warmUpDevice, disposeObject } from "./device";
 import { resolve } from "path";
 import { readdirSync, existsSync, mkdirSync, copyFileSync } from "fs";
 import {
@@ -25,23 +25,27 @@ import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
 
-export async function verifyRun(options: Verification, releaseConfig, name) {
-    return await verifyApp(options, releaseConfig, name, build, true);
+export async function verifyRun(options: Verification, releaseConfig, name, index) {
+    return await verifyApp(options, releaseConfig, name, build, index, true);
 }
 
-export async function verifyBuild(options: Verification, releaseConfig, name) {
-    return await verifyApp(options, releaseConfig, name, build);
+export async function verifyBuild(options: Verification, releaseConfig, name, index) {
+    return await verifyApp(options, releaseConfig, name, build, index);
 }
 
-async function verifyApp(options: Verification, releaseConfig, name, action, tracker = false) {
+async function verifyApp(options: Verification, releaseConfig, name, action, index = 1, tracker = false) {
     const { platform } = options;
     if (!platform) {
         return;
     }
-
     if (tracker) {
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
+        if (index == 0) {
+            await getDevice(platform);
+            await warmUpDevice(platform);
+            await disposeObject(platform);
+        }
     }
 
     const result: any = { configuration: options };
@@ -148,8 +152,9 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: "i
             await sleep(options.trackerTimeout || 5000);
             logs[i] = await watcher.close();
         }
-    }
 
+    }
+    await disposeObject(platform);
     return logs;
 }
 
@@ -253,10 +258,8 @@ async function runChecks(options: Verification, name: string, result) {
         verifications.expectedInOutput = await verifyLogs(expectedInOutput, log[0]);
     }
 
-
     return verifications;
 }
-
 
 //Not used anymore. Keep for future needs.
 async function run(platform, flags, bundle)
