@@ -11,8 +11,7 @@
     "@types/jasmine": "^2.8.6",
     "@types/node": "^8.10.19",
     "jasmine": "^2.9.0",
-    "typescript": "^2.5.3",
-    "ios-device-lib": "^0.4.14"
+    "typescript": "^2.5.3"
   },
   "scripts": {
     "prepare": "tsc",
