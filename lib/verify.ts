@@ -1,6 +1,6 @@
 import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
-import { runApp, stopApp, uninstallApp, installApp, getDevice, warmUpDevice, disposeObject } from "./device";
+import { runApp, stopApp, uninstallApp, installApp, getDevice, warmUpDevice } from "./device";
 import { resolve } from "path";
 import { readdirSync, existsSync, mkdirSync, copyFileSync } from "fs";
 import {
@@ -9,6 +9,7 @@ import {
     bundleRun,
     noBundleBuild,
     noBundleRun,
+    LONG_WAIT,
 } from "./constants";
 
 import {
@@ -44,7 +45,6 @@ async function verifyApp(options: Verification, releaseConfig, name, action, ind
         if (index == 0) {
             await getDevice(platform);
             await warmUpDevice(platform);
-            await disposeObject(platform);
         }
     }
 
@@ -122,9 +122,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, ind
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
-    let i;
-    let watcher;
-    let logs = [];
+    let i:number;
+    let watcher: void | LogTracker;
+    let logs:string[] = [];
 
     const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
     const pjson = require(APP_CONFIG);
@@ -136,25 +136,24 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: "i
     appPath = getInstallablePath(platform, appPath, fileName);
 
     for (i = 0; i < numberOfRuns; i++) {
-        await sleep(10000);
+        await sleep(LONG_WAIT);
         if (tracker) {
             watcher = await enableProfiling(options);
         }
-        await uninstallApp(app, platform);
-        await installApp(appPath, platform);
-        await stopApp(app, platform);
-        await runApp(app, platform);
-        await stopApp(app, platform);
-        await runApp(app, platform);
-        await stopApp(app, platform);
-        await uninstallApp(app, platform);
+        await uninstallApp(app);
+        await installApp(appPath);
+        await stopApp(app);
+        await runApp(app);
+        await stopApp(app);
+        await runApp(app);
+        await stopApp(app);
+        await uninstallApp(app);
         if (tracker && watcher) {
             await sleep(options.trackerTimeout || 5000);
             logs[i] = await watcher.close();
         }
 
     }
-    await disposeObject(platform);
     return logs;
 }
 
