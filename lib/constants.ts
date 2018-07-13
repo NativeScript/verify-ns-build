@@ -43,3 +43,8 @@ export const noBundleRun = (platform, tnsOptions) =>
 
 export const bundleRun = (platform, tnsOptions) =>
     `${noBundleRun(platform, tnsOptions)} --bundle`;
+
+
+export const SHORT_WAIT:number = 5000;
+export const LONG_WAIT:number = 10000;
+export const VERY_LONG_WAIT:number = 15000;

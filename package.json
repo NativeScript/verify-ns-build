@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "mobile-devices-controller": "^2.6.1",
     "timeline-view": "github:sis0k0/timeline-view"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.6",
     "@types/node": "^8.10.19",
     "jasmine": "^2.9.0",
-    "typescript": "^2.5.3",
-    "ios-device-lib": "^0.4.14"
+    "typescript": "^2.5.3"
   },
   "scripts": {
     "prepare": "tsc",

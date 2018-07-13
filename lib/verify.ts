@@ -1,6 +1,6 @@
 import { getReportDirPath, saveBuildReport } from "./report";
 import { ExecutionResult, execute, executeAndKillWhenIdle } from "./command";
-import { runApp, stopApp, uninstallApp, installApp, getDevice } from "./device";
+import { runApp, stopApp, uninstallApp, installApp, getDevice, warmUpDevice } from "./device";
 import { resolve } from "path";
 import { readdirSync, existsSync, mkdirSync, copyFileSync } from "fs";
 import {
@@ -9,6 +9,7 @@ import {
     bundleRun,
     noBundleBuild,
     noBundleRun,
+    LONG_WAIT,
 } from "./constants";
 
 import {
@@ -25,23 +26,26 @@ import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
 
-export async function verifyRun(options: Verification, releaseConfig, name) {
-    return await verifyApp(options, releaseConfig, name, build, true);
+export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
+    return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice, true);
 }
 
-export async function verifyBuild(options: Verification, releaseConfig, name) {
-    return await verifyApp(options, releaseConfig, name, build);
+export async function verifyBuild(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
+    return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice);
 }
 
-async function verifyApp(options: Verification, releaseConfig, name, action, tracker = false) {
+async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const { platform } = options;
     if (!platform) {
         return;
     }
-
     if (tracker) {
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
+        if (shouldWarmupDevice) {
+            await getDevice(platform);
+            await warmUpDevice(platform);
+        }
     }
 
     const result: any = { configuration: options };
@@ -118,9 +122,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, tra
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
-    let i;
-    let watcher;
-    let logs = [];
+    let i: number;
+    let watcher: void | LogTracker;
+    let logs: string[] = [];
 
     const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
     const pjson = require(APP_CONFIG);
@@ -132,24 +136,24 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: "i
     appPath = getInstallablePath(platform, appPath, fileName);
 
     for (i = 0; i < numberOfRuns; i++) {
-        await sleep(10000);
+        await sleep(LONG_WAIT);
         if (tracker) {
             watcher = await enableProfiling(options);
         }
-        await uninstallApp(app, platform);
-        await installApp(appPath, platform);
-        await stopApp(app, platform);
-        await runApp(app, platform);
-        await stopApp(app, platform);
-        await runApp(app, platform);
-        await stopApp(app, platform);
-        await uninstallApp(app, platform);
+        await uninstallApp(app);
+        await installApp(appPath);
+        await stopApp(app);
+        await runApp(app);
+        await stopApp(app);
+        await runApp(app);
+        await stopApp(app);
+        await uninstallApp(app);
         if (tracker && watcher) {
             await sleep(options.trackerTimeout || 5000);
             logs[i] = await watcher.close();
         }
-    }
 
+    }
     return logs;
 }
 
@@ -253,10 +257,8 @@ async function runChecks(options: Verification, name: string, result) {
         verifications.expectedInOutput = await verifyLogs(expectedInOutput, log[0]);
     }
 
-
     return verifications;
 }
-
 
 //Not used anymore. Keep for future needs.
 async function run(platform, flags, bundle)
