@@ -14,29 +14,23 @@ const DISPLAYED_EVENT_FILTER =
 export const MEASURE_FAILED_MESSAGE = "Startup and second run time couldn't be measured!";
 
 export function verifyTime(expected: number, actual: number, tolerance: number) {
-    try {
-        const difference = (expected * tolerance * 0.01);
-        const minimumTime = expected - difference;
-        const maximumTime = expected + difference;
-        let verifyTime = false;
-        if (actual > maximumTime) {
+    const difference = (expected * tolerance * 0.01);
+    const minimumTime = expected - difference;
+    const maximumTime = expected + difference;
+    let verifyTime = false;
+    if (actual > maximumTime) {
+        verifyTime = true;
+    }
+    else if (actual < minimumTime) {
+        if (process.env['SKIP_MINIMUM_STARTUP_TIME_CHECK']) {
+            verifyTime = false;
+            console.log(warn("Skip Minimum time fail: Build wan't fail! Actual time " + actual + " is less than expected time " + expected + " with tolerance (" + minimumTime + ") !"));
+        }
+        else {
             verifyTime = true;
         }
-        else if (actual < minimumTime) {
-            if (process.env['SKIP_MINIMUM_STARTUP_TIME_CHECK']) {
-                verifyTime = false;
-                console.log(warn("Skip Minimum time fail: Build wan't fail! Actual time " + actual + " is less than expected time " + expected + " with tolerance (" + minimumTime + ") !"));
-            }
-            else {
-                verifyTime = true;
-            }
-        }
-        return verifyTime;
     }
-    catch (error) {
-        console.log(error);
-        throwMeasuringFailed(error);
-    }
+    return verifyTime;
 }
 
 export async function verifyStartupTime(
