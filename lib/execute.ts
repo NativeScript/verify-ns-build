@@ -30,8 +30,7 @@ export async function execute(options: ConfigOptions) {
         const type = build.type;
         const name = type ? `${type}-${configurationName}` : configurationName;
         const action = ACTIONS[type];
-
-        const execution = await action(build, config.releaseConfig, name, index);
+        const execution = await action(build, config.releaseConfig, name, index === 0);
         results[name] = execution;
     }
 

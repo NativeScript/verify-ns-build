@@ -17,13 +17,13 @@ export function verifyTime(expected: number, actual: number, tolerance: number) 
     try {
         const difference = (expected * tolerance * 0.01);
         const minimumTime = expected - difference;
-        const maxTime = expected + difference;
+        const maximumTime = expected + difference;
         let verifyTime = false;
-        if (actual > maxTime) {
+        if (actual > maximumTime) {
             verifyTime = true;
         }
         else if (actual < minimumTime) {
-            if (process.env['SKIP_MINIMUM_TIME_FAIL']) {
+            if (process.env['SKIP_MINIMUM_STARTUP_TIME_CHECK']) {
                 verifyTime = false;
                 console.log(warn("Skip Minimum time fail: Build wan't fail! Actual time " + actual + " is less than expected time " + expected + " with tolerance (" + minimumTime + ") !"));
             }

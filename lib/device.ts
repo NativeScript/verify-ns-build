@@ -1,10 +1,5 @@
 import { VERY_LONG_WAIT, SHORT_WAIT } from "./constants";
-import { DeviceController, IDevice, DeviceType } from "mobile-devices-controller";
-import { execute } from "./command";
-import { PROJECT_DIR } from "./constants";
-import { resolve } from "path";
-const ANDROID_HOME_PATH = process.env["ANDROID_HOME"];
-const ADB_PATH = resolve(ANDROID_HOME_PATH, "platform-tools", "adb");
+import { DeviceController, IDevice, DeviceType, AndroidController, AndroidKeyEvent } from "mobile-devices-controller";
 let deviceObject: IDevice;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -45,9 +40,7 @@ export async function warmUpDevice(platform: "ios" | "android", warmUpTimeout: n
         await stopApp(app[0]);
     }
     else {
-        const command = ADB_PATH + " -s " + deviceObject.token + " shell input keyevent 3";
-        await execute(command, PROJECT_DIR, true, true);
-        await execute(command, PROJECT_DIR, true, true);
+        AndroidController.executeKeyevent(deviceObject, AndroidKeyEvent.KEYCODE_HOME);
     }
     sleep(warmUpTimeout);
 }

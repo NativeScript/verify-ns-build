@@ -26,15 +26,15 @@ import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
 
-export async function verifyRun(options: Verification, releaseConfig, name, index) {
-    return await verifyApp(options, releaseConfig, name, build, index, true);
+export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
+    return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice, true);
 }
 
-export async function verifyBuild(options: Verification, releaseConfig, name, index) {
-    return await verifyApp(options, releaseConfig, name, build, index);
+export async function verifyBuild(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
+    return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice);
 }
 
-async function verifyApp(options: Verification, releaseConfig, name, action, index = 1, tracker = false) {
+async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const { platform } = options;
     if (!platform) {
         return;
@@ -42,7 +42,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, ind
     if (tracker) {
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
-        if (index == 0) {
+        if (shouldWarmupDevice) {
             await getDevice(platform);
             await warmUpDevice(platform);
         }
@@ -122,9 +122,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, ind
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
-    let i:number;
+    let i: number;
     let watcher: void | LogTracker;
-    let logs:string[] = [];
+    let logs: string[] = [];
 
     const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
     const pjson = require(APP_CONFIG);
