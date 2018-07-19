@@ -43,8 +43,11 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
         if (shouldWarmupDevice) {
+            const appFolderPath = resolve(PROJECT_DIR.toString(), "releaseApps");
+            const appPath = getInstallablePath(platform, appFolderPath, options.name);
+            const app = await getApp();
             await getDevice(platform);
-            await warmUpDevice(platform);
+            await warmUpDevice(platform, 10000, app, appPath);
         }
     }
 
@@ -121,14 +124,19 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+async function getApp(): Promise<string>{
+    const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
+    const pjson = require(APP_CONFIG);
+    const app = pjson.nativescript.id;
+    return app;
+}
+
 async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
     let i: number;
     let watcher: void | LogTracker;
     let logs: string[] = [];
 
-    const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
-    const pjson = require(APP_CONFIG);
-    const app = pjson.nativescript.id;
+    const app = await getApp();
 
     const { numberOfRuns } = options;
     await getDevice(platform);
@@ -142,7 +150,6 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: "i
         }
         await uninstallApp(app);
         await installApp(appPath);
-        await stopApp(app);
         await runApp(app);
         await stopApp(app);
         await runApp(app);

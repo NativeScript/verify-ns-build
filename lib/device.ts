@@ -29,15 +29,13 @@ export async function installApp(appPath: string) {
     await sleep(SHORT_WAIT);
 }
 
-export async function warmUpDevice(platform: "ios" | "android", warmUpTimeout: number = 10000) {
-    const apps = await DeviceController.getInstalledApplication(deviceObject);
-    let app:string[];
+export async function warmUpDevice(platform: "ios" | "android", warmUpTimeout: number = 10000, app:string, appPath:string) {
     if (platform === "ios") {
-        app = await apps.filter(app => {
-            return app.includes("Keynote")
-        });
-        await runApp(app[0]);
-        await stopApp(app[0]);
+        await uninstallApp(app);
+        await installApp(appPath);
+        await runApp(app);
+        await stopApp(app);
+        await uninstallApp(app);
     }
     else {
         AndroidController.executeKeyevent(deviceObject, AndroidKeyEvent.KEYCODE_HOME);
