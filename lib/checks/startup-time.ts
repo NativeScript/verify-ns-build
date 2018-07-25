@@ -51,7 +51,16 @@ export async function verifyStartupTime(
         logMeasuringFailed();
         return { error: MEASURE_FAILED_MESSAGE };
     }
-    const result = { expectedStartupTime: expectedStartupTime, actualStartupTime: startup[0], expectedSecondTime: expectedSecondTime, actualSecondTime: startup[1] };
+
+    const startupDifference = startup[0] - expectedStartupTime;
+    const secondStartDifference = startup[1] - expectedSecondTime;
+    const startupPercentageDifference = ((startupDifference / expectedStartupTime) * 100) + "%";
+    const secondStartPercentageDifference = ((secondStartDifference / expectedSecondTime) * 100) + " %";
+
+    const result = {
+        expectedStartupTime: expectedStartupTime, actualStartupTime: startup[0], startupDifference: startupDifference + " ms", startupPercentageDifference: startupPercentageDifference,
+        expectedSecondTime: expectedSecondTime, actualSecondTime: startup[1], secondStartDifference: secondStartDifference + " ms", secondStartPercentageDifference: secondStartPercentageDifference
+    };
 
     if (verifyTime(expectedStartupTime, startup[0], tolerance)) {
         if (verifyTime(expectedSecondTime, startup[1], tolerance)) {
