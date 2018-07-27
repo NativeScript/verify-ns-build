@@ -36,15 +36,17 @@ export async function verifyBuild(options: Verification, releaseConfig, name, sh
 
 async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const { platform } = options;
+    const releaseAppFolder = resolve(PROJECT_DIR, "releaseApps");
+
     if (!platform) {
         return;
     }
+    
     if (tracker) {
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
         if (shouldWarmupDevice) {
-            const appFolderPath = resolve(PROJECT_DIR.toString(), "releaseApps");
-            const appPath = getInstallablePath(platform, appFolderPath, options.name);
+            const appPath = getInstallablePath(platform, releaseAppFolder, options.name);
             const app = await getApp();
             await getDevice(platform);
             await warmUpDevice(platform, 10000, app, appPath);
@@ -66,8 +68,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
     if (getExpectedTime) {
         let expectedTimeLogs = []
-        const appPath = resolve(PROJECT_DIR.toString(), "releaseApps");
-        await getPerformanceTimeLogsFromApp(options, platform, tracker, appPath, options.name).then(function (logs) {
+        await getPerformanceTimeLogsFromApp(options, platform, tracker, releaseAppFolder, options.name).then(function (logs) {
             expectedTimeLogs = logs.slice();
         });
         let expectedTime: number[];

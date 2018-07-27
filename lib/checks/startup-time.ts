@@ -1,5 +1,3 @@
-import { PROJECT_DIR } from "../constants";
-import { executeAndKillWhenIdle, ExecutionResult } from "../command";
 import { getPackageJson } from "../project-helpers";
 import { warn } from "../utils";
 
@@ -24,7 +22,7 @@ export function verifyTime(expected: number, actual: number, tolerance: number) 
     else if (actual < minimumTime) {
         if (process.env['SKIP_MINIMUM_STARTUP_TIME_CHECK']) {
             verifyTime = false;
-            console.log(warn("Skip Minimum time fail: Build wan't fail! Actual time " + actual + " is less than expected time " + expected + " with tolerance (" + minimumTime + ") !"));
+            console.log(warn(`Check for minimum time fail: Build wan't fail! Actual time ${actual} is less than expected time ${expected} with tolerance ${minimumTime}!`));
         }
         else {
             verifyTime = true;
@@ -51,7 +49,16 @@ export async function verifyStartupTime(
         logMeasuringFailed();
         return { error: MEASURE_FAILED_MESSAGE };
     }
-    const result = { expectedStartupTime: expectedStartupTime, actualStartupTime: startup[0], expectedSecondTime: expectedSecondTime, actualSecondTime: startup[1] };
+
+    const startupDifference = startup[0] - expectedStartupTime;
+    const secondStartDifference = startup[1] - expectedSecondTime;
+    const startupPercentageDifference = (startupDifference / expectedStartupTime) * 100;
+    const secondStartPercentageDifference = (secondStartDifference / expectedSecondTime) * 100;
+
+    const result = {
+        expectedStartupTime: expectedStartupTime, actualStartupTime: startup[0], startupDifference: `${startupDifference.toFixed(2)} ms`, startupPercentageDifference: `${startupPercentageDifference.toFixed(2)}%`,
+        expectedSecondTime: expectedSecondTime, actualSecondTime: startup[1], secondStartDifference: `${secondStartDifference.toFixed(2)} ms`, secondStartPercentageDifference: `${secondStartPercentageDifference.toFixed(2)}%`
+    };
 
     if (verifyTime(expectedStartupTime, startup[0], tolerance)) {
         if (verifyTime(expectedSecondTime, startup[1], tolerance)) {
