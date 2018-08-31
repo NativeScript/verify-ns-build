@@ -5,11 +5,16 @@ import { PROJECT_DIR } from "./constants";
 
 export async function getInnerPackageJson() {
     
-    const appPath = resolve(PROJECT_DIR, "app");
-    const doExists = await existsSync(resolve(appPath, "package.json"))
-    const innerPackageJson = doExists ? await getPackageJson(appPath) : getPackageJson(resolve(PROJECT_DIR, "src"))
+    let appPath = resolve(PROJECT_DIR, "app");
+    const appPathNsconfig = resolve(PROJECT_DIR, "nsconfig.json");
+    const doExistsNsconfig = await existsSync(appPathNsconfig);
+    if(doExistsNsconfig)
+    {
+        const nsconfigJson = require(appPathNsconfig);
+        appPath = resolve(PROJECT_DIR, nsconfigJson.appPath);
+    }
     
-    return innerPackageJson;
+    return await getPackageJson(appPath);
 }
 
 export async function getPackageJson(projectDir = PROJECT_DIR) {
