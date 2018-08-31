@@ -5,16 +5,19 @@ import { PROJECT_DIR } from "./constants";
 
 export async function getInnerPackageJson() {
     
-    let appPath = resolve(PROJECT_DIR, "app");
-    const appPathNsconfig = resolve(PROJECT_DIR, "nsconfig.json");
-    const doExistsNsconfig = await existsSync(appPathNsconfig);
-    if(doExistsNsconfig)
-    {
-        const nsconfigJson = require(appPathNsconfig);
-        appPath = resolve(PROJECT_DIR, nsconfigJson.appPath);
+    let packageJsonPath = "app";
+    const nsConfigPath = resolve(PROJECT_DIR, "nsconfig.json");
+
+    try {
+        const nsConfig = JSON.parse(readFileSync(nsConfigPath, "utf8"));
+        if (typeof nsConfig.appPath !== 'undefined' &&  nsConfig.appPath !== null) {
+            packageJsonPath = nsConfig.appPath;
+        }
+	} catch(_) {
+		
     }
     
-    return await getPackageJson(appPath);
+    return await getPackageJson(resolve(PROJECT_DIR,packageJsonPath));
 }
 
 export async function getPackageJson(projectDir = PROJECT_DIR) {
