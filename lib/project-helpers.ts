@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { warn } from "./utils";
 
 import { PROJECT_DIR } from "./constants";
