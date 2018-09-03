@@ -126,7 +126,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function getApp(): Promise<string>{
-    const APP_CONFIG = resolve(PROJECT_DIR.toString(), "package.json");
+    const APP_CONFIG = resolve(PROJECT_DIR, "package.json");
     const pjson = require(APP_CONFIG);
     const app = pjson.nativescript.id;
     return app;
