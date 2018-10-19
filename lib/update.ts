@@ -30,7 +30,6 @@ export default async function update(updateWebpack: WebpackUpdateOptions, update
 }
 
 export async function updatePackageJson(dependencies: NpmDependency[] = []) {
-    console.log("UPDATEEEEEE")
     const { file: packageJson, path: packageJsonPath } = await getPackageJson();
     for (const dependency of dependencies) {
         dependency.package = getPackage(dependency);
