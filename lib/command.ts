@@ -1,10 +1,5 @@
-import { spawn, spawnSync } from "child_process";
-import { statSync, rmdirSync, unlinkSync, existsSync, readdirSync } from "fs";
-import { resolve } from "path";
-
+import { spawn, SpawnOptions } from "child_process";
 import { track, info } from "./utils";
-
-import { PLATFORMS_DIR } from "./constants";
 
 const NEW_DATA_WAIT_TIME = 5 * 60 * 1000;
 let nsSpawnedProcesses = [];
@@ -80,7 +75,7 @@ const spawnAndTrack = ({ cwd, command, args, printLog }) =>
         let log = "";
         let newDataArrived = false;
 
-        const options = {
+        const options: SpawnOptions = {
             cwd,
             stdio: "pipe",
             shell: true,

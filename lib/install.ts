@@ -1,10 +1,10 @@
-import { UpdateFlavor, NpmDependency } from "../verify-schema";
-
+import { NpmDependency } from "../verify-schema";
 import { execute } from "./command";
 import {
     PROJECT_DIR,
     WEBPACK_PLUGIN,
 } from "./constants";
+import { getPackage } from "./utils";
 
 const PACKAGE_TYPE_FLAG_MAP = {
     dependency: "--save",
@@ -21,10 +21,6 @@ export default async function install(dependencies: NpmDependency[] = []) {
             await runNpmInstall(dependency);
         }
     }
-}
-
-function getPackage(dependency: NpmDependency) {
-    return process.env[dependency.name] || process.env[dependency.name.replace(/-/g, '_')] || dependency.package;
 }
 
 async function runNpmInstall(dependency: NpmDependency) {

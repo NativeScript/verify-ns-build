@@ -21,11 +21,11 @@ export const BUNDLE_ANALYZER = {
 export const WEBPACK_PLUGIN = "nativescript-dev-webpack";
 export const VERIFY_WEBPACK_SCRIPT = "ns-verify-bundle";
 export const UPDATE_WEBPACK_SCRIPT = "update-ns-webpack";
-export const WEBPACK_HELPER_SCRIPTS = [ VERIFY_WEBPACK_SCRIPT, UPDATE_WEBPACK_SCRIPT ]
+export const WEBPACK_HELPER_SCRIPTS = [VERIFY_WEBPACK_SCRIPT, UPDATE_WEBPACK_SCRIPT]
     .reduce(addScript, {});
 
 export const UPDATE_NG_SCRIPT = "update-app-ng-deps";
-export const NG_HELPER_SCRIPTS = [ UPDATE_NG_SCRIPT ].reduce(addScript, {});
+export const NG_HELPER_SCRIPTS = [UPDATE_NG_SCRIPT].reduce(addScript, {});
 
 function addScript(scripts, current) {
     scripts[current] = current;
@@ -45,6 +45,6 @@ export const bundleRun = (platform, tnsOptions) =>
     `${noBundleRun(platform, tnsOptions)} --bundle`;
 
 
-export const SHORT_WAIT:number = 5000;
-export const LONG_WAIT:number = 10000;
-export const VERY_LONG_WAIT:number = 15000;
+export const SHORT_WAIT: number = 5000;
+export const LONG_WAIT: number = 10000;
+export const VERY_LONG_WAIT: number = 15000;

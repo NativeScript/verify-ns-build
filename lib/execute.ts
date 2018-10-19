@@ -1,12 +1,12 @@
-import { VerifySchema, ReleaseConfig } from "../verify-schema";
+import { NpmDependency } from "../verify-schema";
 import { ConfigOptions } from "./config-options";
 
 import { Config, loadConfig } from "./config";
 import { verifyBuild, verifyRun } from "./verify";
 import { saveFinalReports } from "./report";
 import { hasError } from "./utils";
+import update, { updatePackageJson } from "./update";
 import install from "./install";
-import update from "./update";
 
 const ACTIONS = {
     build: verifyBuild,
@@ -38,4 +38,8 @@ export async function execute(options: ConfigOptions) {
 
     const success: boolean = !hasError(results);
     return { success, outFileName: config.outFileName };
+}
+
+export async function updatePackageJsonDeps(dependencies: NpmDependency[] = []) {
+    await updatePackageJson(dependencies);
 }
