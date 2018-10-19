@@ -1,4 +1,5 @@
 import { mkdirSync } from "fs";
+import { NpmDependency } from "../verify-schema";
 
 export function stringify(obj) {
     return JSON.stringify(obj, null, 2);
@@ -7,7 +8,7 @@ export function stringify(obj) {
 export async function ensure(dir) {
     try {
         mkdirSync(dir);
-    } catch(e) {
+    } catch (e) {
         if (e.code !== "EEXIST") {
             throw e;
         }
@@ -28,7 +29,7 @@ export const underline = (text: string) =>
 
 export const info = (text: string) =>
     paint(colors.yellow, text);
-    
+
 export const track = (text: string) =>
     paint(colors.purple, text);
 
@@ -40,6 +41,10 @@ const paint = (color: string, text: string) =>
 
 export const hasError = (report: object) =>
     report.hasOwnProperty("error") ||
-        Object.values(report)
-            .filter(value => value !== null && typeof value === "object")
-            .some(hasError);
+    Object.values(report)
+        .filter(value => value !== null && typeof value === "object")
+        .some(hasError);
+
+export const getPackage = (dependency: NpmDependency) => {
+    return process.env[dependency.name] || process.env[dependency.name.replace(/-/g, '_')] || dependency.package;
+}
