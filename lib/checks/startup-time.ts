@@ -1,5 +1,5 @@
 import { getPackageJson } from "../project-helpers";
-import { warn } from "../utils";
+import { warn, info } from "../utils";
 
 const ADB_TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
 const ADB_STARTUP_FILTER = (appName) =>
@@ -121,6 +121,7 @@ export async function getStartupTime(platform: "ios" | "android", log: string[],
 async function getIosStartupTime(log: string): Promise<number[]> {
     const matches = log.match(DISPLAYED_EVENT_FILTER);
     if (!matches || !matches.length) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed("'onDisplayed' event not found in the provided log!");
     }
 
