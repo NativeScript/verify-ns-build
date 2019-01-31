@@ -1,4 +1,5 @@
 import { verifyStartupTime } from "./startup-time";
+import { Platform } from "mobile-devices-controller";
 
 class WrappedError {
     error: string;
@@ -7,7 +8,7 @@ class WrappedError {
 describe("Start up time verification", () => {
     describe("iOS", () => {
         const maxTime = 5000;
-        const platform = "ios";
+        const platform = Platform.IOS;
         const tolerance = 1;
 
         describe("when valid log is provided", () => {

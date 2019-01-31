@@ -1,5 +1,6 @@
 import { getPackageJson } from "../project-helpers";
 import { warn, info } from "../utils";
+import { Platform } from "mobile-devices-controller";
 
 const ADB_TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
 const ADB_STARTUP_FILTER = (appName) =>
@@ -34,7 +35,7 @@ export function verifyTime(expected: number, actual: number, tolerance: number) 
 export async function verifyStartupTime(
     expectedStartupTime: number,
     expectedSecondTime: number,
-    platform: "ios" | "android",
+    platform: Platform,
     log: string[],
     numberOfRuns: number,
     tolerance: number
@@ -85,10 +86,10 @@ export async function verifyStartupTime(
     }
 }
 
-export async function getStartupTime(platform: "ios" | "android", log: string[], numberOfRuns: number)
+export async function getStartupTime(platform: Platform, log: string[], numberOfRuns: number)
     : Promise<number[]> {
     let time = [0.0, 0.0];
-    if (platform === "ios") {
+    if (platform === Platform.IOS) {
         let i;
 
         for (i = 0; i < numberOfRuns; i++) {
@@ -130,17 +131,21 @@ async function getIosStartupTime(log: string): Promise<number[]> {
     const secondTimeString = secondStartupLine.match(DISPLAYED_EVENT_TIME_FILTER)[0];
     const startupTimeString = startupLine.match(DISPLAYED_EVENT_TIME_FILTER)[0];
     if (!startupTimeString) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed(`Startup time not found in ${startupLine}`);
     }
     if (!secondTimeString) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed(`Second start time not found in ${startupLine}`);
     }
     const startupTime = parseFloat(startupTimeString);
     if (isNaN(startupTime)) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed(`Logged time - ${startupTime} is not a number!`);
     }
     const secondStartTime = parseFloat(secondTimeString);
     if (isNaN(secondStartTime)) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed(`Logged time - ${secondStartTime} is not a number!`);
     }
     return [startupTime, secondStartTime];
@@ -150,7 +155,8 @@ async function getAndroidStartupTime(log: string): Promise<number[]> {
     const appName = await getAppName();
     const filter = ADB_STARTUP_FILTER(appName);
     const matches = log.match(filter);
-    if (!matches || !matches.length) {
+    if (!matches || matches.length < 1) {
+        console.log(info(`Device Log: ${log}`));
         throw throwMeasuringFailed("'Displayed' event not found in device log!");
     }
 
