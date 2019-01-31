@@ -25,6 +25,7 @@ import {
 import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
+import { Platform } from "mobile-devices-controller/lib/enums";
 
 export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
     return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice, true);
@@ -35,13 +36,14 @@ export async function verifyBuild(options: Verification, releaseConfig, name, sh
 }
 
 async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
-    const { platform } = options;
+    const platform = options.platform == "ios" ? Platform.IOS : Platform.ANDROID;
+
     const releaseAppFolder = resolve(PROJECT_DIR, "releaseApps");
 
     if (!platform) {
         return;
     }
-    
+
     if (tracker) {
         if (!options.numberOfRuns) { options.numberOfRuns = 1; }
         if (!options.tolerance) { options.tolerance = 10; }
@@ -98,7 +100,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
         const appPathAndAppName = getInstallablePath(platform, "", "", true);
         let pathToCopy = resolve(dir, appPathAndAppName.appName);
-        if (platform === "ios") {
+        if (platform == Platform.IOS) {
             pathToCopy = pathToCopy.replace(".ipa", "-" + name + ".ipa");
         }
         else {
@@ -125,14 +127,14 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getApp(): Promise<string>{
+async function getApp(): Promise<string> {
     const APP_CONFIG = resolve(PROJECT_DIR, "package.json");
     const pjson = require(APP_CONFIG);
     const app = pjson.nativescript.id;
     return app;
 }
 
-async function getPerformanceTimeLogsFromApp(options: Verification, platform: "ios" | "android", tracker, appPath = "", fileName = ""): Promise<string[]> {
+async function getPerformanceTimeLogsFromApp(options: Verification, platform: Platform, tracker, appPath = "", fileName = ""): Promise<string[]> {
     let i: number;
     let watcher: void | LogTracker;
     let logs: string[] = [];
@@ -150,7 +152,7 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: "i
             watcher = await enableProfiling(options);
         }
         await uninstallApp(app);
-        await installApp(appPath);
+        await installApp(appPath, app);
         await runApp(app);
         await stopApp(app);
         await runApp(app);
@@ -170,7 +172,7 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
     let appName;
     let appNameSearchText;
     if (folderWithInstallable === "") {
-        if (platform === "ios") {
+        if (platform == Platform.IOS) {
             appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "device");
             appNameSearchText = fileName + ".ipa";
         }
@@ -181,7 +183,7 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
     }
     else {
         appPath = folderWithInstallable;
-        if (platform === "ios") {
+        if (platform == Platform.IOS) {
             appNameSearchText = fileName + ".ipa";
         }
         else {
@@ -249,7 +251,8 @@ async function runChecks(options: Verification, name: string, result) {
         verifications.assets = await verifyAssets(outputSizes);
     }
 
-    const { startup, secondStartTime, tolerance, platform, numberOfRuns } = options;
+    const { startup, secondStartTime, tolerance, numberOfRuns } = options;
+    const platform = options.platform == "ios" ? Platform.IOS : Platform.ANDROID;
 
     let secondStartTimeVariable = secondStartTime;
     if (!secondStartTime) {
