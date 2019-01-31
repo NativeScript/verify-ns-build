@@ -25,7 +25,7 @@ import {
 import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
-import { Platform } from "mobile-devices-controller/lib/enums";
+import { Platform } from "mobile-devices-controller";
 
 export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
     return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice, true);

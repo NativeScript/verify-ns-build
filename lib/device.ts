@@ -1,6 +1,5 @@
 import { VERY_LONG_WAIT, SHORT_WAIT } from "./constants";
-import { DeviceController, IDevice, AndroidController, AndroidKeyEvent } from "mobile-devices-controller";
-import { Platform, DeviceType, Status } from "mobile-devices-controller/lib/enums";
+import { DeviceController, IDevice, AndroidController, AndroidKeyEvent, Platform, DeviceType, Status  } from "mobile-devices-controller";
 let deviceObject: IDevice;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

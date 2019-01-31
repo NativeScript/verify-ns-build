@@ -1,6 +1,6 @@
 import { getPackageJson } from "../project-helpers";
 import { warn, info } from "../utils";
-import { Platform } from "mobile-devices-controller/lib/enums";
+import { Platform } from "mobile-devices-controller";
 
 const ADB_TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
 const ADB_STARTUP_FILTER = (appName) =>

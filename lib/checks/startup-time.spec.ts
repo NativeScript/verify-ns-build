@@ -1,5 +1,5 @@
 import { verifyStartupTime } from "./startup-time";
-import { Platform } from "mobile-devices-controller/lib/enums";
+import { Platform } from "mobile-devices-controller";
 
 class WrappedError {
     error: string;
