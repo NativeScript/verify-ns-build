@@ -100,7 +100,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
         const appPathAndAppName = getInstallablePath(platform, "", "", true);
         let pathToCopy = resolve(dir, appPathAndAppName.appName);
-        if (platform == Platform.IOS) {
+        if (platform === Platform.IOS) {
             pathToCopy = pathToCopy.replace(".ipa", "-" + name + ".ipa");
         }
         else {
@@ -172,7 +172,7 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
     let appName;
     let appNameSearchText;
     if (folderWithInstallable === "") {
-        if (platform == Platform.IOS) {
+        if (platform === Platform.IOS) {
             appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "device");
             appNameSearchText = fileName + ".ipa";
         }
@@ -183,7 +183,7 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
     }
     else {
         appPath = folderWithInstallable;
-        if (platform == Platform.IOS) {
+        if (platform === Platform.IOS) {
             appNameSearchText = fileName + ".ipa";
         }
         else {

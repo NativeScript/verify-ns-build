@@ -30,7 +30,7 @@ export async function installApp(appPath: string, appId: string) {
 }
 
 export async function warmUpDevice(platform: Platform, warmUpTimeout: number = 10000, app: string, appPath: string) {
-    if (platform == Platform.IOS) {
+    if (platform === Platform.IOS) {
         await uninstallApp(app);
         await installApp(appPath, app);
         await runApp(app);

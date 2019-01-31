@@ -89,7 +89,7 @@ export async function verifyStartupTime(
 export async function getStartupTime(platform: Platform, log: string[], numberOfRuns: number)
     : Promise<number[]> {
     let time = [0.0, 0.0];
-    if (platform == Platform.IOS) {
+    if (platform === Platform.IOS) {
         let i;
 
         for (i = 0; i < numberOfRuns; i++) {
