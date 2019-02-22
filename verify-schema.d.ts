@@ -10,6 +10,7 @@ export interface UpdateFlavor {
     dependencies?: NpmDependency[];
     updateAngularDeps?: boolean;
     updateWebpack?: WebpackUpdateOptions;
+    saveExact?: boolean;
 }
 
 export interface NpmDependency {
@@ -30,6 +31,13 @@ export interface NpmDependency {
      * or it should be added as nativescript platform.
      */
     type: "dependency" | "devDependency" | "nsPlatform";
+
+    /**
+     * Specifies whether the package should be saved the exact 
+     * version in the dependencies in the package.json.
+     * If set to true --save-exact would be added when the package is installed.
+     */
+    saveExact?: boolean;
 }
 
 export interface WebpackUpdateOptions {
