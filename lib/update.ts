@@ -17,15 +17,15 @@ const PACKAGE_JSON_OBJECT = {
     devDependency: "devDependencies",
 };
 
-export default async function update(updateWebpack: WebpackUpdateOptions, updateAngularDeps: boolean) {
+export default async function update(updateWebpack: WebpackUpdateOptions, updateAngularDeps: boolean, saveExact?: boolean) {
     await addNpmScripts({ updateWebpack, updateAngularDeps });
 
     if (updateAngularDeps) {
-        await updateNg();
+        await updateNg(saveExact);
     }
 
     if (updateWebpack) {
-        await updateNsWebpack(updateWebpack);
+        await updateNsWebpack(updateWebpack, saveExact);
     }
 }
 
@@ -70,18 +70,32 @@ async function addNpmScripts({ updateWebpack, updateAngularDeps }) {
     writeFileSync(packageJsonPath, stringify(packageJson));
 }
 
-async function updateNsWebpack(config) {
+async function updateNsWebpack(config, saveExact?) {
     const options = Object.keys(config)
         .filter(o => config[o])
         .map(o => `--${o}`).join(" ");
 
     const command = `npm run ${UPDATE_WEBPACK_SCRIPT} ${options}`;
     await execute(command, PROJECT_DIR);
+    if (saveExact) {
+        await saveExactVersion();
+    }
     await execute("npm i", PROJECT_DIR);
 }
 
-async function updateNg() {
+async function updateNg(saveExact?) {
     const command = `npm run ${UPDATE_NG_SCRIPT}`;
     await execute(command, PROJECT_DIR);
+    if (saveExact) {
+        await saveExactVersion();
+    }
     await execute("npm i", PROJECT_DIR);
+}
+
+async function saveExactVersion() {
+    const { file: packageJson, path: packageJsonPath } = await getPackageJson();
+    var newPackageJson = stringify(packageJson).replace(/~|\^/g, '');;
+    await writeFileSync(packageJsonPath, newPackageJson);
+    const { file: updatedPackageJson } = await getPackageJson();
+    console.log("Package.json after update!", updatedPackageJson);
 }

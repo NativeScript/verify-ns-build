@@ -17,7 +17,7 @@ export async function execute(options: ConfigOptions) {
     const config: Config = loadConfig(options);
 
     await install(config.update.dependencies);
-    await update(config.update.updateWebpack, config.update.updateAngularDeps);
+    await update(config.update.updateWebpack, config.update.updateAngularDeps, config.update.saveExact);
 
     if (!config.verification.verifications.length) {
         throw new Error('Verification array is empty!');
