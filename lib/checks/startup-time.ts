@@ -2,7 +2,7 @@ import { getPackageJson } from "../project-helpers";
 import { warn, info } from "../utils";
 import { Platform } from "mobile-devices-controller";
 
-const ADB_TIME_FILTER = `\\+(\\d+)s(\\d+)ms`;
+const ADB_TIME_FILTER = `\\+(\\d*)s?(\\d+)ms`;
 const ADB_STARTUP_FILTER = (appName) =>
     new RegExp(`Displayed ${appName}/com.tns.NativeScriptActivity: ${ADB_TIME_FILTER}`, "g");
 
