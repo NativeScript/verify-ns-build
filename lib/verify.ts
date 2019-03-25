@@ -173,7 +173,7 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
     let appNameSearchText;
     if (folderWithInstallable === "") {
         if (platform === Platform.IOS) {
-            appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "device");
+            appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "Release-iphoneos");
             appNameSearchText = fileName + ".ipa";
         }
         else {
