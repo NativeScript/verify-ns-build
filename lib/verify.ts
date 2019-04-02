@@ -37,7 +37,7 @@ export async function verifyBuild(options: Verification, releaseConfig, name, sh
 
 async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const platform = options.platform == "ios" ? Platform.IOS : Platform.ANDROID;
-
+    
     const releaseAppFolder = resolve(PROJECT_DIR, "releaseApps");
 
     if (!platform) {
@@ -112,9 +112,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
 
     if (tracker) {
         result.execution.log = [];
-        await getPerformanceTimeLogsFromApp(options, platform, tracker).then(function (logs) {
-            result.execution.log = logs.slice();
-        });
+        const buildAppFolder = resolve(PROJECT_DIR, "out");
+        const logs = await getPerformanceTimeLogsFromApp(options, platform, tracker, buildAppFolder);
+        result.execution.log = logs.slice();
     }
 
     result.verifications = await runChecks(options, name, result.execution)
