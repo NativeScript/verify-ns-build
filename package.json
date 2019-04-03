@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "mobile-devices-controller": "4.0.1-5",
+    "mobile-devices-controller": "4.0.1-6",
     "timeline-view": "github:sis0k0/timeline-view"
   },
   "devDependencies": {
