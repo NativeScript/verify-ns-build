@@ -37,7 +37,7 @@ export async function verifyBuild(options: Verification, releaseConfig, name, sh
 
 async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const platform = options.platform == "ios" ? Platform.IOS : Platform.ANDROID;
-    
+
     const releaseAppFolder = resolve(PROJECT_DIR, "releaseApps");
 
     if (!platform) {
