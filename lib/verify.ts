@@ -37,7 +37,7 @@ export async function verifyBuild(options: Verification, releaseConfig, name, sh
 
 async function verifyApp(options: Verification, releaseConfig, name, action, shouldWarmupDevice: boolean, tracker = false) {
     const platform = options.platform == "ios" ? Platform.IOS : Platform.ANDROID;
-    
+
     const releaseAppFolder = resolve(PROJECT_DIR, "releaseApps");
 
     if (!platform) {
@@ -167,13 +167,14 @@ async function getPerformanceTimeLogsFromApp(options: Verification, platform: Pl
     return logs;
 }
 
-function getInstallablePath(platform, folderWithInstallable = "", fileName = "", returnAppName = false) {
+function getInstallablePath(platform, folderWithInstallable = "", fileName = "", returnAppName = false, isRelease = true) {
     let appPath;
     let appName;
     let appNameSearchText;
     if (folderWithInstallable === "") {
         if (platform === Platform.IOS) {
-            appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", "Release-iphoneos");
+            const buildFolder = isRelease ? "Release" : "Debug"
+            appPath = resolve(PROJECT_DIR, "platforms", "ios", "build", buildFolder + "-iphoneos");
             appNameSearchText = fileName + ".ipa";
         }
         else {
