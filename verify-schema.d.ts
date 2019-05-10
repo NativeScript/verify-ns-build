@@ -33,7 +33,6 @@ export interface NpmDependency {
     type: "dependency" | "devDependency" | "nsPlatform";
 
     /**
-     * Depricated. Default value will be always true
      * Specifies whether the package should be saved the exact 
      * version in the dependencies in the package.json.
      * If set to true --save-exact would be added when the package is installed.
