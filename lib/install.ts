@@ -33,7 +33,8 @@ async function runNpmInstall(dependency: NpmDependency) {
 }
 
 const toNpmCommand = ({ name, package: npmPackage, type, saveExact: shouldSaveExact }: NpmDependency) =>
-    `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]} ${shouldSaveExact === true ? "--save-exact" : ""}`;
+    // `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]} ${shouldSaveExact === true ? "--save-exact" : ""}`;
+    `npm i ${name}@${npmPackage} ${PACKAGE_TYPE_FLAG_MAP[type]} --save-exact`;
 
 async function runPlatformAdd({ name, package: npmPackage }: NpmDependency) {
     let command = `tns platform add ${name}`;
