@@ -1,6 +1,6 @@
 import { resolve } from "path";
 
-export const PROJECT_DIR = process.env.INIT_CWD || process.cwd();
+export const PROJECT_DIR = resolveProjectDir();
 export const REPORT_DIR = resolve(PROJECT_DIR, "verify-report");
 export const TIMELINE_FILENAME = "timeline.html";
 export const JSON_REPORT_FILENAME = "final-report.json";
@@ -30,6 +30,19 @@ export const NG_HELPER_SCRIPTS = [UPDATE_NG_SCRIPT].reduce(addScript, {});
 function addScript(scripts, current) {
     scripts[current] = current;
     return scripts;
+}
+
+function resolveProjectDir() {
+    if (process.argv.some(arg => arg.includes("--path"))) {
+        const pathArg = process.argv.filter(arg => arg.includes("--path"))[0];
+        if (pathArg.includes("=")) {
+            return pathArg.split("=")[1];
+        } else {
+            return process.argv[process.argv.indexOf("path") + 1];
+        }
+    } else {
+        return process.env.INIT_CWD || process.cwd();
+    }
 }
 
 export const noBundleBuild = (platform, tnsOptions) =>

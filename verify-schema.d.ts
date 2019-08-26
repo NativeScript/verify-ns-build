@@ -10,6 +10,7 @@ export interface UpdateFlavor {
     dependencies?: NpmDependency[];
     updateAngularDeps?: boolean;
     updateWebpack?: WebpackUpdateOptions;
+    dependenciesUpdateType?: "installOneByOne" | "installAllAtOnce";
     saveExact?: boolean;
 }
 

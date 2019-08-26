@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 
-import { WebpackUpdateOptions, NpmDependency } from "../verify-schema";
+import { WebpackUpdateOptions } from "../verify-schema";
 import { execute } from "./command";
 import {
     PROJECT_DIR,
@@ -11,27 +11,28 @@ import {
 } from "./constants";
 import { stringify, getPackage } from "./utils";
 import { getPackageJson } from "./project-helpers";
+import { Config } from "./config";
 
 const PACKAGE_JSON_OBJECT = {
     dependency: "dependencies",
     devDependency: "devDependencies",
 };
 
-export default async function update(updateWebpack: WebpackUpdateOptions, updateAngularDeps: boolean, saveExact?: boolean) {
+export default async function update(updateWebpack: WebpackUpdateOptions, updateAngularDeps: boolean, saveExact: boolean, shouldExecuteNpmInstall: boolean) {
     await addNpmScripts({ updateWebpack, updateAngularDeps });
 
     if (updateAngularDeps) {
-        await updateNg(saveExact);
+        await updateNg(saveExact, shouldExecuteNpmInstall);
     }
 
     if (updateWebpack) {
-        await updateNsWebpack(updateWebpack, saveExact);
+        await updateNsWebpack(updateWebpack, saveExact, shouldExecuteNpmInstall);
     }
 }
 
-export async function updatePackageJson(dependencies: NpmDependency[] = []) {
+export async function updatePackageJson(config: Config) {
     const { file: packageJson, path: packageJsonPath } = await getPackageJson();
-    for (const dependency of dependencies) {
+    for (const dependency of config.update.dependencies) {
         dependency.package = getPackage(dependency);
         if (dependency.type !== "nsPlatform") {
             packageJson[PACKAGE_JSON_OBJECT[dependency.type]] = packageJson[PACKAGE_JSON_OBJECT[dependency.type]] || {};
@@ -45,9 +46,11 @@ export async function updatePackageJson(dependencies: NpmDependency[] = []) {
         }
     }
 
-    writeFileSync(packageJsonPath, stringify(packageJson));
+    writeFileSync(packageJsonPath, stringify(packageJson), 'UTF8');
     const { file: updatedPackageJson } = await getPackageJson();
     console.log("Package.json after update!", updatedPackageJson);
+
+    return packageJson;
 }
 
 
@@ -70,7 +73,7 @@ async function addNpmScripts({ updateWebpack, updateAngularDeps }) {
     writeFileSync(packageJsonPath, stringify(packageJson));
 }
 
-async function updateNsWebpack(config, saveExact?) {
+async function updateNsWebpack(config, saveExact: boolean, shouldExecuteNpmInstall: boolean) {
     const options = Object.keys(config)
         .filter(o => config[o])
         .map(o => `--${o}`).join(" ");
@@ -80,16 +83,20 @@ async function updateNsWebpack(config, saveExact?) {
     if (saveExact) {
         await saveExactVersion();
     }
-    await execute("npm i", PROJECT_DIR);
+    if (shouldExecuteNpmInstall) {
+        await execute("npm i", PROJECT_DIR);
+    }
 }
 
-async function updateNg(saveExact?) {
+async function updateNg(saveExact: boolean, shouldExecuteNpmInstall: boolean) {
     const command = `npm run ${UPDATE_NG_SCRIPT}`;
     await execute(command, PROJECT_DIR);
     if (saveExact) {
         await saveExactVersion();
     }
-    await execute("npm i", PROJECT_DIR);
+    if (shouldExecuteNpmInstall) {
+        await execute("npm i", PROJECT_DIR);
+    }
 }
 
 async function saveExactVersion() {

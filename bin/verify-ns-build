@@ -4,11 +4,11 @@
     const { execute } = require("..");
 
     const options = {
-        config: process.env.npm_config_config,
-        defaultConfig: process.env.npm_config_defaultConfig,
-        releaseConfigPath: process.env.npm_config_releaseConfigPath,
-        update: process.env.npm_config_update,
-        verification: process.env.npm_config_verification,
+        config: process.env.npm_config_config || process.env["--config"],
+        defaultConfig: process.env.npm_config_defaultConfig || process.env["--defaultConfig"],
+        releaseConfigPath: process.env.npm_config_releaseConfigPath || process.env["--releaseConfigPath"],
+        update: process.env.npm_config_update || process.env["--update"],
+        verification: process.env.npm_config_verification || process.env["--verification"],
     };
 
     const success = await execute(options).catch(e => {

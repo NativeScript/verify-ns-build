@@ -48,6 +48,8 @@ export async function execute(fullCommand, cwd, printLog = true, kill = false)
     const { command, args } = splitCommand(fullCommand);
     const options = { cwd, command, args, printLog };
 
+    console.log(`Execute command: ${fullCommand}, cwd: ${cwd}`);
+
     const action = kill ? spawnAndTrack : spawnAndWait;
 
     try {

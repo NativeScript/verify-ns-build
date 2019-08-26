@@ -75,6 +75,14 @@
                             },
                             "additionalProperties": false
                         },
+                        "dependenciesUpdateType": {
+                            "type": "string",
+                            "enum": [
+                                "installOneByOne",
+                                "installAllAtOnce"
+                            ],
+                            "description": "Specifies if tha packages should replaces in package.json or installed one by one"
+                        },
                         "additionalProperties": false
                     },
                     "required": [
