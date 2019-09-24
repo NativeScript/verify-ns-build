@@ -68,6 +68,8 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
         return result;
     }
 
+    setMarkingModeInPackageJSON(options.markingMode)
+    
     if (getExpectedTime) {
         let expectedTimeLogs = []
         await getPerformanceTimeLogsFromApp(options, platform, tracker, releaseAppFolder, options.name).then(function (logs) {
@@ -291,4 +293,22 @@ async function build(platform, flags, bundle)
         noBundleBuild(platform, flags);
 
     return await executeAndKillWhenIdle(command, PROJECT_DIR);
+}
+
+function setMarkingModeInPackageJSON(markingMode){
+    const editJsonFile = require("edit-json-file");
+    resolve(PROJECT_DIR, "package.json")
+    let file = editJsonFile(`${resolve(PROJECT_DIR, "app", "package.json")}`);
+    if(markingMode == "full"){
+        file.set("android", {
+            "markingMode": "full"
+        });
+    }
+    else{
+        file.set("android", {
+            "markingMode": "none"
+        });
+    }
+    file.save();
+    console.log(file.toObject());
 }
