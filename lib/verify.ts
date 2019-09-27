@@ -26,6 +26,8 @@ import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
 import { Platform } from "mobile-devices-controller";
+import { getPackageJson, savePackageJson } from "./project-helpers";
+import { info } from "./utils";
 
 export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
     return await verifyApp(options, releaseConfig, name, build, shouldWarmupDevice, true);
@@ -56,8 +58,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
     }
 
     const result: any = { configuration: options };
-
-    const { tnsOptions = [], release, bundle, getExpectedTime, numberOfRuns, copyInstallable, enableLifecycle, device } = options;
+    const { tnsOptions = [], release, bundle, getExpectedTime, numberOfRuns, copyInstallable, enableLifecycle, device, markingMode } = options;
 
     let flags;
     try {
@@ -68,7 +69,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
         return result;
     }
 
-    setMarkingModeInPackageJSON(options.markingMode)
+    await setMarkingModeInPackageJSON(markingMode)
     
     if (getExpectedTime) {
         let expectedTimeLogs = []
@@ -193,13 +194,15 @@ function getInstallablePath(platform, folderWithInstallable = "", fileName = "",
             appNameSearchText = fileName + ".apk";
         }
     }
-
     const files = readdirSync(appPath);
     for (const file in files) {
         if (files[file].toString().includes(appNameSearchText)) {
             appName = files[file].toString();
             break;
         }
+    }
+    if (!appName){
+        console.log(info("No installable files found!"))
     }
     appPath = resolve(appPath, appName);
     if (returnAppName) {
@@ -295,20 +298,17 @@ async function build(platform, flags, bundle)
     return await executeAndKillWhenIdle(command, PROJECT_DIR);
 }
 
-function setMarkingModeInPackageJSON(markingMode){
-    const editJsonFile = require("edit-json-file");
-    resolve(PROJECT_DIR, "package.json")
-    let file = editJsonFile(`${resolve(PROJECT_DIR, "app", "package.json")}`);
+async function setMarkingModeInPackageJSON(markingMode){
+    const packageJsonFilePath = resolve(PROJECT_DIR, "app")
+    let packageJson:any = await getPackageJson(packageJsonFilePath)
     if(markingMode == "full"){
-        file.set("android", {
-            "markingMode": "full"
-        });
+        packageJson.file.android.markingMode = "full"
     }
     else{
-        file.set("android", {
-            "markingMode": "none"
-        });
+        packageJson.file.android.markingMode = "none"
     }
-    file.save();
-    console.log(file.toObject());
+    await savePackageJson(packageJsonFilePath, packageJson.file)
+    packageJson = await getPackageJson(packageJsonFilePath)
+    console.log(info("App package.json that will be used for testing:"));
+    console.log(info(JSON.stringify(packageJson.file)));
 }
