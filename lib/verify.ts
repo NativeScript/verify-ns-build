@@ -68,8 +68,9 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
         result.error = error;
         return result;
     }
-
-    await setMarkingModeInPackageJSON(markingMode)
+    if (platform === Platform.ANDROID) {
+        await setMarkingModeInPackageJSON(markingMode)
+    }
     
     if (getExpectedTime) {
         let expectedTimeLogs = []
