@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { warn } from "./utils";
 
 import { PROJECT_DIR } from "./constants";
@@ -24,3 +24,8 @@ export async function getPackageJson(projectDir = PROJECT_DIR) {
     return { path, file };
 }
 
+export async function savePackageJson(projectDir = PROJECT_DIR, packageJsonContent) {
+    const path = resolve(projectDir, "package.json");
+    const file = JSON.stringify(packageJsonContent);
+    writeFileSync(path, file);
+}

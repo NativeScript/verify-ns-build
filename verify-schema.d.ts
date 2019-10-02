@@ -60,6 +60,7 @@ export interface Verification {
     tnsOptions?: string[];
     outputSizes?: FileSizeMap;
     timeline?: boolean;
+    markingMode?: "none" | "full";
     startup?: number;
     secondStartTime?: number;
     numberOfRuns?: number;
