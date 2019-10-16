@@ -26,7 +26,7 @@ import { enableTraces, enableProfiling, LogTracker } from "./traces";
 import { Verification } from "../verify-schema";
 import { setTimeout } from "timers";
 import { Platform } from "mobile-devices-controller";
-import { getPackageJson, savePackageJson } from "./project-helpers";
+import { getPackageJson, getInnerPackageJson, savePackageJson } from "./project-helpers";
 import { info } from "./utils";
 
 export async function verifyRun(options: Verification, releaseConfig, name, shouldWarmupDevice: boolean) {
@@ -68,7 +68,7 @@ async function verifyApp(options: Verification, releaseConfig, name, action, sho
         result.error = error;
         return result;
     }
-    if (platform === Platform.ANDROID) {
+    if (platform === Platform.ANDROID && markingMode) {
         await setMarkingModeInPackageJSON(markingMode)
     }
     
@@ -300,16 +300,15 @@ async function build(platform, flags, bundle)
 }
 
 async function setMarkingModeInPackageJSON(markingMode){
-    const packageJsonFilePath = resolve(PROJECT_DIR, "app")
-    let packageJson:any = await getPackageJson(packageJsonFilePath)
-    if(markingMode == "full"){
-        packageJson.file.android.markingMode = "full"
+    let packageJson:any = await getInnerPackageJson();
+    if(!packageJson.file.android){
+        packageJson.file.android = {};
     }
-    else{
-        packageJson.file.android.markingMode = "none"
-    }
-    await savePackageJson(packageJsonFilePath, packageJson.file)
-    packageJson = await getPackageJson(packageJsonFilePath)
+    packageJson.file.android.markingMode = markingMode;
+    const pathToPackageJson = packageJson.path.split("/");
+    const strippedPathToPackageJson = pathToPackageJson.slice(0, pathToPackageJson.length-1).join("/");
+    await savePackageJson(strippedPathToPackageJson, packageJson.file);
+    packageJson = await getInnerPackageJson();
     console.log(info("App package.json that will be used for testing:"));
     console.log(info(JSON.stringify(packageJson.file)));
 }
