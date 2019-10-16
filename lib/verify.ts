@@ -301,6 +301,9 @@ async function build(platform, flags, bundle)
 
 async function setMarkingModeInPackageJSON(markingMode){
     let packageJson:any = await getInnerPackageJson();
+    if(!packageJson.file.android){
+        packageJson.file.android = {};
+    }
     packageJson.file.android.markingMode = markingMode;
     const pathToPackageJson = packageJson.path.split("/");
     const strippedPathToPackageJson = pathToPackageJson.slice(0, pathToPackageJson.length-1).join("/");
